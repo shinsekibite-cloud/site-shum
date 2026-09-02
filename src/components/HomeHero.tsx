@@ -128,7 +128,7 @@ export default function HomeHero({
   // fight and look like photo↔video flicker.
   const sectionStyle = wantVideo
     ? undefined
-    : ({ ['--home-hero-image' as string]: `url(${posterUrl})` } as React.CSSProperties);
+    : ({ ['--home-hero-image' as string]: `url(${posterUrl})` } as CSSProperties);
 
   return (
     <section className={className} style={sectionStyle}>
