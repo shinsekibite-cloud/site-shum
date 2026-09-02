@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { ArrowRight, MapPin } from 'lucide-react';
 import { COWORKING_PERIODS } from '@/lib/coworking';
 
 type PeriodInfo = {
@@ -35,6 +36,16 @@ function todayYmd() {
   }).format(new Date());
 }
 
+function formatRuDay(ymd: string) {
+  const [y, m, d] = ymd.split('-').map(Number);
+  if (!y || !m || !d) return ymd;
+  return new Date(y, m - 1, d).toLocaleDateString('ru-RU', {
+    day: 'numeric',
+    month: 'long',
+    weekday: 'short',
+  });
+}
+
 export default function CoworkingSignupFlow({ initialSpaceId }: { initialSpaceId?: string }) {
   const router = useRouter();
   const [dayKey, setDayKey] = useState(todayYmd());
@@ -64,6 +75,7 @@ export default function CoworkingSignupFlow({ initialSpaceId }: { initialSpaceId
   const space = useMemo(() => spaces.find((s) => s.id === spaceId) || null, [spaces, spaceId]);
   const periodInfo = space?.periods.find((p) => p.id === period) || null;
   const left = periodInfo?.left ?? 0;
+  const cover = space?.image || '/brand/hero-cover.jpg';
 
   async function submit(waitlist = false) {
     setSubmitting(true);
@@ -96,88 +108,124 @@ export default function CoworkingSignupFlow({ initialSpaceId }: { initialSpaceId
   }
 
   return (
-    <div className="cw-flow">
-      <div className="cw-flow-steps">
-        <label className="cw-field">
-          <span>Площадка</span>
-          <select value={spaceId} onChange={(e) => setSpaceId(e.target.value)} disabled={loading}>
-            {spaces.map((s) => (
-              <option key={s.id} value={s.id}>
-                {s.title}
-                {s.address ? ` — ${s.address}` : ''}
-              </option>
-            ))}
-          </select>
-        </label>
+    <div className="cw-layout">
+      <aside className="cw-aside">
+        <div className="cw-aside__photo" style={{ backgroundImage: `url(${cover})` }} />
+        <div className="cw-aside__body">
+          <h2>{space?.title || 'Площадка'}</h2>
+          {space?.address ? (
+            <p>
+              <MapPin size={14} aria-hidden /> {space.address}
+            </p>
+          ) : null}
+          <span className="cw-aside__seats">
+            {loading
+              ? 'Загрузка…'
+              : left > 0
+                ? `осталось ${left} из ${space?.capacity ?? 0}`
+                : 'мест нет сегодня'}
+          </span>
+        </div>
+      </aside>
 
-        <label className="cw-field">
-          <span>Дата</span>
-          <input type="date" value={dayKey} min={todayYmd()} onChange={(e) => setDayKey(e.target.value)} />
-        </label>
+      <div className="cw-flow">
+        <div className="cw-flow-steps">
+          <label className="cw-field">
+            <span>Площадка</span>
+            <select value={spaceId} onChange={(e) => setSpaceId(e.target.value)} disabled={loading}>
+              {spaces.map((s) => (
+                <option key={s.id} value={s.id}>
+                  {s.title}
+                  {s.address ? ` — ${s.address}` : ''}
+                </option>
+              ))}
+            </select>
+          </label>
 
-        <fieldset className="cw-field">
-          <legend>Интервал</legend>
-          <div className="cw-periods">
-            {COWORKING_PERIODS.map((p) => {
-              const info = space?.periods.find((x) => x.id === p.id);
-              return (
-                <button
-                  key={p.id}
-                  type="button"
-                  className={`cw-period${period === p.id ? ' is-active' : ''}`}
-                  onClick={() => setPeriod(p.id)}
-                >
-                  <strong>{p.label}</strong>
-                  <span>
-                    {p.start}–{p.end}
-                  </span>
-                  <em>{info ? `${info.left} мест` : '—'}</em>
-                </button>
-              );
-            })}
+          <label className="cw-field">
+            <span>Дата</span>
+            <input type="date" value={dayKey} min={todayYmd()} onChange={(e) => setDayKey(e.target.value)} />
+            <em className="cw-field-hint">{formatRuDay(dayKey)}</em>
+          </label>
+
+          <fieldset className="cw-field">
+            <legend>Интервал</legend>
+            <div className="cw-periods">
+              {COWORKING_PERIODS.map((p) => {
+                const info = space?.periods.find((x) => x.id === p.id);
+                const slotLeft = info?.left;
+                return (
+                  <button
+                    key={p.id}
+                    type="button"
+                    className={`cw-period${period === p.id ? ' is-active' : ''}`}
+                    onClick={() => setPeriod(p.id)}
+                  >
+                    <strong>{p.label}</strong>
+                    <span>
+                      {p.start}–{p.end}
+                    </span>
+                    <em>{typeof slotLeft === 'number' ? `${slotLeft} мест` : '…'}</em>
+                  </button>
+                );
+              })}
+            </div>
+          </fieldset>
+
+          <div className="cw-row">
+            <label className="cw-field">
+              <span>Мест</span>
+              <input
+                type="number"
+                min={1}
+                max={5}
+                value={seats}
+                onChange={(e) => setSeats(Math.max(1, Math.min(5, Number(e.target.value) || 1)))}
+              />
+            </label>
+
+            <label className="cw-field">
+              <span>Цель визита</span>
+              <select value={purpose} onChange={(e) => setPurpose(e.target.value)}>
+                <option value="">Необязательно</option>
+                {PURPOSES.map((p) => (
+                  <option key={p} value={p}>
+                    {p}
+                  </option>
+                ))}
+              </select>
+            </label>
           </div>
-        </fieldset>
+        </div>
 
-        <label className="cw-field">
-          <span>Мест</span>
-          <input
-            type="number"
-            min={1}
-            max={5}
-            value={seats}
-            onChange={(e) => setSeats(Math.max(1, Math.min(5, Number(e.target.value) || 1)))}
-          />
-        </label>
+        {error ? <p className="cw-error">{error}</p> : null}
+        {message ? <p className="cw-ok">{message}</p> : null}
 
-        <label className="cw-field">
-          <span>Цель визита (необязательно)</span>
-          <select value={purpose} onChange={(e) => setPurpose(e.target.value)}>
-            <option value="">—</option>
-            {PURPOSES.map((p) => (
-              <option key={p} value={p}>
-                {p}
-              </option>
-            ))}
-          </select>
-        </label>
-      </div>
-
-      {error ? <p className="cw-error">{error}</p> : null}
-      {message ? <p className="cw-ok">{message}</p> : null}
-
-      <div className="cw-actions">
-        {left > 0 ? (
-          <button type="button" className="btn btn-primary" disabled={submitting || !spaceId} onClick={() => submit(false)}>
-            {submitting ? 'Записываем…' : `Записаться · осталось ${left}`}
-          </button>
-        ) : (
-          <button type="button" className="btn btn-primary" disabled={submitting || !spaceId} onClick={() => submit(true)}>
-            {submitting ? 'Отправляем…' : 'В лист ожидания'}
-          </button>
-        )}
-        <Link href="/spaces" className="btn btn-secondary">
-          К площадкам
-        </Link>
+        <div className="cw-actions">
+          {left > 0 ? (
+            <button
+              type="button"
+              className="btn btn-primary cw-cta"
+              disabled={submitting || !spaceId}
+              onClick={() => submit(false)}
+            >
+              {submitting ? 'Записываем…' : 'Записаться'}
+            </button>
+          ) : (
+            <button
+              type="button"
+              className="btn btn-primary cw-cta"
+              disabled={submitting || !spaceId}
+              onClick={() => submit(true)}
+            >
+              {submitting ? 'Отправляем…' : 'В лист ожидания'}
+            </button>
+          )}
+          <Link href="/spaces" className="cw-cta-round" aria-label="К площадкам" title="К площадкам">
+            <ArrowRight size={20} />
+          </Link>
+        </div>
+        {left > 0 ? <p className="cw-left-note">Осталось {left} мест на выбранный интервал</p> : null}
       </div>
     </div>
   );

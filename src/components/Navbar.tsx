@@ -348,7 +348,7 @@ export default function Navbar({ spaces = [], clubs = [], projects = [], pages =
   // Guest links must stay visible during session resolve — never leave empty ghost placeholders.
   // Authenticated chrome only after status === 'authenticated'.
   const isAuthenticated = status === 'authenticated' && Boolean(session);
-  const authIconCount = isAuthenticated ? (isScanner ? 3 : 6) : 2;
+  const authIconCount = isAuthenticated ? (isScanner ? 2 : 2) : 0;
 
   const renderAuthIcons = () => (
     <div
@@ -357,75 +357,18 @@ export default function Navbar({ spaces = [], clubs = [], projects = [], pages =
     >
       {!isAuthenticated ? (
         <div className="nav-auth-icons nav-auth-guest">
-          <button
-            type="button"
-            className="nav-icon-btn"
-            title="Быстрый доступ (панель справа)"
-            aria-label="Быстрый доступ"
-            onClick={openQuickPanel}
-          >
-            <Zap size={18} />
-          </button>
-          <Link href="/login" className="nav-auth-text nav-auth-text--login" title="Вход">
-            <User size={16} aria-hidden /> <span>Вход</span>
+          <Link href="/login" className="nav-pill nav-pill--ghost" title="Вход">
+            Вход
           </Link>
           {modOn(siteSettings, 'registration') ? (
-            <Link href="/register" className="nav-auth-text nav-auth-text--register" title="Регистрация">
-              <User size={16} aria-hidden className="nav-auth-register-icon" /> <span>Регистрация</span>
+            <Link href="/register" className="nav-pill nav-pill--solid" title="Регистрация">
+              Регистрация
             </Link>
           ) : null}
         </div>
       ) : (
-        <div className="nav-auth-icons">
-          <button
-            type="button"
-            className="nav-icon-btn"
-            title="Быстрый доступ (панель справа или ?)"
-            aria-label="Быстрый доступ"
-            onClick={openQuickPanel}
-          >
-            <Zap size={18} />
-          </button>
+        <div className="nav-auth-icons nav-auth-icons--compact">
           {modOn(siteSettings, 'notifications') ? <NotificationsBell compact useNavStyle /> : null}
-          <button
-            type="button"
-            className="nav-icon-btn"
-            title="Выйти"
-            aria-label="Выйти"
-            onClick={() => void signOutLogged({ callbackUrl: '/' })}
-          >
-            <LogOut size={18} />
-          </button>
-          {!isScanner && !isTech && modOn(siteSettings, 'friends') && (
-            <Link
-              href="/friends"
-              className="nav-icon-btn"
-              title="Друзья"
-              aria-label="Друзья"
-            >
-              <Users size={18} />
-            </Link>
-          )}
-          {!isScanner && !isTech && modOn(siteSettings, 'messaging') && (
-            <Link
-              href="/messages"
-              className="nav-icon-btn"
-              title="Сообщения"
-              aria-label="Сообщения"
-            >
-              <MessageCircle size={18} />
-            </Link>
-          )}
-          {!isScanner && (
-            <Link
-              href="/tickets"
-              className="nav-icon-btn nav-tickets-btn"
-              title="Мои билеты"
-              aria-label="Мои билеты"
-            >
-              <Ticket size={18} />
-            </Link>
-          )}
           <div className={`nav-item nav-account${openMenu === 'account' ? ' is-open' : ''}`}>
             <button
               type="button"
@@ -456,6 +399,21 @@ export default function Navbar({ spaces = [], clubs = [], projects = [], pages =
                     <small>Обзор и разделы</small>
                   </span>
                 </Link>
+                <button
+                  type="button"
+                  className="dropdown-item"
+                  role="menuitem"
+                  onClick={() => {
+                    closeDesktopMenus();
+                    openQuickPanel();
+                  }}
+                >
+                  <Zap size={16} aria-hidden />
+                  <span className="nav-account-menu__label">
+                    <strong>Быстрый доступ</strong>
+                    <small>Панель справа</small>
+                  </span>
+                </button>
                 {!isScanner && !isTech ? (
                   <Link href="/dashboard/guides" className="dropdown-item" role="menuitem" onClick={closeDesktopMenus}>
                     <BookOpen size={16} aria-hidden />
@@ -498,6 +456,15 @@ export default function Navbar({ spaces = [], clubs = [], projects = [], pages =
                     <span className="nav-account-menu__label">
                       <strong>Сообщения</strong>
                       <small>Личная переписка</small>
+                    </span>
+                  </Link>
+                ) : null}
+                {!isScanner ? (
+                  <Link href="/tickets" className="dropdown-item" role="menuitem" onClick={closeDesktopMenus}>
+                    <Ticket size={16} aria-hidden />
+                    <span className="nav-account-menu__label">
+                      <strong>Билеты</strong>
+                      <small>QR и записи</small>
                     </span>
                   </Link>
                 ) : null}
@@ -590,44 +557,22 @@ export default function Navbar({ spaces = [], clubs = [], projects = [], pages =
   }, [headerMainPages.length, projects.length, clubs.length, spaces.length]);
 
 
-  /** Compact mobile header: one account slot + optional messages — no duplicate profile icons. */
+  /** Mobile: Записаться CTA + account — no icon cluster. */
   const renderMobileHeaderActions = () => {
     if (!isAuthenticated) {
       return (
         <div className="nav-auth-mobile__row nav-auth-mobile__row--guest">
-          <Link href="/login" className="nav-auth-text nav-auth-text--login" aria-label="Вход" title="Вход">
-            Вход
+          <Link href="/coworking" className="nav-pill nav-pill--solid nav-pill--mobile-cta" title="Записаться">
+            Записаться
           </Link>
-          {modOn(siteSettings, 'registration') ? (
-            <Link href="/register" className="nav-auth-text nav-auth-text--register" aria-label="Регистрация" title="Регистрация">
-              Регистрация
-            </Link>
-          ) : null}
         </div>
       );
     }
     return (
       <div className="nav-auth-mobile__row nav-auth-mobile__row--session">
-        <button
-          type="button"
-          className="nav-icon-btn"
-          aria-label="Быстрый доступ"
-          title="Быстрый доступ"
-          onClick={openQuickPanel}
-        >
-          <Zap size={18} aria-hidden />
-        </button>
-        {!isScanner && !isTech && modOn(siteSettings, 'messaging') ? (
-          <Link
-            href="/messages"
-            className={`nav-icon-btn${isActive('/messages') ? ' is-active' : ''}`}
-            aria-label="Сообщения"
-            title="Сообщения"
-            aria-current={isActive('/messages') ? 'page' : undefined}
-          >
-            <MessageCircle size={18} aria-hidden />
-          </Link>
-        ) : null}
+        <Link href="/coworking" className="nav-pill nav-pill--solid nav-pill--mobile-cta" title="Записаться">
+          Записаться
+        </Link>
         <Link
           href={profileHref}
           className={`nav-icon-btn nav-auth-mobile__profile${isActive(profileHref) ? ' is-active' : ''}`}

@@ -578,7 +578,8 @@ function DashboardInner({ view = 'overview' }: DashboardClientProps) {
 
   useEffect(() => {
     if (view === 'edit') setEditOpen(true);
-    if (view === 'settings') setSettingsOpen(true);
+    // /dashboard/settings — полноценная страница, без модалки поверх профиля
+    if (view === 'settings') setSettingsOpen(false);
   }, [view]);
 
   const closeSettings = useCallback(() => {
@@ -640,7 +641,7 @@ function DashboardInner({ view = 'overview' }: DashboardClientProps) {
         return;
       }
       if (section === 'settings') {
-        setSettingsOpen(true);
+        setSettingsOpen(false);
         router.push('/dashboard/settings');
         return;
       }
@@ -1570,7 +1571,36 @@ function DashboardInner({ view = 'overview' }: DashboardClientProps) {
               </div>
             )}
 
-            {(view === 'overview' || view === 'edit' || view === 'settings') && (
+            {view === 'settings' && (
+              <div className="profile-view svc-settings-page">
+                <div className="profile-page-head">
+                  <div>
+                    <h2 className="profile-view__title">Настройки</h2>
+                    <p className="profile-view__lead">
+                      Профиль, безопасность, уведомления и публичность.
+                    </p>
+                  </div>
+                  <Link href="/dashboard" className="btn btn-secondary">
+                    К профилю
+                  </Link>
+                </div>
+                <DashboardSettingsHub
+                  embedded
+                  onClose={() => router.push('/dashboard')}
+                  profile={profile}
+                  profileVisibility={profileVisibility}
+                  onlineVisibility={onlineVisibility}
+                  profileSaving={profileSaving}
+                  setProfileVisibility={setProfileVisibility}
+                  setOnlineVisibility={setOnlineVisibility}
+                  setProfileSaving={setProfileSaving}
+                  setProfile={setProfile}
+                  readJsonSafe={readJsonSafe}
+                />
+              </div>
+            )}
+
+            {(view === 'overview' || view === 'edit') && (
               <div className="dashboard-stack" style={{ maxWidth: "100%", width: "100%", display: "flex", flexDirection: "column", gap: "0.55rem" }}>
                 <div className="profile-overview-top" id="profile-hub">
                   <div className="profile-view profile-view--unified profile-view--modern profile-view--hub">
@@ -1610,7 +1640,8 @@ function DashboardInner({ view = 'overview' }: DashboardClientProps) {
                       onPreview={() => setPreviewOpen(true)}
                       onSettings={() => {
                         setEditOpen(false);
-                        setSettingsOpen(true);
+                        setSettingsOpen(false);
+                        router.push('/dashboard/settings');
                       }}
                       onAvatarPick={(file) => {
                         setAvatarFile(file);

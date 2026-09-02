@@ -17,11 +17,11 @@ export default async function CoworkingPage({
 }) {
   const sp = await searchParams;
   return (
-    <div className="container cw-page">
+    <div className="container cw-page cw-page--wide">
       <header className="cw-page-head">
         <p className="cw-eyebrow">Пространства ЦРМ</p>
         <h1>Записаться в коворкинг</h1>
-        <p>Выберите площадку, день и интервал — без лишних шагов брони зала.</p>
+        <p>Площадка, день и интервал — без лишних шагов.</p>
       </header>
       <CoworkingSignupFlow initialSpaceId={sp.space} />
     </div>

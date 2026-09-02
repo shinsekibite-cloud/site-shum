@@ -178,7 +178,11 @@ export default function ClubsCatalogClient({ items }: { items: PublicClubCard[] 
                     )}
                     <span>
                       <Users size={14} /> {members}{' '}
-                      {members === 1 ? 'участник' : members < 5 ? 'участника' : 'участников'}
+                      {members % 10 === 1 && members % 100 !== 11
+                        ? 'участник'
+                        : members % 10 >= 2 && members % 10 <= 4 && (members % 100 < 10 || members % 100 >= 20)
+                          ? 'участника'
+                          : 'участников'}
                     </span>
                   </div>
                   <div className="catalog-card-meta">

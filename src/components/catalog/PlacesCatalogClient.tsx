@@ -79,7 +79,7 @@ export default function PlacesCatalogClient({ items }: { items: PublicPlaceCard[
       </header>
 
       <div className="container places-catalog">
-        <div className="places-toolbar places-toolbar--one-row">
+        <div className="places-toolbar places-toolbar--stack">
           <form className="places-search" method="get" action="/places" role="search">
             {categoryFilter ? <input type="hidden" name="category" value={categoryFilter} /> : null}
             <input
@@ -99,7 +99,9 @@ export default function PlacesCatalogClient({ items }: { items: PublicPlaceCard[
                 <option value="title">По названию</option>
               </select>
             </label>
-            <button type="submit">Найти</button>
+            <button type="submit" className="places-search__btn">
+              Найти
+            </button>
           </form>
           <PlaceCategoryChips />
         </div>

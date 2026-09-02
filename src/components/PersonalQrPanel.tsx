@@ -60,35 +60,7 @@ export default function PersonalQrPanel() {
 
   return (
     <section className="presence-panel" aria-label="Личный QR и баллы">
-      <div className="presence-grid">
-        <div className="presence-qr-card">
-          <div className="presence-qr-head">
-            <h2>Ваш пропуск</h2>
-            <p>Покажите на входе. Токен обновляется раз в сутки.</p>
-          </div>
-          {loading && !url ? <p className="presence-muted">Готовим QR…</p> : null}
-          {error ? <p className="presence-error">{error}</p> : null}
-          {url ? (
-            <div className="presence-qr-wrap">
-              <QRCodeDisplay value={url} size={220} />
-              <div className="presence-qr-actions">
-                <button type="button" className="btn btn-secondary" onClick={() => setFullscreen(true)}>
-                  <Maximize2 size={16} /> На весь экран
-                </button>
-                <button type="button" className="btn btn-secondary" onClick={() => load(true)}>
-                  <RefreshCw size={16} /> Обновить
-                </button>
-              </div>
-              {expiresAt ? (
-                <p className="presence-muted">
-                  Действует до{' '}
-                  {new Date(expiresAt).toLocaleString('ru-RU', { timeZone: 'Europe/Moscow' })}
-                </p>
-              ) : null}
-            </div>
-          ) : null}
-        </div>
-
+      <div className="presence-grid presence-grid--svc">
         <div className="presence-scores">
           <ScoreRing
             title="М-бал"
@@ -104,6 +76,34 @@ export default function PersonalQrPanel() {
             level={scores?.ecoLevel}
             tone="eco"
           />
+        </div>
+
+        <div className="presence-qr-card">
+          <div className="presence-qr-head">
+            <h2>Ваш пропуск</h2>
+            <p>Покажите на входе. Токен обновляется раз в сутки.</p>
+          </div>
+          {loading && !url ? <p className="presence-muted">Готовим QR…</p> : null}
+          {error ? <p className="presence-error">{error}</p> : null}
+          {url ? (
+            <div className="presence-qr-wrap">
+              <QRCodeDisplay value={url} size={260} />
+              <div className="presence-qr-actions">
+                <button type="button" className="btn btn-primary" onClick={() => setFullscreen(true)}>
+                  <Maximize2 size={16} /> На весь экран
+                </button>
+                <button type="button" className="btn btn-secondary" onClick={() => load(true)}>
+                  <RefreshCw size={16} /> Обновить
+                </button>
+              </div>
+              {expiresAt ? (
+                <p className="presence-muted">
+                  Действует до{' '}
+                  {new Date(expiresAt).toLocaleString('ru-RU', { timeZone: 'Europe/Moscow' })}
+                </p>
+              ) : null}
+            </div>
+          ) : null}
         </div>
       </div>
 

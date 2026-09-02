@@ -1,12 +1,4 @@
-import { Metadata } from 'next';
-import Link from 'next/link';
-import UpcomingEvents from '@/components/UpcomingEvents';
-import GovWidgetsSection from '@/components/GovWidgetsSection';
-import { ArrowRight, Calendar, MapPin, Users, FileText, Phone } from 'lucide-react';
-import NewsCoverImage from '@/components/NewsCoverImage';
-import EntityCoverImage from '@/components/EntityCoverImage';
-import NewsMediaBadge from '@/components/NewsMediaBadge';
-import HomeHero from '@/components/HomeHero';
+import HomeServiceHero from '@/components/HomeServiceHero';
 import HomeGallery from '@/components/HomeGallery';
 import { getSiteIdentity } from '@/lib/site-identity';
 import { clubCover, projectCover, spaceCover } from '@/lib/theme-covers';
@@ -16,6 +8,14 @@ import { getModuleFlags } from '@/lib/module-flags';
 import HomeGalleryAuth from '@/components/HomeGalleryAuth';
 import AuthAfishaSection from '@/components/AuthAfishaSection';
 import FreeNowSpaces from '@/components/FreeNowSpaces';
+import UpcomingEvents from '@/components/UpcomingEvents';
+import GovWidgetsSection from '@/components/GovWidgetsSection';
+import { ArrowRight, Calendar, MapPin, Users, FileText, Phone } from 'lucide-react';
+import NewsCoverImage from '@/components/NewsCoverImage';
+import EntityCoverImage from '@/components/EntityCoverImage';
+import NewsMediaBadge from '@/components/NewsMediaBadge';
+import Link from 'next/link';
+import { Metadata } from 'next';
 
 export async function generateMetadata(): Promise<Metadata> {
   const { siteName, publicOrigin } = await getSiteIdentity();
@@ -46,7 +46,6 @@ export default async function Home() {
   // Strictly follow admin radio: video only when kind is video AND a file exists.
   const heroMediaKind: 'image' | 'video' =
     storedKind === 'video' && Boolean(heroVideo) ? 'video' : 'image';
-  const heroMode = siteSettings?.heroAnimationMode === 'static' ? 'static' : 'animated';
   const galleryPublic =
     modules.gallery !== false &&
     Boolean(siteSettings?.galleryHomepageEnabled) &&
@@ -78,39 +77,18 @@ export default async function Home() {
 
   return (
     <div className="home-page">
-      {/* Image preload only — browsers reject as="video" and spam console warnings. */}
       {heroMediaKind === 'image' ? (
         <link rel="preload" as="image" href={heroUrl} fetchPriority="high" />
       ) : null}
-      <HomeHero
+      <HomeServiceHero
+        siteName={siteName}
         imageUrl={heroUrl}
         videoUrl={heroVideo}
         mediaKind={heroMediaKind === 'video' && heroVideo ? 'video' : 'image'}
-        mode={heroMode}
-      >
-        <p className="home-hero-brand">{siteName}</p>
-        <h1 className="home-hero-title">
-          Пространства. <br />
-          События. Ты.
-        </h1>
-        <p className="home-hero-lead">
-          Свободные залы, запись в коворкинг и живая афиша молодёжных пространств Сочи.
-        </p>
-        {(heroPrimary || heroSecondary) && (
-          <div className="home-hero-actions">
-            {heroPrimary ? (
-              <Link href={heroPrimary.href} className="btn btn-primary home-hero-btn" prefetch>
-                {heroPrimary.label} <ArrowRight size={18} style={{ marginLeft: '0.35rem' }} />
-              </Link>
-            ) : null}
-            {heroSecondary && heroSecondary.href !== heroPrimary?.href ? (
-              <Link href={heroSecondary.href} className="btn btn-secondary home-hero-btn home-hero-btn-ghost" prefetch>
-                {heroSecondary.label}
-              </Link>
-            ) : null}
-          </div>
-        )}
-      </HomeHero>
+        primary={heroPrimary}
+        secondary={heroSecondary}
+        faceUrls={latestSpaces.slice(0, 3).map((s, i) => spaceCover(s, i))}
+      />
 
       <div className="container home-sections">
         {showSpaces ? <FreeNowSpaces /> : null}
