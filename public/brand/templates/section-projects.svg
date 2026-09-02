@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800" role="img" aria-hidden="true">
+  <defs>
+    <linearGradient id="g-2068349262" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0284C7"/>
+      <stop offset="45%" stop-color="#0369A1"/>
+      <stop offset="100%" stop-color="#0C4A6E"/>
+    </linearGradient>
+    <radialGradient id="r-2068349262" cx="18%" cy="14%" r="72%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.32"/>
+      <stop offset="50%" stop-color="#ffffff" stop-opacity="0.06"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="shine-2068349262" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#fff" stop-opacity="0"/>
+      <stop offset="50%" stop-color="#fff" stop-opacity="0.14"/>
+      <stop offset="100%" stop-color="#fff" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="vignette-2068349262" x1="0.5" y1="0" x2="0.5" y2="1">
+      <stop offset="55%" stop-color="#000" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#000" stop-opacity="0.28"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="800" fill="url(#g-2068349262)"/>
+  <rect width="1200" height="800" fill="url(#r-2068349262)"/>
+  <rect x="-120" y="0" width="420" height="800" fill="url(#shine-2068349262)" opacity="0.95" transform="skewX(-14) rotate(5)"/>
+  <circle cx="1080" cy="120" r="160" fill="#67E8F9" opacity="0.10"/>
+  
+  <path d="M0 800 L0 500 L200 330 L360 470 L540 250 L760 480 L940 340 L1200 500 L1200 800 Z" fill="#000" opacity="0.18"/>
+  <path d="M540 250 L600 340 L480 340 Z" fill="#fff" opacity="0.22"/>
+  <circle cx="942" cy="110" r="52" fill="#fff" opacity="0.16"/>
+  <path d="M0 680 C300 640, 600 720, 900 660 S1200 680, 1200 680 L1200 800 L0 800 Z" fill="#fff" opacity="0.06"/>
+
+  <rect width="1200" height="800" fill="url(#vignette-2068349262)"/>
+</svg>

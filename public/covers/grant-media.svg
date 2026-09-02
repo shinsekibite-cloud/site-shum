@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800" role="img" aria-hidden="true">
+  <defs>
+    <linearGradient id="g-2598512430" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2563EB"/>
+      <stop offset="45%" stop-color="#1D4ED8"/>
+      <stop offset="100%" stop-color="#1E3A8A"/>
+    </linearGradient>
+    <radialGradient id="r-2598512430" cx="18%" cy="14%" r="72%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.32"/>
+      <stop offset="50%" stop-color="#ffffff" stop-opacity="0.06"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="shine-2598512430" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#fff" stop-opacity="0"/>
+      <stop offset="50%" stop-color="#fff" stop-opacity="0.14"/>
+      <stop offset="100%" stop-color="#fff" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="vignette-2598512430" x1="0.5" y1="0" x2="0.5" y2="1">
+      <stop offset="55%" stop-color="#000" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#000" stop-opacity="0.28"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="800" fill="url(#g-2598512430)"/>
+  <rect width="1200" height="800" fill="url(#r-2598512430)"/>
+  <rect x="-120" y="0" width="420" height="800" fill="url(#shine-2598512430)" opacity="0.95" transform="skewX(-14) rotate(6)"/>
+  <circle cx="1080" cy="120" r="160" fill="#67E8F9" opacity="0.10"/>
+  
+  <circle cx="950" cy="140" r="70" fill="#fff" opacity="0.12"/>
+  <circle cx="820" cy="210" r="38" fill="#fff" opacity="0.08"/>
+  <path d="M0 540 C220 480, 480 620, 720 540 S1040 480, 1200 560 L1200 800 L0 800 Z" fill="#000" opacity="0.14"/>
+  <rect x="72" y="72" width="160" height="14" rx="7" fill="#fff" opacity="0.22"/>
+  <rect x="72" y="102" width="100" height="10" rx="5" fill="#fff" opacity="0.14"/>
+  <rect x="72" y="128" width="128" height="10" rx="5" fill="#fff" opacity="0.10"/>
+
+  <rect width="1200" height="800" fill="url(#vignette-2598512430)"/>
+</svg>

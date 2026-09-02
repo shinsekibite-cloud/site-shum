@@ -1,0 +1,11 @@
+# Perf baseline 2026-08-11T07:17:29Z
+200 ttfb=0.641448 total=1.130484 size=142943 /
+200 ttfb=0.503877 total=0.503912 size=143 /api/health
+200 ttfb=0.573822 total=0.988378 size=124624 /projects
+200 ttfb=0.528544 total=0.877990 size=105043 /news
+200 ttfb=0.557334 total=0.975130 size=110542 /privacy
+200 ttfb=0.725994 total=1.130506 size=91907 /rules
+200 ttfb=0.498014 total=0.498067 size=1067 /api/public/status
+0.591281
+1.103808
+0.554913
