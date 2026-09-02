@@ -2,6 +2,8 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import dynamic from 'next/dynamic';
+import Link from 'next/link';
+import { useSession } from 'next-auth/react';
 import type { DayGrid, OccupancySlot, SlotStatus } from '@/lib/hall-occupancy';
 import { slotStatusLabel } from '@/lib/hall-occupancy';
 import { encodeRouteParam } from '@/lib/route-id';
@@ -37,6 +39,7 @@ function minsToHhMm(min: number) {
 }
 
 export default function HallWeekGrid({ spaceId, bookBaseHref }: Props) {
+  const { status } = useSession();
   const [week, setWeek] = useState<DayGrid[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -48,7 +51,9 @@ export default function HallWeekGrid({ spaceId, bookBaseHref }: Props) {
     closeMin?: number;
   }>({});
   const [panel, setPanel] = useState<{ start: string; end: string } | null>(null);
+  const [guestGate, setGuestGate] = useState(false);
   const bookHref = bookBaseHref || `/spaces/${encodeRouteParam(spaceId)}/book`;
+  const authed = status === 'authenticated';
 
   useEffect(() => {
     let cancelled = false;
@@ -82,9 +87,12 @@ export default function HallWeekGrid({ spaceId, bookBaseHref }: Props) {
   }, [spaceId]);
 
   useEffect(() => {
-    if (!panel) return;
+    if (!panel && !guestGate) return;
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setPanel(null);
+      if (e.key === 'Escape') {
+        setPanel(null);
+        setGuestGate(false);
+      }
     };
     document.body.classList.add('yp-sheet-open');
     window.addEventListener('keydown', onKey);
@@ -92,7 +100,7 @@ export default function HallWeekGrid({ spaceId, bookBaseHref }: Props) {
       document.body.classList.remove('yp-sheet-open');
       window.removeEventListener('keydown', onKey);
     };
-  }, [panel]);
+  }, [panel, guestGate]);
 
   const day = week[dayIdx] || null;
   const legend = useMemo(
@@ -106,6 +114,28 @@ export default function HallWeekGrid({ spaceId, bookBaseHref }: Props) {
 
   const openTime = typeof meta.openMin === 'number' ? minsToHhMm(meta.openMin) : '09:00';
   const closeTime = typeof meta.closeMin === 'number' ? minsToHhMm(meta.closeMin) : '21:00';
+
+  const openSlot = (start: string, end: string) => {
+    if (!authed) {
+      setPanel({ start, end });
+      setGuestGate(true);
+      return;
+    }
+    setGuestGate(false);
+    setPanel({ start, end });
+  };
+
+  const closeDrawer = () => {
+    setPanel(null);
+    setGuestGate(false);
+  };
+
+  const loginHref = panel
+    ? `/login?callbackUrl=${encodeURIComponent(`${bookHref}?start=${encodeURIComponent(panel.start)}&end=${encodeURIComponent(panel.end)}`)}`
+    : `/login?callbackUrl=${encodeURIComponent(bookHref)}`;
+  const registerHref = panel
+    ? `/register?callbackUrl=${encodeURIComponent(`${bookHref}?start=${encodeURIComponent(panel.start)}&end=${encodeURIComponent(panel.end)}`)}`
+    : `/register?callbackUrl=${encodeURIComponent(bookHref)}`;
 
   return (
     <section className="hall-week" aria-label="Занятость зала на неделю">
@@ -169,7 +199,7 @@ export default function HallWeekGrid({ spaceId, bookBaseHref }: Props) {
                   type="button"
                   className={`hall-week-slot ${STATUS_CLASS[slot.status]}`}
                   role="listitem"
-                  onClick={() => setPanel({ start: slot.start, end: slot.end })}
+                  onClick={() => openSlot(slot.start, slot.end)}
                 >
                   {content}
                 </button>
@@ -186,11 +216,11 @@ export default function HallWeekGrid({ spaceId, bookBaseHref }: Props) {
 
       {panel ? (
         <div className="svc-drawer" role="dialog" aria-modal="true" aria-label="Бронирование слота">
-          <button type="button" className="svc-drawer__backdrop" aria-label="Закрыть" onClick={() => setPanel(null)} />
+          <button type="button" className="svc-drawer__backdrop" aria-label="Закрыть" onClick={closeDrawer} />
           <div className="svc-drawer__panel">
             <header className="svc-drawer__head">
               <div>
-                <h3>Бронь: {meta.title || 'Площадка'}</h3>
+                <h3>{guestGate ? 'Нужен аккаунт' : `Бронь: ${meta.title || 'Площадка'}`}</h3>
                 <p>
                   {new Date(panel.start).toLocaleString('ru-RU', { timeZone: 'Europe/Moscow' })} –{' '}
                   {new Date(panel.end).toLocaleTimeString('ru-RU', {
@@ -200,25 +230,41 @@ export default function HallWeekGrid({ spaceId, bookBaseHref }: Props) {
                   })}
                 </p>
               </div>
-              <button type="button" className="svc-drawer__close" onClick={() => setPanel(null)} aria-label="Закрыть">
+              <button type="button" className="svc-drawer__close" onClick={closeDrawer} aria-label="Закрыть">
                 <X size={20} />
               </button>
             </header>
             <div className="svc-drawer__body">
-              <BookingCalendar
-                spaceId={spaceId}
-                spaceCapacity={meta.capacity || 50}
-                openTime={openTime}
-                closeTime={closeTime}
-                initialStartIso={panel.start}
-                initialEndIso={panel.end}
-              />
-              <p className="svc-drawer__alt">
-                Нужна полная форма?{' '}
-                <a href={`${bookHref}?start=${encodeURIComponent(panel.start)}&end=${encodeURIComponent(panel.end)}`}>
-                  Открыть страницу брони
-                </a>
-              </p>
+              {guestGate ? (
+                <div className="yp-guest-prompt__actions" style={{ display: 'grid', gap: '0.75rem' }}>
+                  <p className="hall-week-sub" style={{ margin: 0 }}>
+                    Бронь зала доступна после входа. Можно сразу создать аккаунт — слот сохранится в ссылке.
+                  </p>
+                  <Link href={loginHref} className="btn btn-primary" onClick={closeDrawer}>
+                    Войти
+                  </Link>
+                  <Link href={registerHref} className="btn btn-secondary" onClick={closeDrawer}>
+                    Регистрация
+                  </Link>
+                </div>
+              ) : (
+                <>
+                  <BookingCalendar
+                    spaceId={spaceId}
+                    spaceCapacity={meta.capacity || 50}
+                    openTime={openTime}
+                    closeTime={closeTime}
+                    initialStartIso={panel.start}
+                    initialEndIso={panel.end}
+                  />
+                  <p className="svc-drawer__alt">
+                    Нужна полная форма?{' '}
+                    <a href={`${bookHref}?start=${encodeURIComponent(panel.start)}&end=${encodeURIComponent(panel.end)}`}>
+                      Открыть страницу брони
+                    </a>
+                  </p>
+                </>
+              )}
             </div>
           </div>
         </div>

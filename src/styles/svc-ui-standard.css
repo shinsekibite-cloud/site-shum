@@ -9,10 +9,11 @@
   --z-dock: 1000;
   --z-fab: 1100;
   --z-dropdown: 3000;
+  --z-cookie: 9000;
+  --z-nav: 10000;
   --z-sheet: 12000;
   --z-modal: 13000;
   --z-lightbox: 14000;
-  --z-nav: 15000;
   --z-toast: 100000;
 
   --svc-chip-h: 2.35rem;
@@ -20,10 +21,14 @@
   --svc-chip-fs: 0.82rem;
 }
 
-/* ----- Z-index: sticky chrome always above sheets/cookies ----- */
+/* ----- Z-index: nav above cookies; sheets/modals/lightbox above nav ----- */
 .glass-nav,
 .glass-nav.menu-open {
   z-index: var(--z-nav) !important;
+}
+.yp-cookie-banner,
+.consent-banner {
+  z-index: var(--z-cookie) !important;
 }
 
 .portal-activity-lightbox {

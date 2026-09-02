@@ -864,7 +864,7 @@ export default function Navbar({ spaces = [], clubs = [], projects = [], pages =
                 >
                   <Zap size={20} />
                 </button>
-                {session && !isScanner && (
+                {session && !isScanner && !isTech && (
                   <Link
                     href={settingsHref}
                     className="mobile-menu__icon-btn"
@@ -875,7 +875,7 @@ export default function Navbar({ spaces = [], clubs = [], projects = [], pages =
                     <Settings size={20} />
                   </Link>
                 )}
-                {session && !isScanner && modOn(siteSettings, 'notifications') ? (
+                {session && !isScanner && !isTech && modOn(siteSettings, 'notifications') ? (
                   <NotificationsBell compact useNavStyle />
                 ) : null}
                 {session ? (
@@ -915,13 +915,13 @@ export default function Navbar({ spaces = [], clubs = [], projects = [], pages =
               ) : (
                 <NavProfileCard
                   variant="sheet"
-                  href="/dashboard"
+                  href={profileHref}
                   fallbackName={
                     (session!.user as { nickname?: string | null })?.nickname || session!.user?.name
                   }
                   active={isMobileMenuOpen}
                   onNavigate={closeMenu}
-                  ctaLabel="Открыть профиль"
+                  ctaLabel={isTech ? 'Открыть Ops' : isScanner ? 'Открыть сканер' : 'Открыть профиль'}
                 />
               )}
             </div>

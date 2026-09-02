@@ -207,7 +207,6 @@ function DashboardInner({ view = 'overview' }: DashboardClientProps) {
   const [unreadMessages, setUnreadMessages] = useState(0);
   const [editOpen, setEditOpen] = useState(false);
   const [previewOpen, setPreviewOpen] = useState(false);
-  const [settingsOpen, setSettingsOpen] = useState(false);
   const setEcoBalance = useCallback((ecoPoints: number) => {
     setProfile((prev) => {
       if (!prev) return prev;
@@ -578,17 +577,10 @@ function DashboardInner({ view = 'overview' }: DashboardClientProps) {
 
   useEffect(() => {
     if (view === 'edit') setEditOpen(true);
-    // /dashboard/settings — полноценная страница, без модалки поверх профиля
-    if (view === 'settings') setSettingsOpen(false);
   }, [view]);
 
-  const closeSettings = useCallback(() => {
-    setSettingsOpen(false);
-    if (view === 'settings') router.push('/dashboard');
-  }, [view, router]);
-
   useEffect(() => {
-    if (!editOpen && !previewOpen && !settingsOpen) {
+    if (!editOpen && !previewOpen) {
       document.body.classList.remove('yp-sheet-open');
       return;
     }
@@ -599,7 +591,6 @@ function DashboardInner({ view = 'overview' }: DashboardClientProps) {
       if (e.key !== 'Escape') return;
       setEditOpen(false);
       setPreviewOpen(false);
-      closeSettings();
     };
     window.addEventListener('keydown', onKey);
     return () => {
@@ -607,7 +598,7 @@ function DashboardInner({ view = 'overview' }: DashboardClientProps) {
       document.body.classList.remove('yp-sheet-open');
       window.removeEventListener('keydown', onKey);
     };
-  }, [editOpen, previewOpen, settingsOpen, closeSettings]);
+  }, [editOpen, previewOpen]);
 
   if (status === 'loading') {
     return (
@@ -1594,20 +1585,7 @@ function DashboardInner({ view = 'overview' }: DashboardClientProps) {
 
             {view === 'settings' && (
               <div className="profile-view svc-settings-page">
-                <div className="profile-page-head">
-                  <div>
-                    <h2 className="profile-view__title">Настройки</h2>
-                    <p className="profile-view__lead">
-                      Безопасность, уведомления и публичность — в одном месте.
-                    </p>
-                  </div>
-                  <Link href="/dashboard" className="btn btn-secondary">
-                    К профилю
-                  </Link>
-                </div>
                 <DashboardSettingsHub
-                  embedded
-                  onClose={() => router.push('/dashboard')}
                   profile={profile}
                   profileVisibility={profileVisibility}
                   onlineVisibility={onlineVisibility}

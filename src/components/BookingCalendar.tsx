@@ -234,7 +234,8 @@ export default function BookingCalendar({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!session) {
-      router.push('/login?callbackUrl=' + encodeURIComponent(window.location.pathname));
+      const cb = `${window.location.pathname}${window.location.search || ''}`;
+      router.push('/login?callbackUrl=' + encodeURIComponent(cb));
       return;
     }
     if (session.user?.moderationPending) {

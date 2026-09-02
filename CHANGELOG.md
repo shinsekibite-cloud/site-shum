@@ -4,6 +4,16 @@
 Версия в футере и в `package.json` / `src/lib/app-version.ts` должны совпадать.  
 Каждый пользовательский релиз на ty → запись здесь + bump версии **до** staging deploy.
 
+## [1.6.5] — 2026-09-02
+
+### Fixed
+- Z-index: модалки / drawer / QR поверх sticky nav; cookie ниже nav
+- Гость: soft-gate «Забронировать» на карточке зала и в сетке занятости
+- QuickAccess: кабинетные ссылки только USER/PARTICIPANT/MOD/ADMIN; FAB скрыт на `/ops`
+- Navbar: TECH/SCANNER — корректные профиль/настройки в мобильном меню
+- Настройки: один page-head через SettingsHub (без sheet и двойного заголовка)
+- Друзья / Сообщения: общий chrome + soft skeleton; layout gate для messaging
+
 ## [1.6.4] — 2026-09-02
 
 ### Fixed

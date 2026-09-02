@@ -835,10 +835,26 @@ function MessagesInner() {
   };
 
   if (status === 'loading') {
-    return <div className="messages-root"><div className="messages-thread__empty">Загрузка…</div></div>;
+    return (
+      <div className="messages-root" aria-busy="true">
+        <div className="svc-skel" style={{ padding: '1.25rem' }}>
+          <div className="svc-skel__pill" />
+          <div className="svc-skel__row" />
+          <div className="svc-skel__row" />
+        </div>
+      </div>
+    );
   }
   if (loading && dmList.length === 0 && groupList.length === 0 && !activeUser && !activeGroup) {
-    return <div className="messages-root"><div className="messages-thread__empty">Загрузка…</div></div>;
+    return (
+      <div className="messages-root" aria-busy="true">
+        <div className="svc-skel" style={{ padding: '1.25rem' }}>
+          <div className="svc-skel__pill" />
+          <div className="svc-skel__row" />
+          <div className="svc-skel__row" />
+        </div>
+      </div>
+    );
   }
 
   return (

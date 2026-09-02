@@ -13,6 +13,7 @@ import { spaceCover } from '@/lib/theme-covers';
 import { galleryUrls, parseGalleryItems } from '@/lib/gallery-shared';
 import { staticSpaceParams } from '@/lib/generate-public-static-params';
 import HallWeekGrid from '@/components/HallWeekGrid';
+import GuestAuthPrompt from '@/components/GuestAuthPrompt';
 import { isCoworkingSpace } from '@/lib/coworking';
 
 export const revalidate = 60;
@@ -201,20 +202,13 @@ export default async function SpaceDetail({ params }: { params: Promise<{ id: st
                   В коворкинг
                 </Link>
               ) : null}
-              <Link
+              <GuestAuthPrompt
                 href={`/spaces/${encodeURIComponent(space.id)}/book`}
                 className="btn btn-primary"
-                style={{
-                  padding: '0.75rem 1.5rem',
-                  fontWeight: 600,
-                  whiteSpace: 'nowrap',
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '0.5rem',
-                }}
+                title="Забронировать зал"
               >
                 <CalendarPlus size={18} /> Забронировать
-              </Link>
+              </GuestAuthPrompt>
             </div>
           )}
         </div>

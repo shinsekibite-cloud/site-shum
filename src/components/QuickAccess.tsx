@@ -131,6 +131,7 @@ export function QuickAccess() {
   const hideChrome =
     pathname.startsWith('/admin') ||
     pathname.startsWith('/scanner') ||
+    pathname.startsWith('/ops') ||
     pathname.startsWith('/login') ||
     pathname.startsWith('/register') ||
     pathname.startsWith('/forgot-password') ||

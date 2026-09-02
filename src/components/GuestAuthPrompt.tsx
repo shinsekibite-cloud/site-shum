@@ -53,18 +53,15 @@ export default function GuestAuthPrompt({
     );
   }
 
-  // Still resolving session — keep a link so SSR/hydration don't flash a dead button.
-  if (status === 'loading') {
-    return (
-      <Link href={loginHref} className={className} title={title}>
-        {children}
-      </Link>
-    );
-  }
-
   return (
     <>
-      <button type="button" className={className} title={title} onClick={() => setOpen(true)}>
+      <button
+        type="button"
+        className={className}
+        title={title}
+        aria-busy={status === 'loading' ? true : undefined}
+        onClick={() => setOpen(true)}
+      >
         {children}
       </button>
 

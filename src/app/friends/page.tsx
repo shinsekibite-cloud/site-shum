@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { Check, MessageCircle, Search, UserPlus, X } from 'lucide-react';
+import { ArrowLeft, Check, MessageCircle, Search, UserPlus, X } from 'lucide-react';
 import toast from 'react-hot-toast';
 import UserAvatar from '@/components/UserAvatar';
 
@@ -224,19 +224,33 @@ export default function FriendsPage() {
   }, [data.friends, query]);
 
   if (status === 'loading' || loading) {
-    return <div className="container" style={{ padding: '2rem 1rem' }}>Загрузка…</div>;
+    return (
+      <main className="container friends-page" style={{ padding: '1.25rem 1rem 2rem' }}>
+        <div className="svc-skel" aria-busy="true" aria-label="Загрузка">
+          <div className="svc-skel__pill" />
+          <div className="svc-skel__row" />
+          <div className="svc-skel__row" />
+        </div>
+      </main>
+    );
   }
 
   return (
-    <main className="container" style={{ padding: '1.25rem 1rem 2rem' }}>
-      <div style={{ marginBottom: '1rem' }}>
-        <h1 className="page-hero-title" style={{ margin: 0 }}>
-          Друзья
-        </h1>
-        <p style={{ margin: '0.35rem 0 0', color: 'var(--muted)', lineHeight: 1.45 }}>
-          Ищите участников по имени на всём портале и отправляйте заявки. Закрытые профили в поиске
-          не показываются — к ним нужна персональная ссылка.
-        </p>
+    <main className="container friends-page" style={{ padding: '1.25rem 1rem 2rem' }}>
+      <div className="messages-top" style={{ marginBottom: '1rem' }}>
+        <Link href="/dashboard" className="messages-top__back" aria-label="Назад в профиль">
+          <ArrowLeft size={20} />
+        </Link>
+        <div className="messages-top__copy">
+          <h1>Друзья</h1>
+          <p>
+            Ищите участников по имени и отправляйте заявки. Закрытые профили в поиске не показываются.
+          </p>
+        </div>
+        <Link href="/messages" className="messages-top__friends">
+          <MessageCircle size={16} aria-hidden />
+          Сообщения
+        </Link>
       </div>
 
       <section className="glass" style={{ padding: '1rem', marginBottom: '1rem' }}>
