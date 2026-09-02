@@ -10,8 +10,12 @@ import { spaceCover } from '@/lib/theme-covers';
 import EntityCoverImage from '@/components/EntityCoverImage';
 import { encodeRouteParam } from '@/lib/route-id';
 import { isCoworkingSpace } from '@/lib/coworking';
+import { isNextBuildPhase } from '@/lib/build-phase';
 
 export default async function FreeNowSpaces({ limit = 6 }: { limit?: number }) {
+  // Docker builder has no Postgres — skip Prisma during `next build` prerender.
+  if (isNextBuildPhase()) return null;
+
   const spaces = await prisma.space.findMany({
     where: { status: 'ACTIVE', isDemoData: false },
     orderBy: { updatedAt: 'desc' },
