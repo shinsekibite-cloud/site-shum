@@ -574,8 +574,8 @@ export default function BookingCalendar({
               Рабочее время: {openTime}–{closeTime} (время Сочи)
             </p>
 
-            <fieldset style={{ margin: 0, border: '1px solid #e2e8f0', borderRadius: 10, padding: '0.65rem 0.75rem' }}>
-              <legend style={{ fontSize: '0.78rem', fontWeight: 700, padding: '0 0.25rem' }}>Организатор в афише</legend>
+            <div className="svc-form-group" role="group" aria-labelledby="bk-org-label">
+              <span id="bk-org-label" className="svc-form-group__label">Организатор в афише</span>
               <label style={{ display: 'flex', gap: 8, alignItems: 'flex-start', fontSize: '0.82rem', marginBottom: 8, cursor: 'pointer' }}>
                 <input
                   type="checkbox"
@@ -608,8 +608,8 @@ export default function BookingCalendar({
                       alignItems: 'flex-start',
                       padding: '0.4rem 0.5rem',
                       borderRadius: 8,
-                      border: contactMode === opt.id ? '1px solid rgba(37,99,235,0.4)' : '1px solid #e2e8f0',
-                      background: contactMode === opt.id ? 'rgba(37,99,235,0.06)' : '#fff',
+                      border: contactMode === opt.id ? '1px solid rgba(13,115,119,0.45)' : '1px solid var(--line)',
+                      background: contactMode === opt.id ? 'var(--brand-soft)' : '#fff',
                       cursor: 'pointer',
                       fontSize: '0.82rem',
                     }}
@@ -649,29 +649,29 @@ export default function BookingCalendar({
                     value={contactPhone}
                     onChange={(e) => setContactPhone(e.target.value)}
                     placeholder="Телефон"
-                    style={{ width: '100%', padding: '0.4rem 0.65rem', border: '1px solid #e2e8f0', borderRadius: 8, fontSize: '0.85rem' }}
+                    style={{ width: '100%', padding: '0.4rem 0.65rem', border: '1px solid var(--line)', borderRadius: 8, fontSize: '0.85rem' }}
                   />
                   <input
                     value={contactTelegram}
                     onChange={(e) => setContactTelegram(e.target.value)}
                     placeholder="Telegram (@user или ссылка)"
-                    style={{ width: '100%', padding: '0.4rem 0.65rem', border: '1px solid #e2e8f0', borderRadius: 8, fontSize: '0.85rem' }}
+                    style={{ width: '100%', padding: '0.4rem 0.65rem', border: '1px solid var(--line)', borderRadius: 8, fontSize: '0.85rem' }}
                   />
                   <input
                     value={contactVk}
                     onChange={(e) => setContactVk(e.target.value)}
                     placeholder="VK (ссылка)"
-                    style={{ width: '100%', padding: '0.4rem 0.65rem', border: '1px solid #e2e8f0', borderRadius: 8, fontSize: '0.85rem' }}
+                    style={{ width: '100%', padding: '0.4rem 0.65rem', border: '1px solid var(--line)', borderRadius: 8, fontSize: '0.85rem' }}
                   />
                   <input
                     value={contactMax}
                     onChange={(e) => setContactMax(e.target.value)}
                     placeholder="MAX (ссылка)"
-                    style={{ width: '100%', padding: '0.4rem 0.65rem', border: '1px solid #e2e8f0', borderRadius: 8, fontSize: '0.85rem' }}
+                    style={{ width: '100%', padding: '0.4rem 0.65rem', border: '1px solid var(--line)', borderRadius: 8, fontSize: '0.85rem' }}
                   />
                 </div>
               ) : null}
-            </fieldset>
+            </div>
 
             <button
               type="submit"

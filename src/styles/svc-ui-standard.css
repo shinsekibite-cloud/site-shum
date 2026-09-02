@@ -257,6 +257,36 @@
   overflow: hidden;
 }
 
+/* Forms: kill native fieldset frames that draw lines through legends */
+.main-content fieldset:not(.keep-fieldset) {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  min-inline-size: 0;
+  min-width: 0;
+  max-width: 100%;
+}
+.main-content fieldset:not(.keep-fieldset) > legend {
+  float: none;
+  width: auto;
+  padding: 0;
+  margin: 0 0 0.35rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+/* Service form shells stay inside the viewport */
+.cw-page,
+.cw-layout,
+.cw-flow,
+.svc-form-group,
+.hall-week,
+.yp-engage {
+  min-width: 0;
+  max-width: 100%;
+}
+
 .places-card:hover,
 .catalog-card:hover {
   transform: none;

@@ -1,4 +1,4 @@
-const CACHE = "sochi-shell-v29-loadfix";
+const CACHE = "sochi-shell-v30-forms";
 const PRECACHE = [
   "/manifest.webmanifest",
   "/offline.html",

@@ -201,7 +201,6 @@ export default function CoworkingSignupFlow({
               {spaces.map((s) => (
                 <option key={s.id} value={s.id}>
                   {s.title}
-                  {s.address ? ` — ${s.address}` : ''}
                 </option>
               ))}
             </select>
@@ -209,8 +208,8 @@ export default function CoworkingSignupFlow({
 
           <SvcDateField value={dayKey} min={todayYmd()} onChange={setDayKey} />
 
-          <fieldset className="cw-field">
-            <legend>Интервал</legend>
+          <div className="cw-field" role="group" aria-labelledby="cw-interval-label">
+            <span id="cw-interval-label">Интервал</span>
             <div className="cw-periods">
               {COWORKING_PERIODS.map((p) => {
                 const info = space?.periods.find((x) => x.id === p.id);
@@ -220,6 +219,7 @@ export default function CoworkingSignupFlow({
                     key={p.id}
                     type="button"
                     className={`cw-period${period === p.id ? ' is-active' : ''}`}
+                    aria-pressed={period === p.id}
                     onClick={() => setPeriod(p.id)}
                   >
                     <strong>{p.label}</strong>
@@ -239,7 +239,7 @@ export default function CoworkingSignupFlow({
                 );
               })}
             </div>
-          </fieldset>
+          </div>
 
           <div className="cw-row">
             <label className="cw-field">
