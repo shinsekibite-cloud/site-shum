@@ -14,7 +14,8 @@ type Props = {
 
 /**
  * Hero media: strictly one plane — image or video.
- * Video uses poster={imageUrl}; cover CSS var is never painted under video.
+ * CSS `--home-hero-image` poster stays under the <video> until the first frame
+ * (video starts at opacity 0) so refresh does not flash a dark empty plane.
  * On video error → fall back to image (video unmounted).
  */
 export default function HomeHero({
@@ -32,12 +33,16 @@ export default function HomeHero({
   const [playing, setPlaying] = useState(false);
   const [failed, setFailed] = useState(false);
   const playingRef = useRef(false);
+  const mediaKeyRef = useRef(`${mediaKind}|${videoSrc}`);
 
   useEffect(() => {
     setReduceMotion(window.matchMedia('(prefers-reduced-motion: reduce)').matches);
   }, []);
 
   useEffect(() => {
+    const key = `${mediaKind}|${videoSrc}`;
+    if (mediaKeyRef.current === key) return;
+    mediaKeyRef.current = key;
     setFailed(false);
     setPlaying(false);
     setNeedsTap(false);
@@ -123,11 +128,8 @@ export default function HomeHero({
       if (!cancelled && !playingRef.current) setFailed(true);
     }, 8000);
 
-    try {
-      el.load();
-    } catch {
-      /* ignore */
-    }
+    // Avoid el.load() on every mount — it resets the media element and flashes
+    // blank/poster under the opacity:0 <video> before the first decoded frame.
     tryPlay();
 
     return () => {

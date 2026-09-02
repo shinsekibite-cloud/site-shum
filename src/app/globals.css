@@ -1486,15 +1486,16 @@ body.yp-no-copy pre {
   height: 100%;
   object-fit: cover;
   object-position: center;
+  /* Stay transparent until first frame; poster is the CSS background under it */
   opacity: 0;
-  transition: opacity 0.45s ease;
+  transition: opacity 0.28s ease;
 }
 .home-hero--video .home-hero-media {
-  /* Poster/fallback image stays until video is ready */
-  background-color: #0b1724;
+  /* Keep --home-hero-image poster painted — do not cover with flat dark fill */
+  background-color: transparent;
 }
 .home-hero--playing .home-hero-media {
-  background-color: #0b1724;
+  background-color: transparent;
 }
 .home-hero-play {
   position: absolute;
@@ -1564,17 +1565,18 @@ body.yp-no-copy pre {
 .home-hero--animated .home-hero-glow {
   animation: home-hero-glow-shift 14s ease-in-out infinite alternate;
 }
+/* Entrance: transform only — opacity:0→1 on every F5 reads as a blink. */
 .home-hero--animated .home-hero-title,
 .home-hero--video .home-hero-title {
-  animation: home-hero-title-in 0.9s ease-out both;
+  animation: home-hero-title-in 0.55s ease-out both;
 }
 .home-hero--animated .home-hero-lead,
 .home-hero--video .home-hero-lead {
-  animation: home-hero-title-in 0.9s ease-out 0.12s both;
+  animation: home-hero-title-in 0.55s ease-out 0.06s both;
 }
 .home-hero--animated .home-hero-actions,
 .home-hero--video .home-hero-actions {
-  animation: home-hero-title-in 0.9s ease-out 0.22s both;
+  animation: home-hero-title-in 0.55s ease-out 0.12s both;
 }
 @keyframes home-hero-kenburns {
   from { transform: scale(1) translate3d(0, 0, 0); }
@@ -1585,8 +1587,8 @@ body.yp-no-copy pre {
   to { opacity: 1; transform: translate3d(2%, -1%, 0); }
 }
 @keyframes home-hero-title-in {
-  from { opacity: 0; transform: translateY(12px); }
-  to { opacity: 1; transform: translateY(0); }
+  from { transform: translateY(8px); }
+  to { transform: translateY(0); }
 }
 @media (prefers-reduced-motion: reduce) {
   .home-hero--animated .home-hero-media,
@@ -18486,7 +18488,8 @@ body.is-admin .ops-page-shell__top .yp-notif-bell {
 }
 
 .home-hero--video.home-hero--playing .home-hero-media {
-  background-color: #0b1724;
+  /* Poster stays as fallback under the video; no dark flash on play */
+  background-color: transparent;
 }
 
 /* Places: less void above footer */
