@@ -94,7 +94,12 @@ async function updateSettings(formData: FormData) {
     data.galleryPageEnabled = formData.get('galleryPageEnabled') === 'true';
     data.galleryPublicEnabled = formData.get('galleryPublicEnabled') === 'true';
     const orgGallery = String(formData.get('orgGalleryJson') || '').trim();
-    data.orgGalleryJson = orgGallery || null;
+    if (orgGallery) {
+      const { parseGalleryItems, serializeGalleryItems } = await import('@/lib/gallery-shared');
+      data.orgGalleryJson = serializeGalleryItems(parseGalleryItems(orgGallery, 48), 48);
+    } else {
+      data.orgGalleryJson = null;
+    }
     const maxUser = parseInt(String(formData.get('galleryMaxPerUser') || ''), 10);
     if (Number.isFinite(maxUser) && maxUser > 0) data.galleryMaxPerUser = Math.min(48, maxUser);
     const maxBytes = parseInt(String(formData.get('galleryMaxUploadBytes') || ''), 10);
@@ -1601,7 +1606,7 @@ export default async function AdminSettings({ searchParams }: { searchParams: Pr
           <div className="tab-content">
             <div style={cardStyle}>
               <h2 style={{ margin: '0 0 0.75rem', fontSize: '1.15rem', fontWeight: 800, display: 'flex', alignItems: 'center', gap: 8 }}>
-                <Leaf size={18} /> Эко-баллы и пул
+                <Leaf size={18} /> Эко-баллы и М-пул
               </h2>
               <p style={{ margin: '0 0 1rem', color: '#64748b', fontSize: '0.9rem' }}>
                 Общий лимит портала (по умолчанию 1&nbsp;000&nbsp;000). Выдача участникам и награды в конкурсах

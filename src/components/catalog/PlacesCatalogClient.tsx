@@ -79,11 +79,9 @@ export default function PlacesCatalogClient({ items }: { items: PublicPlaceCard[
       </header>
 
       <div className="container places-catalog">
-        <div className="places-toolbar">
-          <PlaceCategoryChips />
+        <div className="places-toolbar places-toolbar--one-row">
           <form className="places-search" method="get" action="/places" role="search">
             {categoryFilter ? <input type="hidden" name="category" value={categoryFilter} /> : null}
-            {sort !== 'order' ? <input type="hidden" name="sort" value={sort} /> : null}
             <input
               id="places-q"
               name="q"
@@ -103,6 +101,7 @@ export default function PlacesCatalogClient({ items }: { items: PublicPlaceCard[
             </label>
             <button type="submit">Найти</button>
           </form>
+          <PlaceCategoryChips />
         </div>
 
         {pageItems.length === 0 ? (

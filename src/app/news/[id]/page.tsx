@@ -67,7 +67,7 @@ export default async function NewsDetailPage({ params }: { params: Promise<{ id:
   });
 
   return (
-    <div className="container" style={{ padding: '1.5rem 1rem 3rem' }}>
+    <div className="container news-detail-page" style={{ padding: '1.5rem 1rem 3rem' }}>
       <Breadcrumbs
         items={[
           { href: '/', label: 'Главная' },
@@ -90,27 +90,20 @@ export default async function NewsDetailPage({ params }: { params: Promise<{ id:
         <ArrowLeft size={18} /> К новостям
       </Link>
 
-      <article
-        style={{
-          background: '#fff',
-          borderRadius: 'var(--radius-lg)',
-          border: '1px solid rgba(15,23,42,0.06)',
-          overflow: 'hidden',
-        }}
-      >
+      <article className="news-detail-article">
         {item.videoEmbedUrl ? (
           <NewsVideoEmbed src={item.videoEmbedUrl} title={item.title} />
         ) : (
-          <div style={{ position: 'relative', width: '100%', aspectRatio: '16 / 9', background: '#e2e8f0' }}>
+          <div className="news-detail-cover">
             <NewsCoverImage
               src={item.imageUrl}
               alt={item.title || 'Новость'}
               priority
-              sizes="(max-width: 820px) 100vw, 820px"
+              sizes="(max-width: 720px) 100vw, 720px"
             />
           </div>
         )}
-        <div style={{ padding: '1.5rem 1.35rem 1.75rem' }}>
+        <div className="news-detail-body">
           <span
             style={{
               color: 'var(--muted)',
@@ -131,19 +124,12 @@ export default async function NewsDetailPage({ params }: { params: Promise<{ id:
             })}
           </span>
           {item.title && (
-            <h1 className="page-hero-title" style={{ margin: '0 0 0.5rem' }}>
+            <h1 className="news-detail-title">
               {item.title}
             </h1>
           )}
-          <ViewBeacon type="NEWS" id={item.id} initialCount={item.viewCount ?? 0} style={{ marginBottom: '1rem' }} />
-          <div
-            style={{
-              fontSize: '1.05rem',
-              lineHeight: 1.7,
-              color: 'var(--foreground)',
-              whiteSpace: 'pre-wrap',
-            }}
-          >
+          <ViewBeacon type="NEWS" id={item.id} initialCount={item.viewCount ?? 0} style={{ marginBottom: '0.85rem' }} />
+          <div className="news-detail-text">
             {item.text}
           </div>
           {item.vkLink && (

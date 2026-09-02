@@ -218,87 +218,88 @@ export default async function ContactsPage() {
         )}
 
         {address && (
-          <div style={{ marginBottom: '1.5rem' }}>
+          <div className="contacts-directions" style={{ marginBottom: '1.5rem' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: '0.75rem', fontWeight: 700 }}>
               <Navigation size={18} color="var(--primary)" /> Как добраться
             </div>
-            <YandexDirections address={address} placeName={siteName} point={mapPoint} showMap />
+            <YandexDirections
+              address={address}
+              placeName={siteName}
+              point={mapPoint}
+              showMap
+              splitLayout
+            />
           </div>
         )}
 
-        <div
-          className="glass"
-          style={{
-            padding: '1.5rem',
-            borderRadius: 'var(--radius-lg)',
-            marginBottom: '1.5rem',
-          }}
-        >
-          <h2 style={{ fontSize: '1.15rem', fontWeight: 700, marginBottom: '0.75rem', display: 'flex', alignItems: 'center', gap: 8 }}>
-            <MessageCircle size={18} /> Чем мы можем помочь
-          </h2>
-          <ul style={{ margin: 0, paddingLeft: '1.1rem', color: 'var(--muted)', lineHeight: 1.7, fontSize: '0.95rem' }}>
-            <li>Запись на мероприятия и вопросы по билетам / QR</li>
-            <li>Заявки в проекты и клубы</li>
-            <li>Бронирование молодёжных пространств</li>
-            <li>Документы, самоуправление и партнёрские инициативы</li>
-          </ul>
-          <div
-            className="contacts-action-row"
-            style={{ display: 'flex', flexWrap: 'wrap', gap: '0.45rem', marginTop: '0.85rem', alignItems: 'center' }}
-          >
-            <Link href="/events" className="btn btn-primary" style={{ padding: '0.5rem 0.85rem', fontSize: '0.85rem' }}>
-              Афиша
-            </Link>
-            <Link href="/documents" className="btn btn-secondary" style={{ padding: '0.5rem 0.85rem', fontSize: '0.85rem', gap: 6, display: 'inline-flex', alignItems: 'center' }}>
-              <FileText size={14} /> Документы
-            </Link>
-            <Link href="/spaces" className="btn btn-secondary" style={{ padding: '0.5rem 0.85rem', fontSize: '0.85rem' }}>
-              Пространства
-            </Link>
-            <Link href="/rules" className="btn btn-secondary" style={{ padding: '0.5rem 0.85rem', fontSize: '0.85rem' }}>
-              Правила
-            </Link>
-            <Link href="/faq" className="btn btn-secondary" style={{ padding: '0.5rem 0.85rem', fontSize: '0.85rem' }}>
-              Вопросы
-            </Link>
-          </div>
-        </div>
-
-        <div className="glass" style={{ padding: '1.15rem 1.25rem', borderRadius: 'var(--radius-lg)' }}>
-          <h2 style={{ fontSize: '1.05rem', fontWeight: 700, marginBottom: '0.65rem' }}>Мы в социальных сетях</h2>
-          {socials.length > 0 ? (
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.65rem', alignItems: 'center' }}>
-              {socials.map((s) => (
-                <a
-                  key={s.key}
-                  href={(settings as any)[s.key + 'Link']}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '0.45rem',
-                    color: s.color,
-                    fontWeight: 600,
-                    fontSize: '0.88rem',
-                    textDecoration: 'none',
-                  }}
-                >
-                  <SocialIconLink
-                    kind={s.key as 'vk' | 'tg' | 'ok' | 'whatsapp' | 'rutube' | 'max'}
-                    href={(settings as any)[s.key + 'Link']}
-                    size={36}
-                  />
-                  {s.label}
-                </a>
-              ))}
+        <div className="contacts-two-col">
+          <div className="glass contacts-col-card">
+            <h2 style={{ fontSize: '1.15rem', fontWeight: 700, marginBottom: '0.75rem', display: 'flex', alignItems: 'center', gap: 8 }}>
+              <MessageCircle size={18} /> Чем мы можем помочь
+            </h2>
+            <ul style={{ margin: 0, paddingLeft: '1.1rem', color: 'var(--muted)', lineHeight: 1.7, fontSize: '0.95rem' }}>
+              <li>Запись на мероприятия и вопросы по билетам / QR</li>
+              <li>Заявки в проекты и клубы</li>
+              <li>Бронирование молодёжных пространств</li>
+              <li>Документы, самоуправление и партнёрские инициативы</li>
+            </ul>
+            <div
+              className="contacts-action-row"
+              style={{ display: 'flex', flexWrap: 'wrap', gap: '0.45rem', marginTop: '0.85rem', alignItems: 'center' }}
+            >
+              <Link href="/events" className="btn btn-primary" style={{ padding: '0.5rem 0.85rem', fontSize: '0.85rem' }}>
+                Афиша
+              </Link>
+              <Link href="/documents" className="btn btn-secondary" style={{ padding: '0.5rem 0.85rem', fontSize: '0.85rem', gap: 6, display: 'inline-flex', alignItems: 'center' }}>
+                <FileText size={14} /> Документы
+              </Link>
+              <Link href="/spaces" className="btn btn-secondary" style={{ padding: '0.5rem 0.85rem', fontSize: '0.85rem' }}>
+                Пространства
+              </Link>
+              <Link href="/rules" className="btn btn-secondary" style={{ padding: '0.5rem 0.85rem', fontSize: '0.85rem' }}>
+                Правила
+              </Link>
+              <Link href="/faq" className="btn btn-secondary" style={{ padding: '0.5rem 0.85rem', fontSize: '0.85rem' }}>
+                Вопросы
+              </Link>
             </div>
-          ) : (
-            <p style={{ margin: 0, color: 'var(--muted)', fontSize: '0.95rem' }}>
-              Ссылки на соцсети появятся позже.
-            </p>
-          )}
+          </div>
+
+          <div className="glass contacts-col-card">
+            <h2 style={{ fontSize: '1.05rem', fontWeight: 700, marginBottom: '0.65rem' }}>Мы в социальных сетях</h2>
+            {socials.length > 0 ? (
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.65rem', alignItems: 'center' }}>
+                {socials.map((s) => (
+                  <a
+                    key={s.key}
+                    href={(settings as any)[s.key + 'Link']}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '0.45rem',
+                      color: s.color,
+                      fontWeight: 600,
+                      fontSize: '0.88rem',
+                      textDecoration: 'none',
+                    }}
+                  >
+                    <SocialIconLink
+                      kind={s.key as 'vk' | 'tg' | 'ok' | 'whatsapp' | 'rutube' | 'max'}
+                      href={(settings as any)[s.key + 'Link']}
+                      size={36}
+                    />
+                    {s.label}
+                  </a>
+                ))}
+              </div>
+            ) : (
+              <p style={{ margin: 0, color: 'var(--muted)', fontSize: '0.95rem' }}>
+                Ссылки на соцсети появятся позже.
+              </p>
+            )}
+          </div>
         </div>
       </div>
     </div>

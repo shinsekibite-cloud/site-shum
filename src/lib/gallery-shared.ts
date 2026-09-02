@@ -24,7 +24,11 @@ export function parseGalleryItems(raw: unknown, max = 48): GalleryItem[] {
         .map((u) => u.trim())
         .filter((u) => u.startsWith('/') || /^https?:\/\//i.test(u))
         .slice(0, max)
-        .map((url) => ({ url }));
+        .map((url, i) => ({
+          url,
+          // Legacy URL lists: fake descending days so gallery can group by date
+          createdAt: new Date(Date.now() - i * 86400000).toISOString(),
+        }));
     }
   }
   if (!Array.isArray(data)) return [];
@@ -32,7 +36,12 @@ export function parseGalleryItems(raw: unknown, max = 48): GalleryItem[] {
   for (const row of data) {
     if (typeof row === 'string') {
       const url = row.trim();
-      if (url.startsWith('/') || /^https?:\/\//i.test(url)) out.push({ url });
+      if (url.startsWith('/') || /^https?:\/\//i.test(url)) {
+        out.push({
+          url,
+          createdAt: new Date(Date.now() - out.length * 86400000).toISOString(),
+        });
+      }
     } else if (row && typeof row === 'object' && typeof (row as GalleryItem).url === 'string') {
       const url = String((row as GalleryItem).url).trim();
       if (!url) continue;
@@ -42,12 +51,14 @@ export function parseGalleryItems(raw: unknown, max = 48): GalleryItem[] {
         statusRaw === 'PENDING' || statusRaw === 'APPROVED' || statusRaw === 'REJECTED'
           ? (statusRaw as GalleryModerationStatus)
           : undefined;
-      const createdAt = (row as GalleryItem).createdAt?.trim();
+      const createdAt =
+        (row as GalleryItem).createdAt?.trim() ||
+        new Date(Date.now() - out.length * 86400000).toISOString();
       out.push({
         url,
         ...(caption ? { caption } : {}),
         ...(status ? { status } : {}),
-        ...(createdAt ? { createdAt } : {}),
+        createdAt,
       });
     }
     if (out.length >= max) break;

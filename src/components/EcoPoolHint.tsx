@@ -77,8 +77,8 @@ export default function EcoPoolHint({
 
   if (variant === 'footer') {
     return (
-      <p className="eco-pool-hint eco-pool-hint--footer" title="Общий пул эко-баллов портала">
-        <Leaf size={12} aria-hidden /> Эко-пул: осталось {fmt(remaining)} из {fmt(pool.total)}
+      <p className="eco-pool-hint eco-pool-hint--footer" title="Общий М-пул портала">
+        <Leaf size={12} aria-hidden /> М-пул: осталось {fmt(remaining)} из {fmt(pool.total)}
       </p>
     );
   }
@@ -86,11 +86,11 @@ export default function EcoPoolHint({
   return (
     <div
       className={`eco-pool-hint eco-pool-hint--${variant}`}
-      aria-label="Пул эко-баллов"
+      aria-label="М-пул"
     >
       <div className="eco-pool-hint__head">
         <Leaf size={14} aria-hidden />
-        <span>Пул эко-баллов</span>
+        <span>М-пул</span>
         <strong>{fmt(remaining)}</strong>
         <span className="eco-pool-hint__muted">осталось</span>
       </div>

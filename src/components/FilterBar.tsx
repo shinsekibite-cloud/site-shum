@@ -112,8 +112,8 @@ export default function FilterBar({
   };
 
   return (
-    <div className="filter-bar">
-      <div className="filter-bar__row">
+    <div className="filter-bar filter-bar--compact">
+      <div className="filter-bar__row filter-bar__row--one">
         <div className="filter-bar__search-wrap">
           <Search size={16} className="filter-bar__icon" aria-hidden />
           <input
@@ -146,40 +146,40 @@ export default function FilterBar({
             </select>
           </label>
         ) : null}
+
+        {!hideStatus ? (
+          <div className="filter-bar__chips filter-bar__chips--inline" role="group" aria-label="Фильтр по статусу">
+            {statusOptions.map(({ key, label }) => (
+              <button
+                key={key}
+                type="button"
+                onClick={() => setStatus(key)}
+                className={chipClass(key, status === key, key === 'COMPLETED' || key === 'CLOSED')}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+        ) : null}
+
+        {cats ? (
+          <div className="filter-bar__chips filter-bar__chips--inline" role="group" aria-label="Категории">
+            <button type="button" onClick={() => setCat('ALL')} className={chipClass('ALL', cat === 'ALL')}>
+              Все
+            </button>
+            {cats.map(({ key, label }) => (
+              <button
+                key={key}
+                type="button"
+                onClick={() => setCat(key)}
+                className={chipClass(key, cat === key)}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+        ) : null}
       </div>
-
-      {!hideStatus ? (
-        <div className="filter-bar__chips" role="group" aria-label="Фильтр по статусу">
-          {statusOptions.map(({ key, label }) => (
-            <button
-              key={key}
-              type="button"
-              onClick={() => setStatus(key)}
-              className={chipClass(key, status === key, key === 'COMPLETED' || key === 'CLOSED')}
-            >
-              {label}
-            </button>
-          ))}
-        </div>
-      ) : null}
-
-      {cats ? (
-        <div className="filter-bar__chips" role="group" aria-label="Категории">
-          <button type="button" onClick={() => setCat('ALL')} className={chipClass('ALL', cat === 'ALL')}>
-            Все категории
-          </button>
-          {cats.map(({ key, label }) => (
-            <button
-              key={key}
-              type="button"
-              onClick={() => setCat(key)}
-              className={chipClass(key, cat === key)}
-            >
-              {label}
-            </button>
-          ))}
-        </div>
-      ) : null}
     </div>
   );
 }

@@ -56,13 +56,13 @@ export default function FooterEcoStatus() {
   const pct = Math.max(0, Math.min(100, Math.round((remaining / total) * 100)));
 
   return (
-    <div className="site-footer-eco" title="Общий пул эко-баллов всего портала, не ваш личный баланс">
+    <div className="site-footer-eco" title="Общий М-пул портала — не ваш личный баланс">
       <div className="site-footer-eco__row">
         <span className="site-footer-eco__icon" aria-hidden>
           <Leaf size={16} />
         </span>
         <div className="site-footer-eco__text">
-          <strong>Общий эко-пул портала</strong>
+          <strong>М-пул портала</strong>
           <span>
             осталось {fmt(remaining)} из {fmt(total)} · это не ваш личный баланс
           </span>

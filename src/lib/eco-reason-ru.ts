@@ -21,7 +21,7 @@ const EXACT: Record<string, string> = {
   view_unique: 'Просмотр карточки',
   admin_grant: 'Начисление администратором',
   admin_adjust: 'Корректировка администратором',
-  eco_pool_reset: 'Сброс эко-пула',
+  eco_pool_reset: 'Сброс М-пула',
   contest_manual_award: 'Премия за конкурс (вручную)',
   referral_signup: 'Реферал: регистрация друга',
   referral_signup_welcome: 'Бонус за регистрацию по приглашению',

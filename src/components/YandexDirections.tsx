@@ -19,6 +19,8 @@ type Props = {
   showMap?: boolean;
   /** Compact link row only */
   compact?: boolean;
+  /** Desktop: route buttons left, large map right */
+  splitLayout?: boolean;
   style?: React.CSSProperties;
 };
 
@@ -36,6 +38,7 @@ export default function YandexDirections({
   point = null,
   showMap = false,
   compact = false,
+  splitLayout = false,
   style,
 }: Props) {
   const query = resolveQuery(address, placeName);
@@ -78,99 +81,111 @@ export default function YandexDirections({
     );
   }
 
-  return (
-    <div style={{ ...style }}>
-      <div
+  const actions = (
+    <div className={splitLayout ? 'yp-directions__actions' : undefined} style={splitLayout ? undefined : {
+      display: 'flex',
+      flexWrap: 'wrap',
+      gap: '0.45rem',
+      alignItems: 'center',
+      marginBottom: widget ? '0.75rem' : 0,
+    }}>
+      <a
+        href={directions}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="btn btn-primary"
         style={{
-          display: 'flex',
-          flexWrap: 'wrap',
-          gap: '0.45rem',
+          display: 'inline-flex',
           alignItems: 'center',
-          marginBottom: widget ? '0.75rem' : 0,
+          gap: '0.4rem',
+          padding: '0.55rem 0.9rem',
+          fontWeight: 600,
+          textDecoration: 'none',
+          flex: '0 0 auto',
+          whiteSpace: 'nowrap',
         }}
       >
-        <a
-          href={directions}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="btn btn-primary"
-          style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '0.4rem',
-            padding: '0.55rem 0.9rem',
-            fontWeight: 600,
-            textDecoration: 'none',
-            flex: '0 0 auto',
-            whiteSpace: 'nowrap',
-          }}
-        >
-          <Navigation size={16} />
-          Маршрут
-        </a>
-        <a
-          href={place}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="btn btn-secondary"
-          style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '0.4rem',
-            padding: '0.55rem 0.9rem',
-            fontWeight: 600,
-            textDecoration: 'none',
-            flex: '0 0 auto',
-            whiteSpace: 'nowrap',
-          }}
-        >
-          <MapIcon size={16} />
-          На карте
-        </a>
-        {modes.map(({ mode, label }) => {
-          const href = yandexMapsDirectionsUrl(query || address || '', mode, point);
-          if (!href) return null;
-          return (
-            <a
-              key={mode}
-              href={href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn btn-secondary"
-              style={{
-                fontSize: '0.82rem',
-                fontWeight: 600,
-                textDecoration: 'none',
-                padding: '0.55rem 0.75rem',
-                flex: '0 0 auto',
-                whiteSpace: 'nowrap',
-              }}
-            >
-              {label}
-            </a>
-          );
-        })}
-      </div>
-
-      {widget && (
-        <div className="yp-map-embed">
-          <iframe
-            title={`Карта: ${query || address || 'место'}`}
-            src={widget}
-            width="100%"
-            height="100%"
-            frameBorder={0}
-            allowFullScreen
+        <Navigation size={16} />
+        Маршрут
+      </a>
+      <a
+        href={place}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="btn btn-secondary"
+        style={{
+          display: 'inline-flex',
+          alignItems: 'center',
+          gap: '0.4rem',
+          padding: '0.55rem 0.9rem',
+          fontWeight: 600,
+          textDecoration: 'none',
+          flex: '0 0 auto',
+          whiteSpace: 'nowrap',
+        }}
+      >
+        <MapIcon size={16} />
+        На карте
+      </a>
+      {modes.map(({ mode, label }) => {
+        const href = yandexMapsDirectionsUrl(query || address || '', mode, point);
+        if (!href) return null;
+        return (
+          <a
+            key={mode}
+            href={href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn btn-secondary"
             style={{
-              position: 'absolute',
-              inset: 0,
-              width: '100%',
-              height: '100%',
-              border: 0,
+              fontSize: '0.82rem',
+              fontWeight: 600,
+              textDecoration: 'none',
+              padding: '0.55rem 0.75rem',
+              flex: '0 0 auto',
+              whiteSpace: 'nowrap',
             }}
-          />
-        </div>
-      )}
+          >
+            {label}
+          </a>
+        );
+      })}
+    </div>
+  );
+
+  const map = widget ? (
+    <div className={`yp-map-embed${splitLayout ? ' yp-map-embed--lg' : ''}`}>
+      <iframe
+        title={`Карта: ${query || address || 'место'}`}
+        src={widget}
+        width="100%"
+        height="100%"
+        frameBorder={0}
+        allowFullScreen
+        style={{
+          position: 'absolute',
+          inset: 0,
+          width: '100%',
+          height: '100%',
+          border: 0,
+        }}
+      />
+    </div>
+  ) : null;
+
+  if (splitLayout && map) {
+    return (
+      <div className="yp-directions-split" style={style}>
+        {actions}
+        {map}
+      </div>
+    );
+  }
+
+  return (
+    <div style={{ ...style }}>
+      {actions}
+      {map}
     </div>
   );
 }

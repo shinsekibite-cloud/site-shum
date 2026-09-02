@@ -147,6 +147,9 @@ export default function UserAvatar({
         />
       );
     }
+    // Uploads are often served by nginx from a shared volume; the in-container
+    // optimizer can 400 ("isn't a valid image") when the file isn't on this mount.
+    const isUpload = image.startsWith('/uploads/') || image.includes('/uploads/');
     return wrap(
       <Image
         src={image}
@@ -154,7 +157,7 @@ export default function UserAvatar({
         width={size}
         height={size}
         style={shared}
-        unoptimized={image.startsWith('data:') || image.startsWith('http')}
+        unoptimized={isUpload || image.startsWith('data:') || image.startsWith('http')}
         onError={() => setImgFailed(true)}
       />
     );

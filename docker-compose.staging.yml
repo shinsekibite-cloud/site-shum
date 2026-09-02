@@ -37,7 +37,9 @@ services:
       - NODE_OPTIONS=--max-old-space-size=320
       # NODE_EXTRA_CA_CERTS set by scripts/docker-entrypoint.sh only if PEM exists
     volumes:
-      - ./public/uploads:/app/public/uploads
+      # Share prod uploads so docs/avatars/gallery exist for next/image + /api/documents
+      # (nginx already serves /uploads from prod; empty staging volume caused 400/404).
+      - ${STAGING_UPLOADS_HOST_PATH:-/opt/sochi-portal/public/uploads}:/app/public/uploads
       - ./certs:/app/certs:ro
     restart: always
     mem_limit: 512m

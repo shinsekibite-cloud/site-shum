@@ -30,6 +30,7 @@ const manrope = localFont({
   ],
   variable: '--font-manrope',
   display: 'swap',
+  preload: true,
 });
 
 const unbounded = localFont({
@@ -41,6 +42,8 @@ const unbounded = localFont({
   ],
   variable: '--font-unbounded',
   display: 'swap',
+  // Avoid unused font preload spam — headings pull weights on demand
+  preload: false,
 });
 
 export async function generateMetadata(): Promise<Metadata> {

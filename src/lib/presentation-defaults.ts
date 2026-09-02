@@ -331,7 +331,7 @@ export function defaultFullDeck(): PresentationDeck {
         cards: [
           { title: 'Боты', text: 'Telegram и MAX: алерты и бэкапы' },
           { title: 'Система', text: 'Состояние сервера и сервисов' },
-          { title: 'Настройки', text: 'Почта, бренд, согласия, эко-пул' },
+          { title: 'Настройки', text: 'Почта, бренд, согласия, М-пул' },
         ],
       },
       {

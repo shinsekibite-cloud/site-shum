@@ -45,7 +45,7 @@ export default async function BookSpacePage({ params }: { params: Promise<{ id: 
           Выберите дату и время для бронирования или присоединяйтесь к открытым мероприятиям.
         </p>
 
-        <div style={{ backgroundColor: 'white', borderRadius: 'var(--radius-xl)', boxShadow: '0 4px 20px rgba(0,0,0,0.05)', overflow: 'hidden', maxWidth: '28rem', width: '100%', marginInline: 'auto' }}>
+        <div className="booking-page-panel">
           <BookingCalendar
             spaceId={space.id}
             spaceCapacity={space.capacity}
