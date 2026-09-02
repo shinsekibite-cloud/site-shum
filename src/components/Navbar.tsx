@@ -603,7 +603,13 @@ export default function Navbar({ spaces = [], clubs = [], projects = [], pages =
           className="desktop-nav"
           aria-label="Основное меню"
         >
-          {headerMainPages.map((page: any) => (
+          {headerMainPages
+            .filter((page: any) => {
+              const slug = String(page.slug || '').toLowerCase();
+              // TZ: 4–6 primary links — keep About in the main row only
+              return slug === 'about' || slug === 'o-nas' || page.title === 'О нас';
+            })
+            .map((page: any) => (
             <Link key={page.id} href={publicPagePath(page.slug)} data-nav-id={`page-${page.slug}`} style={getLinkStyle(publicPagePath(page.slug))}>
               {page.title}
             </Link>
@@ -704,34 +710,35 @@ export default function Navbar({ spaces = [], clubs = [], projects = [], pages =
               Афиша
             </Link>
           ) : null}
-          {(siteSettings?.galleryPageEnabled ?? true) && modOn(siteSettings, 'gallery') && (
-            <Link href="/gallery" data-nav-id="gallery" style={getLinkStyle('/gallery')}>
-              Галерея
-            </Link>
-          )}
-          {modOn(siteSettings, 'places') && (
-            <Link href="/places" data-nav-id="places" style={getLinkStyle('/places')}>
-              Куда сходить
-            </Link>
-          )}
           {modOn(siteSettings, 'news') ? (
             <Link href="/news" data-nav-id="news" style={getLinkStyle('/news')}>
               Новости
             </Link>
           ) : null}
-          {modOn(siteSettings, 'vacancies') && (
+
+          {/* Secondary destinations live under «Ещё» (TZ: 4–6 primary links) */}
+          {false && (siteSettings?.galleryPageEnabled ?? true) && modOn(siteSettings, 'gallery') && (
+            <Link href="/gallery" data-nav-id="gallery" style={getLinkStyle('/gallery')}>
+              Галерея
+            </Link>
+          )}
+          {false && modOn(siteSettings, 'places') && (
+            <Link href="/places" data-nav-id="places" style={getLinkStyle('/places')}>
+              Куда сходить
+            </Link>
+          )}
+          {false && modOn(siteSettings, 'vacancies') && (
             <Link href="/vacancies" data-nav-id="vacancies" style={getLinkStyle('/vacancies')}>
               Вакансии
             </Link>
           )}
-          {modOn(siteSettings, 'contests') && (
+          {false && modOn(siteSettings, 'contests') && (
             <Link href="/contests" data-nav-id="contests" style={getLinkStyle('/contests')}>
               Конкурсы
             </Link>
           )}
 
-          {(headerSubPages.length > 0 || overflowIds.length > 0) &&
-            renderDropdown(
+          {renderDropdown(
               'more',
               <button
                 type="button"
@@ -761,41 +768,37 @@ export default function Navbar({ spaces = [], clubs = [], projects = [], pages =
                   }
                 }}
               >
-                {overflowIds.length > 0 ? 'Ещё' : 'Разделы'} <ChevronDown size={14} />
+                Ещё <ChevronDown size={14} />
               </button>,
               <>
-                {overflowIds.length > 0 && (
-                  <div className="dropdown-section-label" role="presentation">
-                    Скрытые пункты
-                  </div>
-                )}
-                {overflowIds.includes('projects') && modOn(siteSettings, 'projects') && (
-                  <Link href="/projects" className="dropdown-item" role="menuitem" onClick={closeDesktopMenus}>Проекты</Link>
-                )}
-                {overflowIds.includes('clubs') && modOn(siteSettings, 'clubs') && (
-                  <Link href="/clubs" className="dropdown-item" role="menuitem" onClick={closeDesktopMenus}>Клубы</Link>
-                )}
-                {overflowIds.includes('spaces') && modOn(siteSettings, 'spaces') && (
-                  <Link href="/spaces" className="dropdown-item" role="menuitem" onClick={closeDesktopMenus}>Пространства</Link>
-                )}
-                {overflowIds.includes('events') && modOn(siteSettings, 'events') && (
-                  <Link href="/events" className="dropdown-item" role="menuitem" onClick={closeDesktopMenus}>Афиша</Link>
-                )}
-                {overflowIds.includes('gallery') && (
+                {(siteSettings?.galleryPageEnabled ?? true) && modOn(siteSettings, 'gallery') && (
                   <Link href="/gallery" className="dropdown-item" role="menuitem" onClick={closeDesktopMenus}>Галерея</Link>
                 )}
-                {overflowIds.includes('places') && modOn(siteSettings, 'places') && (
+                {modOn(siteSettings, 'places') && (
                   <Link href="/places" className="dropdown-item" role="menuitem" onClick={closeDesktopMenus}>Куда сходить</Link>
                 )}
-                {overflowIds.includes('news') && modOn(siteSettings, 'news') && (
-                  <Link href="/news" className="dropdown-item" role="menuitem" onClick={closeDesktopMenus}>Новости</Link>
-                )}
-                {overflowIds.includes('vacancies') && (
+                {modOn(siteSettings, 'vacancies') && (
                   <Link href="/vacancies" className="dropdown-item" role="menuitem" onClick={closeDesktopMenus}>Вакансии</Link>
                 )}
-                {overflowIds.includes('contests') && (
+                {modOn(siteSettings, 'contests') && (
                   <Link href="/contests" className="dropdown-item" role="menuitem" onClick={closeDesktopMenus}>Конкурсы</Link>
                 )}
+                {headerMainPages
+                  .filter((page: any) => {
+                    const slug = String(page.slug || '').toLowerCase();
+                    return !(slug === 'about' || slug === 'o-nas' || page.title === 'О нас');
+                  })
+                  .map((page: any) => (
+                    <Link
+                      key={`more-${page.id}`}
+                      href={publicPagePath(page.slug)}
+                      className="dropdown-item"
+                      role="menuitem"
+                      onClick={closeDesktopMenus}
+                    >
+                      {page.title}
+                    </Link>
+                  ))}
                 {headerSubPages.length > 0 && (
                   <div className="dropdown-section-label" role="presentation">
                     Ещё на сайте
