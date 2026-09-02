@@ -143,7 +143,7 @@ export default function HomeHero({
             muted
             loop
             playsInline
-            preload="auto"
+            preload="metadata"
             disablePictureInPicture
           />
         ) : null}

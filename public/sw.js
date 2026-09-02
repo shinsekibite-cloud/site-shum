@@ -1,4 +1,4 @@
-const CACHE = "sochi-shell-v22-brand";
+const CACHE = "sochi-shell-v23-stable";
 const PRECACHE = [
   "/manifest.webmanifest",
   "/offline.html",
@@ -27,8 +27,27 @@ const NEVER_CACHE = [
 
 function shouldBypass(pathname) {
   return NEVER_CACHE.some(
-    (p) => pathname === p || pathname.startsWith(p + "/") || pathname.startsWith(p)
+    (p) => pathname === p || pathname.startsWith(p + "/")
   );
+}
+
+/** Next RSC / flight — must never get offline.html or opaque SW errors. */
+function isNextDataRequest(request, url) {
+  if (url.searchParams.has("_rsc")) return true;
+  const dest = request.destination;
+  if (dest === "document" && request.mode !== "navigate") {
+    /* keep checking headers */
+  }
+  try {
+    if (request.headers.get("RSC") === "1") return true;
+    if (request.headers.get("Next-Router-Prefetch") === "1") return true;
+    if (request.headers.get("Next-Router-State-Tree")) return true;
+    const accept = request.headers.get("Accept") || "";
+    if (accept.includes("text/x-component")) return true;
+  } catch {
+    /* ignore */
+  }
+  return false;
 }
 
 function offlinePage() {
@@ -43,7 +62,6 @@ function offlinePage() {
 }
 
 self.addEventListener("install", (event) => {
-  /* Critical API passthrough fix — activate immediately (games pages skip hard reload). */
   self.skipWaiting();
   event.waitUntil(
     caches.open(CACHE).then((cache) => cache.addAll(PRECACHE)).catch(() => undefined)
@@ -82,14 +100,21 @@ self.addEventListener("fetch", (event) => {
 
   const path = url.pathname;
 
-  /* CRITICAL: never intercept API — substituting offline.html caused
-     "Failed to convert value to Response" / Failed to fetch on shop equip. */
-  if (path.startsWith("/api/") || path.startsWith("/_next/data/")) {
+  /* Never intercept API / Next data / RSC — substituting offline.html caused
+     "Failed to convert value to Response", Failed to fetch, and hung navigations. */
+  if (
+    path.startsWith("/api/") ||
+    path.startsWith("/_next/data/") ||
+    isNextDataRequest(req, url)
+  ) {
     return;
   }
 
   if (shouldBypass(path)) {
-    event.respondWith(fetch(req).catch(() => offlinePage()));
+    /* Only soft-fallback for full navigations — never for prefetch/XHR. */
+    if (req.mode === "navigate") {
+      event.respondWith(fetch(req).catch(() => offlinePage()));
+    }
     return;
   }
 
@@ -153,7 +178,6 @@ self.addEventListener("fetch", (event) => {
   }
 
   if (path.startsWith("/brand/") || path.startsWith("/covers/")) {
-    // Cache-first — hero mp4/poster must not revalidate on every navigation
     event.respondWith(
       caches.match(req).then((cached) => {
         const network = fetch(req)
@@ -197,15 +221,8 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
-  event.respondWith(
-    fetch(req).catch(() =>
-      caches.match(req).then(
-        (cached) =>
-          cached ||
-          new Response("", { status: 504, statusText: "Offline" })
-      )
-    )
-  );
+  /* Default: network only — do not invent 503/504 for soft navigations / RSC leftovers. */
+  event.respondWith(fetch(req));
 });
 
 /** Web Push → system tray notification */

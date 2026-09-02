@@ -33,15 +33,16 @@ services:
       - TECH_EMAIL=${TECH_EMAIL:-}
       - TECH_BOOTSTRAP_PASSWORD=${TECH_BOOTSTRAP_PASSWORD:-}
       - TECH_PASSWORD_HASH=${TECH_PASSWORD_HASH:-}
-      - NODE_OPTIONS=--max-old-space-size=256
+      # Heap under cgroup: leave ~128–160Mi for native/buffers to avoid GC thrash → nginx 503
+      - NODE_OPTIONS=--max-old-space-size=320
       # NODE_EXTRA_CA_CERTS set by scripts/docker-entrypoint.sh only if PEM exists
     volumes:
       - ./public/uploads:/app/public/uploads
       - ./certs:/app/certs:ro
     restart: always
-    mem_limit: 384m
-    memswap_limit: 512m
-    cpus: '0.50'
+    mem_limit: 512m
+    memswap_limit: 640m
+    cpus: '0.75'
     healthcheck:
       test: ['CMD', 'node', '-e', "fetch('http://127.0.0.1:3000/api/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
       interval: 20s

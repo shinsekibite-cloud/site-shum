@@ -9,7 +9,7 @@
 # Requires /etc/nginx/snippets/yp-proxy.conf
 
 upstream yp_web {
-    server 127.0.0.1:3000 fail_timeout=3s max_fails=1;
+    server 127.0.0.1:3000 fail_timeout=10s max_fails=3;
     keepalive 16;
 }
 

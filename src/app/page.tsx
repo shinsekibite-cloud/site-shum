@@ -78,10 +78,9 @@ export default async function Home() {
 
   return (
     <div className="home-page">
-      {/* Hoisted to <head> by Next — faster LCP / first video frame */}
-      <link rel="preload" as="image" href={heroUrl} fetchPriority="high" />
-      {heroMediaKind === 'video' && heroVideo ? (
-        <link rel="preload" as="video" href={heroVideo} type="video/mp4" />
+      {/* Image preload only — browsers reject as="video" and spam console warnings. */}
+      {heroMediaKind === 'image' ? (
+        <link rel="preload" as="image" href={heroUrl} fetchPriority="high" />
       ) : null}
       <HomeHero
         imageUrl={heroUrl}

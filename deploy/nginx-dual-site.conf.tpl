@@ -13,12 +13,12 @@
 # Requires /etc/nginx/snippets/yp-proxy.conf
 
 upstream yp_web_prod {
-    server 127.0.0.1:3000 fail_timeout=3s max_fails=1;
+    server 127.0.0.1:3000 fail_timeout=10s max_fails=3;
     keepalive 16;
 }
 
 upstream yp_web_staging {
-    server 127.0.0.1:3001 fail_timeout=3s max_fails=1;
+    server 127.0.0.1:3001 fail_timeout=10s max_fails=3;
     keepalive 8;
 }
 
