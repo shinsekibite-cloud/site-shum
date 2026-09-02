@@ -23974,11 +23974,10 @@ main,
   position: relative;
   z-index: 0;
 }
-.glass-nav {
-  z-index: 100 !important;
-}
-.qa-fab {
-  z-index: 90 !important; /* below sticky header */
+@media (max-width: 900px) {
+  .glass-nav {
+    z-index: 10050 !important;
+  }
 }
 
 .places-hero--image-only {
@@ -24018,5 +24017,46 @@ main,
     background: transparent !important;
     box-shadow: none !important;
     isolation: auto;
+  }
+}
+
+/* Mobile CTA cards — no arrow overlapping the pill */
+@media (max-width: 640px) {
+  .svc-cta-card {
+    flex-wrap: wrap;
+    gap: 0.65rem;
+    align-items: center;
+    padding: 0.85rem 0.9rem;
+  }
+  .svc-cta-card__faces {
+    order: 0;
+  }
+  .svc-cta-card .svc-pill {
+    order: 1;
+    flex: 1 1 auto;
+    justify-content: center;
+    text-align: center;
+    max-width: 100%;
+  }
+  .svc-cta-card__text {
+    order: 1;
+    flex: 1 1 140px;
+  }
+  .svc-cta-card__arrow {
+    order: 2;
+    margin-left: auto;
+  }
+  .svc-cta-card--alt {
+    flex-wrap: wrap;
+  }
+
+  /* Logo: mark only on very narrow phones */
+  .site-brand-nav .site-brand-name {
+    display: none !important;
+  }
+  .site-brand-nav .site-brand-mark,
+  .site-brand-nav .site-brand-logo {
+    width: 36px !important;
+    height: 36px !important;
   }
 }
