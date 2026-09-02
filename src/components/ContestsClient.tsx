@@ -34,7 +34,7 @@ export default function ContestsClient() {
   const [needAuth, setNeedAuth] = useState(false);
 
   const load = useCallback(async () => {
-    setLoading(true);
+    setLoading((prev) => (items.length === 0 ? true : prev));
     try {
       const qs = new URLSearchParams();
       if (kind) qs.set('kind', kind);
@@ -51,6 +51,7 @@ export default function ContestsClient() {
     } finally {
       setLoading(false);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- soft-load keeps list while filters change
   }, [kind, status]);
 
   useEffect(() => {
@@ -111,7 +112,7 @@ export default function ContestsClient() {
         ))}
       </div>
 
-      {loading ? (
+      {loading && items.length === 0 ? (
         <p style={{ color: 'var(--muted)' }}>Загрузка…</p>
       ) : needAuth ? (
         <div className="yp-surface yp-guest-gate" style={{ padding: '1.5rem', textAlign: 'center' }}>

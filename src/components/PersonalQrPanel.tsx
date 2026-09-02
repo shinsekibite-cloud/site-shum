@@ -31,7 +31,8 @@ export default function PersonalQrPanel() {
   const [error, setError] = useState<string | null>(null);
 
   const load = useCallback(async (force = false) => {
-    setLoading(true);
+    // First paint only — rotate keeps the current QR on screen.
+    if (!force) setLoading(true);
     try {
       const r = await fetch(force ? '/api/presence-qr' : '/api/presence-qr', {
         method: force ? 'POST' : 'GET',

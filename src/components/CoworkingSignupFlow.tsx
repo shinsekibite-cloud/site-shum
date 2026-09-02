@@ -1,32 +1,16 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { ArrowRight, MapPin } from 'lucide-react';
 import { COWORKING_PERIODS } from '@/lib/coworking';
+import type { CoworkingSpaceAvailability } from '@/lib/coworking-availability';
 import SvcDateField from '@/components/SvcDateField';
 import ServiceSplitModal from '@/components/ServiceSplitModal';
 import QRCodeDisplay from '@/components/QRCodeDisplay';
 
-type PeriodInfo = {
-  id: string;
-  label: string;
-  start: string;
-  end: string;
-  used: number;
-  wait: number;
-  left: number;
-};
-
-type SpaceInfo = {
-  id: string;
-  title: string;
-  address: string | null;
-  capacity: number;
-  image: string | null;
-  periods: PeriodInfo[];
-};
+type SpaceInfo = CoworkingSpaceAvailability;
 
 const PURPOSES = ['Учёба', 'Проект', 'Встреча', 'Другое'];
 
@@ -48,15 +32,29 @@ function formatRuLong(ymd: string) {
   });
 }
 
-export default function CoworkingSignupFlow({ initialSpaceId }: { initialSpaceId?: string }) {
+type Props = {
+  initialSpaceId?: string;
+  initialDayKey?: string;
+  initialSpaces?: SpaceInfo[];
+};
+
+export default function CoworkingSignupFlow({
+  initialSpaceId,
+  initialDayKey,
+  initialSpaces = [],
+}: Props) {
   const router = useRouter();
-  const [dayKey, setDayKey] = useState(todayYmd());
-  const [spaces, setSpaces] = useState<SpaceInfo[]>([]);
-  const [spaceId, setSpaceId] = useState(initialSpaceId || '');
+  const [dayKey, setDayKey] = useState(initialDayKey || todayYmd());
+  const [spaces, setSpaces] = useState<SpaceInfo[]>(initialSpaces);
+  const [spaceId, setSpaceId] = useState(() => {
+    if (initialSpaceId && initialSpaces.some((s) => s.id === initialSpaceId)) return initialSpaceId;
+    return initialSpaces[0]?.id || initialSpaceId || '';
+  });
   const [period, setPeriod] = useState('DAY');
   const [seats, setSeats] = useState(1);
   const [purpose, setPurpose] = useState('');
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(initialSpaces.length === 0);
+  const [refreshing, setRefreshing] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -69,25 +67,58 @@ export default function CoworkingSignupFlow({ initialSpaceId }: { initialSpaceId
     waitlist: boolean;
   } | null>(null);
   const [qrUrl, setQrUrl] = useState('');
+  const spaceIdRef = useRef(spaceId);
+  spaceIdRef.current = spaceId;
+  const lastFetchedDay = useRef<string | null>(
+    initialSpaces.length > 0 ? initialDayKey || todayYmd() : null
+  );
+  const spacesRef = useRef(spaces);
+  spacesRef.current = spaces;
 
   useEffect(() => {
-    setLoading(true);
+    let cancelled = false;
+
+    // SSR already hydrated this day — don't blank the UI with a remount refetch.
+    if (lastFetchedDay.current === dayKey) return;
+
+    const soft = spacesRef.current.length > 0;
+    if (soft) setRefreshing(true);
+    else setLoading(true);
+
     fetch(`/api/coworking?day=${encodeURIComponent(dayKey)}`, { credentials: 'same-origin' })
       .then(async (r) => {
         const data = await r.json();
         if (!r.ok) throw new Error(data.message || 'Ошибка');
-        setSpaces(data.spaces || []);
-        if (!spaceId && data.spaces?.[0]?.id) setSpaceId(data.spaces[0].id);
+        if (cancelled) return;
+        const next: SpaceInfo[] = data.spaces || [];
+        setSpaces(next);
+        setError(null);
+        lastFetchedDay.current = dayKey;
+        const current = spaceIdRef.current;
+        if (!current || !next.some((s) => s.id === current)) {
+          if (next[0]?.id) setSpaceId(next[0].id);
+        }
       })
-      .catch((e) => setError(e.message))
-      .finally(() => setLoading(false));
-  }, [dayKey, spaceId]);
+      .catch((e) => {
+        if (!cancelled) setError(e.message);
+      })
+      .finally(() => {
+        if (cancelled) return;
+        setLoading(false);
+        setRefreshing(false);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [dayKey]);
 
   const space = useMemo(() => spaces.find((s) => s.id === spaceId) || null, [spaces, spaceId]);
   const periodInfo = space?.periods.find((p) => p.id === period) || null;
   const left = periodInfo?.left ?? 0;
   const cover = space?.image || '/brand/hero-cover.jpg';
   const periodDef = COWORKING_PERIODS.find((p) => p.id === period);
+  const busy = loading && spaces.length === 0;
 
   async function submit(waitlist = false) {
     setSubmitting(true);
@@ -135,7 +166,7 @@ export default function CoworkingSignupFlow({ initialSpaceId }: { initialSpaceId
   }
 
   return (
-    <div className="cw-layout">
+    <div className={`cw-layout${refreshing ? ' is-refreshing' : ''}`}>
       <aside className="cw-aside">
         <div className="cw-aside__photo" style={{ backgroundImage: `url(${cover})` }} />
         <div className="cw-aside__body">
@@ -146,11 +177,13 @@ export default function CoworkingSignupFlow({ initialSpaceId }: { initialSpaceId
             </p>
           ) : null}
           <span className="cw-aside__seats">
-            {loading
+            {busy
               ? 'Загрузка…'
               : left > 0
                 ? `осталось ${left} из ${space?.capacity ?? 0}`
-                : 'мест нет сегодня'}
+                : space
+                  ? 'мест нет сегодня'
+                  : 'Загрузка…'}
           </span>
         </div>
       </aside>
@@ -159,7 +192,12 @@ export default function CoworkingSignupFlow({ initialSpaceId }: { initialSpaceId
         <div className="cw-flow-steps">
           <label className="cw-field">
             <span>Площадка</span>
-            <select value={spaceId} onChange={(e) => setSpaceId(e.target.value)} disabled={loading}>
+            <select
+              value={spaceId}
+              onChange={(e) => setSpaceId(e.target.value)}
+              disabled={busy || spaces.length === 0}
+            >
+              {spaces.length === 0 ? <option value="">Загрузка…</option> : null}
               {spaces.map((s) => (
                 <option key={s.id} value={s.id}>
                   {s.title}
@@ -193,7 +231,9 @@ export default function CoworkingSignupFlow({ initialSpaceId }: { initialSpaceId
                         ? slotLeft > 0
                           ? `${slotLeft} мест`
                           : 'мест нет'
-                        : 'Загрузка…'}
+                        : busy
+                          ? 'Загрузка…'
+                          : '—'}
                     </em>
                   </button>
                 );
@@ -231,11 +271,11 @@ export default function CoworkingSignupFlow({ initialSpaceId }: { initialSpaceId
         {message && !successOpen ? <p className="cw-ok">{message}</p> : null}
 
         <div className="cw-actions">
-          {left > 0 ? (
+          {left > 0 || busy ? (
             <button
               type="button"
               className="btn btn-primary cw-cta"
-              disabled={submitting || !spaceId}
+              disabled={submitting || !spaceId || busy}
               onClick={() => submit(false)}
             >
               {submitting ? 'Записываем…' : 'Записаться'}
@@ -254,7 +294,7 @@ export default function CoworkingSignupFlow({ initialSpaceId }: { initialSpaceId
             <ArrowRight size={20} />
           </Link>
         </div>
-        {left > 0 ? <p className="cw-left-note">Осталось {left} мест на выбранный интервал</p> : null}
+        {!busy && left > 0 ? <p className="cw-left-note">Осталось {left} мест на выбранный интервал</p> : null}
       </div>
 
       <ServiceSplitModal

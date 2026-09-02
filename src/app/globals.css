@@ -23194,6 +23194,10 @@ body.yp-scroll-locked {
   gap: 1.25rem;
   align-items: stretch;
 }
+.cw-layout.is-refreshing {
+  opacity: 0.92;
+  transition: opacity 0.2s ease;
+}
 .cw-aside {
   background: #fff;
   border: 1px solid var(--line);

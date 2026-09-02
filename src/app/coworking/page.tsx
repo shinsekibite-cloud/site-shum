@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import CoworkingSignupFlow from '@/components/CoworkingSignupFlow';
+import { getCoworkingAvailability } from '@/lib/coworking-availability';
 import { getSiteIdentity } from '@/lib/site-identity';
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -16,6 +17,7 @@ export default async function CoworkingPage({
   searchParams: Promise<{ space?: string }>;
 }) {
   const sp = await searchParams;
+  const { dayKey, spaces } = await getCoworkingAvailability();
   return (
     <div className="container cw-page cw-page--wide">
       <header className="cw-page-head">
@@ -23,7 +25,11 @@ export default async function CoworkingPage({
         <h1>Записаться в коворкинг</h1>
         <p>Площадка, день и интервал — без лишних шагов.</p>
       </header>
-      <CoworkingSignupFlow initialSpaceId={sp.space} />
+      <CoworkingSignupFlow
+        initialSpaceId={sp.space}
+        initialDayKey={dayKey}
+        initialSpaces={spaces}
+      />
     </div>
   );
 }

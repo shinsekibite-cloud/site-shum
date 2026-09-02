@@ -18,8 +18,8 @@ export default function CoworkingCabinetList() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const load = useCallback(() => {
-    setLoading(true);
+  const load = useCallback((opts?: { soft?: boolean }) => {
+    setLoading((prev) => (opts?.soft ? prev : true));
     fetch('/api/coworking?mine=1', { credentials: 'same-origin' })
       .then(async (r) => {
         const data = await r.json();
@@ -45,7 +45,7 @@ export default function CoworkingCabinetList() {
       setError(data.message || 'Не удалось отменить');
       return;
     }
-    load();
+    load({ soft: rows.length > 0 });
   }
 
   return (
@@ -57,7 +57,7 @@ export default function CoworkingCabinetList() {
         </Link>
       </div>
       {error ? <p className="cw-error">{error}</p> : null}
-      {loading ? (
+      {loading && rows.length === 0 ? (
         <div className="svc-skel" aria-hidden>
           <div className="svc-skel__pill" />
           <div className="svc-skel__pill" />
@@ -68,7 +68,7 @@ export default function CoworkingCabinetList() {
           Пока нет записей. <Link href="/coworking">Записаться в коворкинг</Link>
         </p>
       ) : null}
-      {!loading && rows.length > 0 ? (
+      {rows.length > 0 ? (
         <ul className="cw-cabinet-pills">
           {rows.map((row) => {
             const day = new Date(row.startTime).toLocaleDateString('ru-RU', {

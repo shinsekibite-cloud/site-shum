@@ -12,6 +12,7 @@ import {
   periodBounds,
   todayKey,
 } from '@/lib/coworking';
+import { getCoworkingAvailability } from '@/lib/coworking-availability';
 import { adjustScore, M_BALL } from '@/lib/score-scales';
 
 export const dynamic = 'force-dynamic';
@@ -40,49 +41,9 @@ export async function GET(req: Request) {
     return NextResponse.json({ signups: rows });
   }
 
-  const spaces = await prisma.space.findMany({
-    where: {
-      status: 'ACTIVE',
-      isDemoData: false,
-      ...(spaceId ? { id: spaceId } : {}),
-    },
-    orderBy: { title: 'asc' },
-  });
-  const coworking = spaces.filter((s) => isCoworkingSpace(s));
-
-  const signups = await prisma.coworkingSignup.findMany({
-    where: {
-      spaceId: { in: coworking.map((s) => s.id) },
-      dayKey,
-      status: { in: [...occupiedSeatStatuses(), 'WAITLIST'] },
-    },
-    select: { spaceId: true, period: true, seats: true, status: true },
-  });
-
-  const occupied = new Set<string>(occupiedSeatStatuses());
-  const availability = coworking.map((space) => {
-    const periods = COWORKING_PERIODS.map((p) => {
-      const used = signups
-        .filter((s) => s.spaceId === space.id && s.period === p.id && occupied.has(s.status))
-        .reduce((acc, s) => acc + s.seats, 0);
-      const wait = signups
-        .filter((s) => s.spaceId === space.id && s.period === p.id && s.status === 'WAITLIST')
-        .reduce((acc, s) => acc + s.seats, 0);
-      const left = Math.max(0, space.capacity - used);
-      return { ...p, used, wait, left };
-    });
-    return {
-      id: space.id,
-      title: space.title,
-      address: space.address,
-      capacity: space.capacity,
-      image: space.image,
-      category: space.category,
-      periods,
-    };
-  });
-
-  return NextResponse.json({ dayKey, spaces: availability });
+  const payload = await getCoworkingAvailability(dayKey);
+  const spaces = spaceId ? payload.spaces.filter((s) => s.id === spaceId) : payload.spaces;
+  return NextResponse.json({ dayKey: payload.dayKey, spaces });
 }
 
 export async function POST(req: Request) {

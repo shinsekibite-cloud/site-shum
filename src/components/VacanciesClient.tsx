@@ -39,7 +39,7 @@ export default function VacanciesClient() {
   const [loading, setLoading] = useState(true);
 
   const load = useCallback(async () => {
-    setLoading(true);
+    setLoading((prev) => (items.length === 0 ? true : prev));
     try {
       const qs = new URLSearchParams();
       if (q.trim()) qs.set('q', q.trim());
@@ -59,6 +59,7 @@ export default function VacanciesClient() {
     } finally {
       setLoading(false);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- soft-load keeps list while filters change
   }, [q, format, city, scope]);
 
   useEffect(() => {
@@ -148,7 +149,7 @@ export default function VacanciesClient() {
         ) : null}
       </div>
 
-      {loading ? (
+      {loading && items.length === 0 ? (
         <p style={{ color: 'var(--muted)' }}>Загрузка…</p>
       ) : needAuth ? (
         <div className="yp-surface yp-guest-gate" style={{ padding: '1.5rem', textAlign: 'center' }}>

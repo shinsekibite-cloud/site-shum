@@ -52,7 +52,8 @@ export default function HallWeekGrid({ spaceId, bookBaseHref }: Props) {
 
   useEffect(() => {
     let cancelled = false;
-    setLoading(true);
+    // Soft refresh: keep the previous week visible; only skeleton when empty.
+    setLoading((prev) => (week.length === 0 ? true : prev));
     fetch(`/api/spaces/${encodeURIComponent(spaceId)}/occupancy`, { credentials: 'same-origin' })
       .then(async (r) => {
         const data = await r.json();
@@ -77,6 +78,7 @@ export default function HallWeekGrid({ spaceId, bookBaseHref }: Props) {
     return () => {
       cancelled = true;
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- soft-load uses current week length once per spaceId
   }, [spaceId]);
 
   useEffect(() => {
@@ -121,7 +123,7 @@ export default function HallWeekGrid({ spaceId, bookBaseHref }: Props) {
         </div>
       </div>
 
-      {loading ? (
+      {loading && week.length === 0 ? (
         <div className="svc-skel" aria-hidden>
           <div className="svc-skel__pill" />
           <div className="svc-skel__pill" />
