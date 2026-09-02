@@ -7,6 +7,8 @@ import { isNextBuildPhase } from '@/lib/build-phase';
 export const getHomeCatalog = unstable_cache(
   async () => {
     if (isNextBuildPhase()) {
+      // Docker builder has no DB — still bake sensible hero defaults so the
+      // first static HTML is not stuck on photo-only until ISR catches up.
       return {
         latestProjects: [] as Array<{
           id: string;
@@ -39,20 +41,20 @@ export const getHomeCatalog = unstable_cache(
           publishedAt: string | null;
           createdAt: string;
         }>,
-        siteSettings: null as {
-          heroImageUrl: string | null;
-          heroVideoUrl: string | null;
-          heroMediaKind: string | null;
-          heroAnimationMode: string | null;
-          govWidgetsEnabled: boolean | null;
-          govWidgetsTitle: string | null;
-          govWidgetsJson: string | null;
-          galleryHomepageEnabled: boolean | null;
-          galleryPublicEnabled: boolean | null;
-          orgGalleryJson: string | null;
-          siteName: string | null;
-          publicEventsVisibility: boolean | null;
-        } | null,
+        siteSettings: {
+          heroImageUrl: '/brand/hero-cover.jpg',
+          heroVideoUrl: '/brand/hero-cover.mp4',
+          heroMediaKind: 'video',
+          heroAnimationMode: 'animated',
+          govWidgetsEnabled: null,
+          govWidgetsTitle: null,
+          govWidgetsJson: null,
+          galleryHomepageEnabled: null,
+          galleryPublicEnabled: null,
+          orgGalleryJson: null,
+          siteName: null,
+          publicEventsVisibility: null,
+        },
       };
     }
     const [latestProjects, latestClubs, latestSpaces, latestNews, siteSettings] = await Promise.all([
@@ -133,6 +135,6 @@ export const getHomeCatalog = unstable_cache(
     }));
     return { latestProjects, latestClubs, latestSpaces, latestNews: news, siteSettings };
   },
-  ['home-catalog-v3'],
+  ['home-catalog-v4'],
   { revalidate: 60, tags: ['yp-home-catalog', 'home-catalog'] }
 );

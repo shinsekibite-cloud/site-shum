@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from 'react'
 import { useSession } from 'next-auth/react'
+import { usePathname } from 'next/navigation'
 import { Award, Keyboard, Smartphone, X, Zap } from 'lucide-react'
 import {
   getQuickAccessTutorialState,
@@ -9,6 +10,10 @@ import {
   notifyQuickAccessTutorialDone,
   type QuickAccessTutorialState,
 } from '@/lib/quick-access'
+import {
+  COOKIE_BANNER_VISIBILITY_EVENT,
+  hasAnsweredCookieBanner,
+} from '@/lib/cookie-consent'
 
 type Props = {
   forceOpen?: boolean
@@ -27,8 +32,16 @@ function useIsCoarsePointer() {
   return coarse
 }
 
+/**
+ * Blocking modal for quick-access tips.
+ * Auto-open is intentionally OFF for guests and homepage first paint —
+ * TZ: no onboarding modals covering the hero. Opens only via forceOpen
+ * (profile guides / explicit «?» request) or once for logged-in users
+ * after cookie consent, never stacking with the cookie sheet.
+ */
 export function QuickAccessTutorial({ forceOpen = false, restartKey = 0 }: Props) {
   const { data: session, status } = useSession()
+  const pathname = usePathname() || '/'
   const isMobile = useIsCoarsePointer()
   const [open, setOpen] = useState(false)
   const [busy, setBusy] = useState(false)
@@ -45,10 +58,32 @@ export function QuickAccessTutorial({ forceOpen = false, restartKey = 0 }: Props
     }
     if (status === 'loading' || localState === null) return
     if (localState !== 'pending') return
-    // Let the homepage hero start before covering it with the tutorial.
-    const t = window.setTimeout(() => setOpen(true), 4500)
+
+    // Guests: never auto-block the first visit — discover via edge tab / «?».
+    if (status !== 'authenticated' || !session?.user) return
+
+    // Keep homepage hero free; offer tutorial from other pages only.
+    if (pathname === '/' || pathname === '') return
+
+    if (!hasAnsweredCookieBanner()) return
+    if (document.querySelector('.yp-cookie-banner') || document.querySelector('.yp-pwa-sheet')) return
+
+    const t = window.setTimeout(() => {
+      if (document.querySelector('.yp-cookie-banner') || document.querySelector('.yp-pwa-sheet')) return
+      setOpen(true)
+    }, 12_000)
     return () => window.clearTimeout(t)
-  }, [forceOpen, localState, status, restartKey])
+  }, [forceOpen, localState, status, session?.user, pathname, restartKey])
+
+  useEffect(() => {
+    if (forceOpen || !open) return
+    const onCookieVis = (e: Event) => {
+      const visible = Boolean((e as CustomEvent<{ visible?: boolean }>).detail?.visible)
+      if (visible) setOpen(false)
+    }
+    window.addEventListener(COOKIE_BANNER_VISIBILITY_EVENT, onCookieVis as EventListener)
+    return () => window.removeEventListener(COOKIE_BANNER_VISIBILITY_EVENT, onCookieVis as EventListener)
+  }, [forceOpen, open])
 
   const persist = useCallback(
     async (next: Exclude<QuickAccessTutorialState, 'pending'>) => {

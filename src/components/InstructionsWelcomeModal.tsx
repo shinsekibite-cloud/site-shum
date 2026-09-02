@@ -127,9 +127,11 @@ export default function InstructionsWelcomeModal() {
       if (timer) window.clearTimeout(timer);
       timer = window.setTimeout(() => {
         if (!cancelled && !document.querySelector('.yp-cookie-banner') && !document.querySelector('.yp-pwa-sheet')) {
+          // Never cover the marketing homepage hero with another sheet.
+          if (pathname === '/' || pathname === '') return;
           setState('show');
         }
-      }, 1300);
+      }, 6_000);
     };
 
     const onCookieVis = (e: Event) => {
@@ -154,7 +156,7 @@ export default function InstructionsWelcomeModal() {
       window.removeEventListener(PWA_BANNER_VISIBILITY_EVENT, onPwaVis);
       window.removeEventListener(COOKIE_CONSENT_EVENT, onConsent);
     };
-  }, [eligible]);
+  }, [eligible, pathname]);
 
   const persist = useCallback(async (action: 'skip' | 'dismiss') => {
     setBusy(true);

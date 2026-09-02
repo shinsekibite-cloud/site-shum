@@ -116,8 +116,10 @@ export default function PwaInstallBanner({ siteName = 'Молодёжь Сочи
     const scheduleReveal = () => {
       if (t) window.clearTimeout(t);
       if (sessionDismissed) return;
-      // After cookie — short delay, then app prompt
-      t = window.setTimeout(revealPwa, 1100);
+      // After cookie — wait so the homepage hero is not stacked with prompts.
+      // Guests get a longer delay; logged-in users slightly shorter.
+      const delay = userId ? 8_000 : 20_000;
+      t = window.setTimeout(revealPwa, delay);
     };
 
     const onCookieConsent = () => scheduleReveal();

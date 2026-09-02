@@ -27,7 +27,8 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export const revalidate = 60;
-export const dynamic = 'force-static';
+// Do not force-static: admin hero mediaKind must apply after deploy without a
+// long stale bake that shows photo while DB says video.
 
 function stripHtml(html: string) {
   return html.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
@@ -77,6 +78,11 @@ export default async function Home() {
 
   return (
     <div className="home-page">
+      {/* Hoisted to <head> by Next — faster LCP / first video frame */}
+      <link rel="preload" as="image" href={heroUrl} fetchPriority="high" />
+      {heroMediaKind === 'video' && heroVideo ? (
+        <link rel="preload" as="video" href={heroVideo} type="video/mp4" />
+      ) : null}
       <HomeHero
         imageUrl={heroUrl}
         videoUrl={heroVideo}
