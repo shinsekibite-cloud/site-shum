@@ -1,0 +1,138 @@
+{
+  "base": "https://young.idivles.ru",
+  "at": "2026-08-11T07:23:47.880Z",
+  "passed": 25,
+  "failed": 1,
+  "results": [
+    {
+      "name": "public /",
+      "ok": true,
+      "detail": "HTTP 200"
+    },
+    {
+      "name": "public /api/health",
+      "ok": true,
+      "detail": "HTTP 200"
+    },
+    {
+      "name": "public /privacy",
+      "ok": true,
+      "detail": "HTTP 200"
+    },
+    {
+      "name": "public /rules",
+      "ok": true,
+      "detail": "HTTP 200"
+    },
+    {
+      "name": "public /terms",
+      "ok": true,
+      "detail": "HTTP 200"
+    },
+    {
+      "name": "public /api/public/status",
+      "ok": true,
+      "detail": "HTTP 200"
+    },
+    {
+      "name": "public /projects",
+      "ok": true,
+      "detail": "HTTP 200"
+    },
+    {
+      "name": "public /news",
+      "ok": true,
+      "detail": "HTTP 200"
+    },
+    {
+      "name": "health",
+      "ok": true,
+      "detail": "latency 3ms"
+    },
+    {
+      "name": "public status / modules",
+      "ok": true,
+      "detail": "keys=ok,maintenanceMode,maintenanceMessage,maintenanceEta,siteName,registrationEnabled,messagingEnabled,modules"
+    },
+    {
+      "name": "legal adaptive /privacy",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "legal adaptive /rules",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "login ADMIN",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "role ADMIN /admin",
+      "ok": true,
+      "detail": "HTTP 200"
+    },
+    {
+      "name": "role ADMIN /admin/settings",
+      "ok": true,
+      "detail": "HTTP 200"
+    },
+    {
+      "name": "role ADMIN /dashboard",
+      "ok": true,
+      "detail": "HTTP 200"
+    },
+    {
+      "name": "login MODERATOR",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "role MODERATOR /admin",
+      "ok": true,
+      "detail": "HTTP 200"
+    },
+    {
+      "name": "role MODERATOR /dashboard",
+      "ok": true,
+      "detail": "HTTP 200"
+    },
+    {
+      "name": "login USER",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "role USER /dashboard",
+      "ok": true,
+      "detail": "HTTP 200"
+    },
+    {
+      "name": "role USER /dashboard/achievements",
+      "ok": true,
+      "detail": "HTTP 200"
+    },
+    {
+      "name": "login SCANNER",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "role SCANNER /scanner",
+      "ok": true,
+      "detail": "HTTP 200"
+    },
+    {
+      "name": "role SCANNER /admin/scanner",
+      "ok": true,
+      "detail": "HTTP 307"
+    },
+    {
+      "name": "sub qa-role-matrix",
+      "ok": false,
+      "detail": "\": \"200\"\n    },\n    {\n      \"name\": \"scanner:messages\",\n      \"pass\": true,\n      \"detail\": \"\"\n    },\n    {\n      \"name\": \"scanner:achievements\",\n      \"pass\": false,\n      \"detail\": \"\"\n    },\n    {\n      \"name\": \"scanner:private-hidden-search\",\n      \"pass\": true,\n      \"detail\": \"n=0\"\n    }\n  ]\n}\n"
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+# YoungPortal nginx jails — copy to /etc/fail2ban/jail.d/yp-nginx.local
+# Installed by scripts/install-full-clone.sh when fail2ban is enabled.
+
+[nginx-http-auth]
+enabled = true
+port = http,https
+filter = nginx-http-auth
+logpath = /var/log/nginx/error.log
+maxretry = 5
+findtime = 600
+bantime = 3600
+
+[nginx-limit-req]
+enabled = true
+port = http,https
+filter = nginx-limit-req
+logpath = /var/log/nginx/error.log
+maxretry = 20
+findtime = 120
+bantime = 1800
+
+[nginx-botsearch]
+enabled = true
+port = http,https
+filter = nginx-botsearch
+logpath = /var/log/nginx/access.log
+maxretry = 6
+findtime = 300
+bantime = 86400

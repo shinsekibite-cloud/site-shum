@@ -1,0 +1,142 @@
+YoungPortal — ЭТАЛОННЫЙ установочный комплект
+==============================================
+
+Два профиля:
+
+  --client       КЛИЕНТУ: чистая БД + выдача первого ADMIN
+  --developer    РАЗРАБОТЧИКУ: роли (--demo) или полный клон (--full)
+
+Также: --clean / --demo / --full / --reinstall
+
+
+БЫСТРЫЙ СТАРТ (новый Debian/Ubuntu, root)
+----------------------------------------
+
+  tar -xzf youngportal-reference-kit-*.tgz
+  cd youngportal-reference-kit-*
+  sudo bash START.sh
+
+Меню: клиент / клиент по SSH / разработчик / переустановка.
+
+
+══════════════════════════════════════
+  КЛИЕНТУ ПО SSH (slim, без docs)
+══════════════════════════════════════
+
+Собрать клиентский архив (на машине автора):
+
+  bash scripts/pack-dev-deploy-kit.sh --client --with-live
+
+Установка клиенту:
+
+  SSHPASS='…' bash install-from-url.sh root@IP --client \
+    --prod-domain portal.example.ru \
+    --staging-domain test.example.ru \
+    --le-email ops@example.ru \
+    --admin-email admin@portal.example.ru
+
+В клиентском комплекте: нет docs/tests/qa, есть LICENSE + INTEGRITY.json.
+После установки: client-harden (docs сняты, src read-only).
+
+
+══════════════════════════════════════
+  КЛИЕНТУ (локально на VPS)
+══════════════════════════════════════
+
+  sudo bash START.sh --client --yes \
+    --prod-domain portal.example.ru \
+    --staging-domain test.example.ru \
+    --tls-mode letsencrypt \
+    --le-email ops@example.ru \
+    --admin-email admin@portal.example.ru \
+    --admin-password 'StrongPass1!'
+
+  # без --admin-password пароль сгенерируется
+  # файл: /etc/yp-portal/admin-credentials.txt
+
+
+══════════════════════════════════════
+  КЛИЕНТУ ПО SSH (с машины разработчика)
+══════════════════════════════════════
+
+  SSHPASS='пароль-root' bash install-from-url.sh root@IP --client \
+    --prod-domain portal.example.ru \
+    --staging-domain test.example.ru \
+    --le-email ops@example.ru \
+    --admin-email admin@portal.example.ru \
+    --admin-password 'StrongPass1!'
+
+  # если SSH уже на 4488:
+  SSHPASS='…' bash install-from-url.sh root@IP -p 4488 --client ...
+
+  После установки скрипт выведет EMAIL/PASSWORD первого админа
+  (или cat /etc/yp-portal/admin-credentials.txt на сервере).
+
+
+══════════════════════════════════════
+  РАЗРАБОТЧИКУ
+══════════════════════════════════════
+
+Чистый стенд со всеми ролями:
+
+  sudo bash START.sh --developer --demo --yes \
+    --prod-domain portal.example.ru \
+    --staging-domain test.example.ru \
+    --le-email ops@example.ru \
+    --seed-password 'InstallSeed1!'
+
+Полный клон текущих данных:
+
+  sudo bash START.sh --developer --full --yes \
+    --prod-domain portal.example.ru \
+    --staging-domain test.example.ru \
+    --le-email ops@example.ru
+
+Удалённо:
+
+  SSHPASS='…' bash install-from-url.sh root@IP --developer --demo \
+    --prod-domain a.example.ru --staging-domain b.example.ru \
+    --le-email ops@a.example.ru
+
+  SSHPASS='…' bash install-from-url.sh root@IP --developer --full \
+    --prod-domain a.example.ru --staging-domain b.example.ru \
+    --le-email ops@a.example.ru
+
+Переустановка:
+
+  sudo bash START.sh --reinstall --client --yes ...
+  sudo bash START.sh --reinstall --developer --demo --yes ...
+
+
+УЧЁТКИ (--developer --demo)
+---------------------------
+
+  Пароль: InstallSeed1!  (или --seed-password)
+  admin@ДОМЕН-ПРОДА   ADMIN
+  mod@ДОМЕН-ПРОДА     MODERATOR
+  part@ДОМЕН-ПРОДА    PARTICIPANT
+  user@ДОМЕН-ПРОДА    USER
+  scanner@ДОМЕН-ПРОДА SCANNER
+  private@ДОМЕН-ПРОДА USER (закрытый)
+  tech@ДОМЕН-ПРОДА    TECH (.env)
+
+  Файл: /etc/yp-portal/seed-accounts.txt
+
+
+СОСТАВ
+------
+
+  START.sh              ← запускайте это
+  INSTALL.sh            установщик
+  install-remote.sh     установка на другой VPS
+  install-from-url.sh   скачать + поставить удалённо
+  REFERENCE.txt         эта инструкция
+  VERSION.json
+  source/app.tgz        код
+  snapshot/             БД + uploads + Docker-образы (если полный эталон)
+  scripts/ deploy/ docs/
+
+
+Требования: Debian 12+ / Ubuntu 22.04+, ~2 ГБ RAM, root,
+две A-записи (прод и тест) на IP сервера.
+Секреты (.env, TLS-ключи) НЕ входят — создаются при установке.

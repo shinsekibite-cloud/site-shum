@@ -1,0 +1,47 @@
+QA auto-check → https://young.idivles.ru
+OK   public / — HTTP 200
+OK   public /api/health — HTTP 200
+OK   public /privacy — HTTP 200
+OK   public /rules — HTTP 200
+OK   public /terms — HTTP 200
+OK   public /api/public/status — HTTP 200
+OK   public /projects — HTTP 200
+OK   public /news — HTTP 200
+OK   health — latency 3ms
+OK   public status / modules — keys=ok,maintenanceMode,maintenanceMessage,maintenanceEta,siteName,registrationEnabled,messagingEnabled,modules
+OK   legal adaptive /privacy
+OK   legal adaptive /rules
+OK   login ADMIN
+OK   role ADMIN /admin — HTTP 200
+OK   role ADMIN /admin/settings — HTTP 200
+OK   role ADMIN /dashboard — HTTP 200
+OK   login MODERATOR
+OK   role MODERATOR /admin — HTTP 200
+OK   role MODERATOR /dashboard — HTTP 200
+OK   login USER
+OK   role USER /dashboard — HTTP 200
+OK   role USER /dashboard/achievements — HTTP 200
+OK   login SCANNER
+OK   role SCANNER /scanner — HTTP 200
+OK   role SCANNER /admin/scanner — HTTP 307
+FAIL sub qa-role-matrix — ": "200"
+    },
+    {
+      "name": "scanner:messages",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "scanner:achievements",
+      "pass": false,
+      "detail": ""
+    },
+    {
+      "name": "scanner:private-hidden-search",
+      "pass": true,
+      "detail": "n=0"
+    }
+  ]
+}
+
+---- passed=25 failed=1 report=/workspace/docs/perf/qa-auto-check-1786433027881.json
