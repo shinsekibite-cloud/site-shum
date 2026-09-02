@@ -1,0 +1,81 @@
+/* profile-safety-ux: click targets, gallery pending, rep modal */
+
+.catalog-card__hit-link {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+}
+.catalog-card__interactive {
+  position: relative;
+  z-index: 2;
+  pointer-events: auto;
+}
+
+.rating-chip.is-clickable,
+.rating-icons__item.is-clickable {
+  position: relative;
+  z-index: 2;
+  pointer-events: auto;
+}
+.dashboard-aside__chips,
+.profile-hero__stats,
+.public-profile-ratings {
+  position: relative;
+  z-index: 3;
+  pointer-events: auto;
+}
+
+.rep-modal__why {
+  margin: 0 0 0.65rem;
+  padding: 0.55rem 0.7rem;
+  font-size: 0.78rem;
+  line-height: 1.4;
+  color: #475569;
+  background: rgba(37, 99, 235, 0.06);
+  border: 1px solid rgba(37, 99, 235, 0.12);
+  border-radius: 10px;
+}
+.rep-modal__why b {
+  color: #0f172a;
+  font-weight: 750;
+}
+.rep-modal__tabs {
+  position: relative;
+  z-index: 2;
+  pointer-events: auto;
+}
+.rep-modal__tab {
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+.personal-gallery-editor__thumb.is-pending {
+  outline: 2px dashed rgba(245, 158, 11, 0.85);
+  outline-offset: -2px;
+}
+.personal-gallery-editor__badge {
+  position: absolute;
+  left: 6px;
+  bottom: 6px;
+  z-index: 2;
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  padding: 0.15rem 0.4rem;
+  border-radius: 999px;
+  background: rgba(245, 158, 11, 0.95);
+  color: #fff;
+  pointer-events: none;
+}
+
+.nav-item .dropdown {
+  max-height: min(70vh, 420px);
+  overflow-y: auto;
+}
+@media (hover: hover) and (pointer: fine) {
+  .nav-item:hover .dropdown,
+  .nav-item.is-open .dropdown {
+    display: block;
+  }
+}

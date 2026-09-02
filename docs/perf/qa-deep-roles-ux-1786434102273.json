@@ -1,0 +1,2101 @@
+{
+  "base": "https://young.idivles.ru",
+  "at": "2026-08-11T07:41:42.272Z",
+  "siteName": "Центр развития молодежи Сочи",
+  "modules": {
+    "registration": false,
+    "messaging": false,
+    "events": true,
+    "tickets_scan": true,
+    "places": false,
+    "gallery": false,
+    "projects": true,
+    "clubs": true,
+    "spaces": true,
+    "programs": true,
+    "vacancies": false,
+    "contests": false,
+    "friends": false,
+    "games": false,
+    "news": true,
+    "portfolio": false,
+    "eco": false,
+    "achievements": false,
+    "ratings": false,
+    "club_chat": false,
+    "faq": false,
+    "server_status": false,
+    "bots": false,
+    "maintenance": true
+  },
+  "offModes": {
+    "registration": "hide",
+    "messaging": "hide",
+    "places": "soon",
+    "gallery": "soon",
+    "vacancies": "soon",
+    "contests": "soon",
+    "friends": "soon",
+    "games": "soon",
+    "portfolio": "soon",
+    "eco": "soon",
+    "achievements": "soon",
+    "ratings": "soon",
+    "club_chat": "soon",
+    "faq": "soon",
+    "server_status": "hide",
+    "bots": "hide"
+  },
+  "total": 207,
+  "passed": 169,
+  "failed": 38,
+  "byRole": {
+    "SYSTEM": {
+      "total": 2,
+      "pass": 2,
+      "fail": 0,
+      "critical": 0,
+      "high": 0,
+      "medium": 0,
+      "low": 0,
+      "fails": []
+    },
+    "GUEST": {
+      "total": 50,
+      "pass": 43,
+      "fail": 7,
+      "critical": 5,
+      "high": 0,
+      "medium": 2,
+      "low": 0,
+      "fails": [
+        {
+          "role": "GUEST",
+          "scenario": "Запрет без логина: /change-password",
+          "pass": false,
+          "severity": "critical",
+          "detail": "HTTP 200 → ",
+          "repro": "Открыть /change-password гостем"
+        },
+        {
+          "role": "GUEST",
+          "scenario": "Запрет без логина: /more",
+          "pass": false,
+          "severity": "critical",
+          "detail": "HTTP 200 → ",
+          "repro": "Открыть /more гостем"
+        },
+        {
+          "role": "GUEST",
+          "scenario": "Запрет без логина: /ops",
+          "pass": false,
+          "severity": "critical",
+          "detail": "HTTP 307 → /",
+          "repro": "Открыть /ops гостем"
+        },
+        {
+          "role": "GUEST",
+          "scenario": "API deny /api/admin/users",
+          "pass": false,
+          "severity": "critical",
+          "detail": "HTTP 404",
+          "repro": ""
+        },
+        {
+          "role": "GUEST",
+          "scenario": "API deny /api/ops/flags",
+          "pass": false,
+          "severity": "critical",
+          "detail": "HTTP 404",
+          "repro": ""
+        },
+        {
+          "role": "GUEST",
+          "scenario": "Форма входа на русском",
+          "pass": false,
+          "severity": "medium",
+          "detail": "HTTP 200",
+          "repro": ""
+        },
+        {
+          "role": "GUEST",
+          "scenario": "Восстановление пароля доступно",
+          "pass": false,
+          "severity": "medium",
+          "detail": "HTTP 200",
+          "repro": ""
+        }
+      ]
+    },
+    "USER": {
+      "total": 26,
+      "pass": 22,
+      "fail": 4,
+      "critical": 0,
+      "high": 0,
+      "medium": 2,
+      "low": 1,
+      "fails": [
+        {
+          "role": "USER",
+          "scenario": "Логин успешен",
+          "pass": false,
+          "severity": "info",
+          "detail": "got PARTICIPANT",
+          "repro": ""
+        },
+        {
+          "role": "USER",
+          "scenario": "Friends API при OFF модуле",
+          "pass": false,
+          "severity": "medium",
+          "detail": "HTTP 503",
+          "repro": ""
+        },
+        {
+          "role": "USER",
+          "scenario": "Messages API при OFF модуле",
+          "pass": false,
+          "severity": "medium",
+          "detail": "HTTP 503",
+          "repro": ""
+        },
+        {
+          "role": "USER",
+          "scenario": "Eco API",
+          "pass": false,
+          "severity": "low",
+          "detail": "HTTP 503",
+          "repro": ""
+        }
+      ]
+    },
+    "PARTICIPANT": {
+      "total": 26,
+      "pass": 23,
+      "fail": 3,
+      "critical": 0,
+      "high": 0,
+      "medium": 2,
+      "low": 1,
+      "fails": [
+        {
+          "role": "PARTICIPANT",
+          "scenario": "Friends API при OFF модуле",
+          "pass": false,
+          "severity": "medium",
+          "detail": "HTTP 503",
+          "repro": ""
+        },
+        {
+          "role": "PARTICIPANT",
+          "scenario": "Messages API при OFF модуле",
+          "pass": false,
+          "severity": "medium",
+          "detail": "HTTP 503",
+          "repro": ""
+        },
+        {
+          "role": "PARTICIPANT",
+          "scenario": "Eco API",
+          "pass": false,
+          "severity": "low",
+          "detail": "HTTP 503",
+          "repro": ""
+        }
+      ]
+    },
+    "MODERATOR": {
+      "total": 41,
+      "pass": 27,
+      "fail": 14,
+      "critical": 3,
+      "high": 8,
+      "medium": 2,
+      "low": 1,
+      "fails": [
+        {
+          "role": "MODERATOR",
+          "scenario": "Запрет staff: /admin",
+          "pass": false,
+          "severity": "critical",
+          "detail": "HTTP 200 → ",
+          "repro": "MODERATOR открывает /admin"
+        },
+        {
+          "role": "MODERATOR",
+          "scenario": "Запрет staff: /admin/users",
+          "pass": false,
+          "severity": "critical",
+          "detail": "HTTP 307 → /admin?denied=1",
+          "repro": "MODERATOR открывает /admin/users"
+        },
+        {
+          "role": "MODERATOR",
+          "scenario": "Запрет staff: /api/admin/stats",
+          "pass": false,
+          "severity": "critical",
+          "detail": "HTTP 200 → ",
+          "repro": "MODERATOR открывает /api/admin/stats"
+        },
+        {
+          "role": "MODERATOR",
+          "scenario": "Запрет /scanner",
+          "pass": false,
+          "severity": "high",
+          "detail": "HTTP 200 → ",
+          "repro": ""
+        },
+        {
+          "role": "MODERATOR",
+          "scenario": "Friends API при OFF модуле",
+          "pass": false,
+          "severity": "medium",
+          "detail": "HTTP 503",
+          "repro": ""
+        },
+        {
+          "role": "MODERATOR",
+          "scenario": "Messages API при OFF модуле",
+          "pass": false,
+          "severity": "medium",
+          "detail": "HTTP 503",
+          "repro": ""
+        },
+        {
+          "role": "MODERATOR",
+          "scenario": "Eco API",
+          "pass": false,
+          "severity": "low",
+          "detail": "HTTP 503",
+          "repro": ""
+        },
+        {
+          "role": "MODERATOR",
+          "scenario": "ADMIN_ONLY deny /admin/users",
+          "pass": false,
+          "severity": "high",
+          "detail": "HTTP 307 → /admin?denied=1",
+          "repro": ""
+        },
+        {
+          "role": "MODERATOR",
+          "scenario": "ADMIN_ONLY deny /admin/settings",
+          "pass": false,
+          "severity": "high",
+          "detail": "HTTP 307 → /admin?denied=1",
+          "repro": ""
+        },
+        {
+          "role": "MODERATOR",
+          "scenario": "ADMIN_ONLY deny /admin/rkn",
+          "pass": false,
+          "severity": "high",
+          "detail": "HTTP 307 → /admin?denied=1",
+          "repro": ""
+        },
+        {
+          "role": "MODERATOR",
+          "scenario": "ADMIN_ONLY deny /admin/backup",
+          "pass": false,
+          "severity": "high",
+          "detail": "HTTP 307 → /admin?denied=1",
+          "repro": ""
+        },
+        {
+          "role": "MODERATOR",
+          "scenario": "ADMIN_ONLY deny /admin/system",
+          "pass": false,
+          "severity": "high",
+          "detail": "HTTP 307 → /unavailable?m=server_status&mode=hide",
+          "repro": ""
+        },
+        {
+          "role": "MODERATOR",
+          "scenario": "ADMIN_ONLY deny /admin/online",
+          "pass": false,
+          "severity": "high",
+          "detail": "HTTP 307 → /admin?denied=1",
+          "repro": ""
+        },
+        {
+          "role": "MODERATOR",
+          "scenario": "ADMIN_ONLY deny /admin/bots",
+          "pass": false,
+          "severity": "high",
+          "detail": "HTTP 307 → /unavailable?m=bots&mode=hide",
+          "repro": ""
+        }
+      ]
+    },
+    "ADMIN": {
+      "total": 51,
+      "pass": 41,
+      "fail": 10,
+      "critical": 3,
+      "high": 3,
+      "medium": 2,
+      "low": 2,
+      "fails": [
+        {
+          "role": "ADMIN",
+          "scenario": "Запрет staff: /admin",
+          "pass": false,
+          "severity": "critical",
+          "detail": "HTTP 200 → ",
+          "repro": "ADMIN открывает /admin"
+        },
+        {
+          "role": "ADMIN",
+          "scenario": "Запрет staff: /admin/users",
+          "pass": false,
+          "severity": "critical",
+          "detail": "HTTP 200 → ",
+          "repro": "ADMIN открывает /admin/users"
+        },
+        {
+          "role": "ADMIN",
+          "scenario": "Запрет staff: /api/admin/stats",
+          "pass": false,
+          "severity": "critical",
+          "detail": "HTTP 200 → ",
+          "repro": "ADMIN открывает /api/admin/stats"
+        },
+        {
+          "role": "ADMIN",
+          "scenario": "Запрет /scanner",
+          "pass": false,
+          "severity": "high",
+          "detail": "HTTP 200 → ",
+          "repro": ""
+        },
+        {
+          "role": "ADMIN",
+          "scenario": "Friends API при OFF модуле",
+          "pass": false,
+          "severity": "medium",
+          "detail": "HTTP 503",
+          "repro": ""
+        },
+        {
+          "role": "ADMIN",
+          "scenario": "Messages API при OFF модуле",
+          "pass": false,
+          "severity": "medium",
+          "detail": "HTTP 503",
+          "repro": ""
+        },
+        {
+          "role": "ADMIN",
+          "scenario": "Eco API",
+          "pass": false,
+          "severity": "low",
+          "detail": "HTTP 503",
+          "repro": ""
+        },
+        {
+          "role": "ADMIN",
+          "scenario": "Админ страница /admin/online",
+          "pass": false,
+          "severity": "high",
+          "detail": "HTTP 404 → ",
+          "repro": ""
+        },
+        {
+          "role": "ADMIN",
+          "scenario": "API users list",
+          "pass": false,
+          "severity": "high",
+          "detail": "HTTP 404",
+          "repro": ""
+        },
+        {
+          "role": "ADMIN",
+          "scenario": "/ops для ADMIN (ожидаем deny или redirect)",
+          "pass": false,
+          "severity": "low",
+          "detail": "HTTP 307 → / (документируем фактическое поведение)",
+          "repro": ""
+        }
+      ]
+    },
+    "SCANNER": {
+      "total": 6,
+      "pass": 6,
+      "fail": 0,
+      "critical": 0,
+      "high": 0,
+      "medium": 0,
+      "low": 0,
+      "fails": []
+    },
+    "TECH": {
+      "total": 5,
+      "pass": 5,
+      "fail": 0,
+      "critical": 0,
+      "high": 0,
+      "medium": 0,
+      "low": 0,
+      "fails": []
+    }
+  },
+  "results": [
+    {
+      "role": "SYSTEM",
+      "scenario": "API /api/public/status",
+      "pass": true,
+      "severity": "critical",
+      "detail": "site=Центр развития молодежи Сочи",
+      "repro": ""
+    },
+    {
+      "role": "SYSTEM",
+      "scenario": "Регистрация выключена (факт)",
+      "pass": true,
+      "severity": "info",
+      "detail": "registrationEnabled=false",
+      "repro": ""
+    },
+    {
+      "role": "GUEST",
+      "scenario": "Открыть /",
+      "pass": true,
+      "severity": "info",
+      "detail": "HTTP 200 ",
+      "repro": ""
+    },
+    {
+      "role": "GUEST",
+      "scenario": "Открыть /events",
+      "pass": true,
+      "severity": "info",
+      "detail": "HTTP 200 ",
+      "repro": ""
+    },
+    {
+      "role": "GUEST",
+      "scenario": "Открыть /projects",
+      "pass": true,
+      "severity": "info",
+      "detail": "HTTP 200 ",
+      "repro": ""
+    },
+    {
+      "role": "GUEST",
+      "scenario": "Открыть /clubs",
+      "pass": true,
+      "severity": "info",
+      "detail": "HTTP 200 ",
+      "repro": ""
+    },
+    {
+      "role": "GUEST",
+      "scenario": "Открыть /spaces",
+      "pass": true,
+      "severity": "info",
+      "detail": "HTTP 200 ",
+      "repro": ""
+    },
+    {
+      "role": "GUEST",
+      "scenario": "Открыть /news",
+      "pass": true,
+      "severity": "info",
+      "detail": "HTTP 200 ",
+      "repro": ""
+    },
+    {
+      "role": "GUEST",
+      "scenario": "Открыть /grants",
+      "pass": true,
+      "severity": "info",
+      "detail": "HTTP 200 ",
+      "repro": ""
+    },
+    {
+      "role": "GUEST",
+      "scenario": "Открыть /dobro",
+      "pass": true,
+      "severity": "info",
+      "detail": "HTTP 200 ",
+      "repro": ""
+    },
+    {
+      "role": "GUEST",
+      "scenario": "Открыть /self-gov",
+      "pass": true,
+      "severity": "info",
+      "detail": "HTTP 200 ",
+      "repro": ""
+    },
+    {
+      "role": "GUEST",
+      "scenario": "Открыть /contacts",
+      "pass": true,
+      "severity": "info",
+      "detail": "HTTP 200 ",
+      "repro": ""
+    },
+    {
+      "role": "GUEST",
+      "scenario": "Открыть /privacy",
+      "pass": true,
+      "severity": "info",
+      "detail": "HTTP 200 ",
+      "repro": ""
+    },
+    {
+      "role": "GUEST",
+      "scenario": "Открыть /rules",
+      "pass": true,
+      "severity": "info",
+      "detail": "HTTP 200 ",
+      "repro": ""
+    },
+    {
+      "role": "GUEST",
+      "scenario": "Открыть /terms",
+      "pass": true,
+      "severity": "info",
+      "detail": "HTTP 200 ",
+      "repro": ""
+    },
+    {
+      "role": "GUEST",
+      "scenario": "Открыть /documents",
+      "pass": true,
+      "severity": "info",
+      "detail": "HTTP 200 ",
+      "repro": ""
+    },
+    {
+      "role": "GUEST",
+      "scenario": "Открыть /login",
+      "pass": true,
+      "severity": "info",
+      "detail": "HTTP 200 ",
+      "repro": ""
+    },
+    {
+      "role": "GUEST",
+      "scenario": "Открыть /forgot-password",
+      "pass": true,
+      "severity": "info",
+      "detail": "HTTP 200 ",
+      "repro": ""
+    },
+    {
+      "role": "GUEST",
+      "scenario": "Модуль OFF: /register недоступен",
+      "pass": true,
+      "severity": "info",
+      "detail": "HTTP 307 → /unavailable?m=registration&mode=hide",
+      "repro": "Открыть https://young.idivles.ru/register без логина"
+    },
+    {
+      "role": "GUEST",
+      "scenario": "Модуль OFF: /places недоступен",
+      "pass": true,
+      "severity": "info",
+      "detail": "HTTP 307 → /unavailable?m=places&mode=soon",
+      "repro": "Открыть https://young.idivles.ru/places без логина"
+    },
+    {
+      "role": "GUEST",
+      "scenario": "Модуль OFF: /gallery недоступен",
+      "pass": true,
+      "severity": "info",
+      "detail": "HTTP 307 → /unavailable?m=gallery&mode=soon",
+      "repro": "Открыть https://young.idivles.ru/gallery без логина"
+    },
+    {
+      "role": "GUEST",
+      "scenario": "Модуль OFF: /vacancies недоступен",
+      "pass": true,
+      "severity": "info",
+      "detail": "HTTP 307 → /unavailable?m=vacancies&mode=soon",
+      "repro": "Открыть https://young.idivles.ru/vacancies без логина"
+    },
+    {
+      "role": "GUEST",
+      "scenario": "Модуль OFF: /contests недоступен",
+      "pass": true,
+      "severity": "info",
+      "detail": "HTTP 307 → /unavailable?m=contests&mode=soon",
+      "repro": "Открыть https://young.idivles.ru/contests без логина"
+    },
+    {
+      "role": "GUEST",
+      "scenario": "Модуль OFF: /games недоступен",
+      "pass": true,
+      "severity": "info",
+      "detail": "HTTP 307 → /unavailable?m=games&mode=soon",
+      "repro": "Открыть https://young.idivles.ru/games без логина"
+    },
+    {
+      "role": "GUEST",
+      "scenario": "Модуль OFF: /friends недоступен",
+      "pass": true,
+      "severity": "info",
+      "detail": "HTTP 307 → /unavailable?m=friends&mode=soon",
+      "repro": "Открыть https://young.idivles.ru/friends без логина"
+    },
+    {
+      "role": "GUEST",
+      "scenario": "Модуль OFF: /messages недоступен",
+      "pass": true,
+      "severity": "info",
+      "detail": "HTTP 307 → /unavailable?m=messaging&mode=hide",
+      "repro": "Открыть https://young.idivles.ru/messages без логина"
+    },
+    {
+      "role": "GUEST",
+      "scenario": "Модуль OFF: /faq недоступен",
+      "pass": true,
+      "severity": "info",
+      "detail": "HTTP 307 → /unavailable?m=faq&mode=soon",
+      "repro": "Открыть https://young.idivles.ru/faq без логина"
+    },
+    {
+      "role": "GUEST",
+      "scenario": "Модуль OFF: /portfolio недоступен",
+      "pass": true,
+      "severity": "info",
+      "detail": "HTTP 307 → /unavailable?m=portfolio&mode=soon",
+      "repro": "Открыть https://young.idivles.ru/portfolio без логина"
+    },
+    {
+      "role": "GUEST",
+      "scenario": "Запрет без логина: /dashboard",
+      "pass": true,
+      "severity": "info",
+      "detail": "HTTP 307 → /login?callbackUrl=%2Fdashboard",
+      "repro": "Открыть /dashboard гостем"
+    },
+    {
+      "role": "GUEST",
+      "scenario": "Запрет без логина: /dashboard/edit",
+      "pass": true,
+      "severity": "info",
+      "detail": "HTTP 307 → /login?callbackUrl=%2Fdashboard%2Fedit",
+      "repro": "Открыть /dashboard/edit гостем"
+    },
+    {
+      "role": "GUEST",
+      "scenario": "Запрет без логина: /dashboard/settings",
+      "pass": true,
+      "severity": "info",
+      "detail": "HTTP 307 → /login?callbackUrl=%2Fdashboard%2Fsettings",
+      "repro": "Открыть /dashboard/settings гостем"
+    },
+    {
+      "role": "GUEST",
+      "scenario": "Запрет без логина: /dashboard/applications",
+      "pass": true,
+      "severity": "info",
+      "detail": "HTTP 307 → /login?callbackUrl=%2Fdashboard%2Fapplications",
+      "repro": "Открыть /dashboard/applications гостем"
+    },
+    {
+      "role": "GUEST",
+      "scenario": "Запрет без логина: /change-password",
+      "pass": false,
+      "severity": "critical",
+      "detail": "HTTP 200 → ",
+      "repro": "Открыть /change-password гостем"
+    },
+    {
+      "role": "GUEST",
+      "scenario": "Запрет без логина: /more",
+      "pass": false,
+      "severity": "critical",
+      "detail": "HTTP 200 → ",
+      "repro": "Открыть /more гостем"
+    },
+    {
+      "role": "GUEST",
+      "scenario": "Запрет без логина: /admin",
+      "pass": true,
+      "severity": "info",
+      "detail": "HTTP 307 → /login?callbackUrl=/admin&staff=1",
+      "repro": "Открыть /admin гостем"
+    },
+    {
+      "role": "GUEST",
+      "scenario": "Запрет без логина: /scanner",
+      "pass": true,
+      "severity": "info",
+      "detail": "HTTP 307 → /login?callbackUrl=/scanner&staff=1",
+      "repro": "Открыть /scanner гостем"
+    },
+    {
+      "role": "GUEST",
+      "scenario": "Запрет без логина: /ops",
+      "pass": false,
+      "severity": "critical",
+      "detail": "HTTP 307 → /",
+      "repro": "Открыть /ops гостем"
+    },
+    {
+      "role": "GUEST",
+      "scenario": "Запрет без логина: /messages",
+      "pass": true,
+      "severity": "info",
+      "detail": "HTTP 307 → /unavailable?m=messaging&mode=hide",
+      "repro": "Открыть /messages гостем"
+    },
+    {
+      "role": "GUEST",
+      "scenario": "Запрет без логина: /friends",
+      "pass": true,
+      "severity": "info",
+      "detail": "HTTP 307 → /unavailable?m=friends&mode=soon",
+      "repro": "Открыть /friends гостем"
+    },
+    {
+      "role": "GUEST",
+      "scenario": "API deny /api/user/profile",
+      "pass": true,
+      "severity": "info",
+      "detail": "HTTP 401",
+      "repro": ""
+    },
+    {
+      "role": "GUEST",
+      "scenario": "API deny /api/admin/stats",
+      "pass": true,
+      "severity": "info",
+      "detail": "HTTP 401",
+      "repro": ""
+    },
+    {
+      "role": "GUEST",
+      "scenario": "API deny /api/admin/users",
+      "pass": false,
+      "severity": "critical",
+      "detail": "HTTP 404",
+      "repro": ""
+    },
+    {
+      "role": "GUEST",
+      "scenario": "API deny /api/ops/flags",
+      "pass": false,
+      "severity": "critical",
+      "detail": "HTTP 404",
+      "repro": ""
+    },
+    {
+      "role": "GUEST",
+      "scenario": "API deny /api/scanner/events",
+      "pass": true,
+      "severity": "info",
+      "detail": "HTTP 403",
+      "repro": ""
+    },
+    {
+      "role": "GUEST",
+      "scenario": "Форма входа на русском",
+      "pass": false,
+      "severity": "medium",
+      "detail": "HTTP 200",
+      "repro": ""
+    },
+    {
+      "role": "GUEST",
+      "scenario": "Восстановление пароля доступно",
+      "pass": false,
+      "severity": "medium",
+      "detail": "HTTP 200",
+      "repro": ""
+    },
+    {
+      "role": "GUEST",
+      "scenario": "Неверный логин не создаёт сессию",
+      "pass": true,
+      "severity": "info",
+      "detail": "role=null status=401",
+      "repro": ""
+    },
+    {
+      "role": "GUEST",
+      "scenario": "Пустой логин отвергается",
+      "pass": true,
+      "severity": "low",
+      "detail": "HTTP 200",
+      "repro": ""
+    },
+    {
+      "role": "GUEST",
+      "scenario": "PWA manifest",
+      "pass": true,
+      "severity": "medium",
+      "detail": "HTTP 200",
+      "repro": ""
+    },
+    {
+      "role": "GUEST",
+      "scenario": "Service worker",
+      "pass": true,
+      "severity": "medium",
+      "detail": "HTTP 200",
+      "repro": ""
+    },
+    {
+      "role": "GUEST",
+      "scenario": "Поиск /search",
+      "pass": true,
+      "severity": "low",
+      "detail": "HTTP 200 ",
+      "repro": ""
+    },
+    {
+      "role": "GUEST",
+      "scenario": "Health latency <2s",
+      "pass": true,
+      "severity": "info",
+      "detail": "169ms",
+      "repro": ""
+    },
+    {
+      "role": "USER",
+      "scenario": "Логин успешен",
+      "pass": false,
+      "severity": "info",
+      "detail": "got PARTICIPANT",
+      "repro": ""
+    },
+    {
+      "role": "USER",
+      "scenario": "GET /api/user/profile",
+      "pass": true,
+      "severity": "critical",
+      "detail": "HTTP 200",
+      "repro": ""
+    },
+    {
+      "role": "USER",
+      "scenario": "Кабинет/страница /dashboard",
+      "pass": true,
+      "severity": "info",
+      "detail": "HTTP 200 → ",
+      "repro": ""
+    },
+    {
+      "role": "USER",
+      "scenario": "Кабинет/страница /dashboard/edit",
+      "pass": true,
+      "severity": "info",
+      "detail": "HTTP 200 → ",
+      "repro": ""
+    },
+    {
+      "role": "USER",
+      "scenario": "Кабинет/страница /dashboard/settings",
+      "pass": true,
+      "severity": "info",
+      "detail": "HTTP 200 → ",
+      "repro": ""
+    },
+    {
+      "role": "USER",
+      "scenario": "Кабинет/страница /dashboard/applications",
+      "pass": true,
+      "severity": "info",
+      "detail": "HTTP 200 → ",
+      "repro": ""
+    },
+    {
+      "role": "USER",
+      "scenario": "Кабинет/страница /change-password",
+      "pass": true,
+      "severity": "info",
+      "detail": "HTTP 200 → ",
+      "repro": ""
+    },
+    {
+      "role": "USER",
+      "scenario": "Кабинет/страница /more",
+      "pass": true,
+      "severity": "info",
+      "detail": "HTTP 200 → ",
+      "repro": ""
+    },
+    {
+      "role": "USER",
+      "scenario": "Запрет staff: /admin",
+      "pass": true,
+      "severity": "info",
+      "detail": "HTTP 307 → /dashboard",
+      "repro": "USER открывает /admin"
+    },
+    {
+      "role": "USER",
+      "scenario": "Запрет staff: /admin/users",
+      "pass": true,
+      "severity": "info",
+      "detail": "HTTP 307 → /dashboard",
+      "repro": "USER открывает /admin/users"
+    },
+    {
+      "role": "USER",
+      "scenario": "Запрет staff: /ops",
+      "pass": true,
+      "severity": "info",
+      "detail": "HTTP 307 → /",
+      "repro": "USER открывает /ops"
+    },
+    {
+      "role": "USER",
+      "scenario": "Запрет staff: /api/admin/stats",
+      "pass": true,
+      "severity": "info",
+      "detail": "HTTP 403 → ",
+      "repro": "USER открывает /api/admin/stats"
+    },
+    {
+      "role": "USER",
+      "scenario": "Запрет staff: /api/ops/flags",
+      "pass": true,
+      "severity": "critical",
+      "detail": "HTTP 404 → ",
+      "repro": "USER открывает /api/ops/flags"
+    },
+    {
+      "role": "USER",
+      "scenario": "Запрет /scanner",
+      "pass": true,
+      "severity": "high",
+      "detail": "HTTP 307 → /dashboard",
+      "repro": ""
+    },
+    {
+      "role": "USER",
+      "scenario": "Редактирование профиля (PATCH)",
+      "pass": true,
+      "severity": "high",
+      "detail": "HTTP 200 {\"message\":\"Профиль успешно сохранен!\",\"user\":{\"id\":\"cmsfzh25j000237o6nc50x3js\",\"publicCode\":\"YM-KGT",
+      "repro": ""
+    },
+    {
+      "role": "USER",
+      "scenario": "Нельзя сменить email через profile PATCH",
+      "pass": true,
+      "severity": "critical",
+      "detail": "HTTP 403",
+      "repro": ""
+    },
+    {
+      "role": "USER",
+      "scenario": "Список заявок",
+      "pass": true,
+      "severity": "medium",
+      "detail": "HTTP 200",
+      "repro": ""
+    },
+    {
+      "role": "USER",
+      "scenario": "Список броней",
+      "pass": true,
+      "severity": "medium",
+      "detail": "HTTP 200",
+      "repro": ""
+    },
+    {
+      "role": "USER",
+      "scenario": "Подача заявки в клуб",
+      "pass": true,
+      "severity": "high",
+      "detail": "HTTP 400 Клуб недоступен для заявок",
+      "repro": ""
+    },
+    {
+      "role": "USER",
+      "scenario": "Повторная заявка обработана без 500",
+      "pass": true,
+      "severity": "medium",
+      "detail": "HTTP 400",
+      "repro": ""
+    },
+    {
+      "role": "USER",
+      "scenario": "Friends API при OFF модуле",
+      "pass": false,
+      "severity": "medium",
+      "detail": "HTTP 503",
+      "repro": ""
+    },
+    {
+      "role": "USER",
+      "scenario": "Messages API при OFF модуле",
+      "pass": false,
+      "severity": "medium",
+      "detail": "HTTP 503",
+      "repro": ""
+    },
+    {
+      "role": "USER",
+      "scenario": "Eco API",
+      "pass": false,
+      "severity": "low",
+      "detail": "HTTP 503",
+      "repro": ""
+    },
+    {
+      "role": "USER",
+      "scenario": "Уведомления",
+      "pass": true,
+      "severity": "medium",
+      "detail": "HTTP 404",
+      "repro": ""
+    },
+    {
+      "role": "USER",
+      "scenario": "Сессия стабильна",
+      "pass": true,
+      "severity": "critical",
+      "detail": "\"PARTICIPANT\"",
+      "repro": ""
+    },
+    {
+      "role": "USER",
+      "scenario": "Выход (signout) отвечает",
+      "pass": true,
+      "severity": "medium",
+      "detail": "HTTP 200",
+      "repro": ""
+    },
+    {
+      "role": "PARTICIPANT",
+      "scenario": "Логин успешен",
+      "pass": true,
+      "severity": "info",
+      "detail": "got PARTICIPANT",
+      "repro": ""
+    },
+    {
+      "role": "PARTICIPANT",
+      "scenario": "GET /api/user/profile",
+      "pass": true,
+      "severity": "critical",
+      "detail": "HTTP 200",
+      "repro": ""
+    },
+    {
+      "role": "PARTICIPANT",
+      "scenario": "Кабинет/страница /dashboard",
+      "pass": true,
+      "severity": "info",
+      "detail": "HTTP 200 → ",
+      "repro": ""
+    },
+    {
+      "role": "PARTICIPANT",
+      "scenario": "Кабинет/страница /dashboard/edit",
+      "pass": true,
+      "severity": "info",
+      "detail": "HTTP 200 → ",
+      "repro": ""
+    },
+    {
+      "role": "PARTICIPANT",
+      "scenario": "Кабинет/страница /dashboard/settings",
+      "pass": true,
+      "severity": "info",
+      "detail": "HTTP 200 → ",
+      "repro": ""
+    },
+    {
+      "role": "PARTICIPANT",
+      "scenario": "Кабинет/страница /dashboard/applications",
+      "pass": true,
+      "severity": "info",
+      "detail": "HTTP 200 → ",
+      "repro": ""
+    },
+    {
+      "role": "PARTICIPANT",
+      "scenario": "Кабинет/страница /change-password",
+      "pass": true,
+      "severity": "info",
+      "detail": "HTTP 200 → ",
+      "repro": ""
+    },
+    {
+      "role": "PARTICIPANT",
+      "scenario": "Кабинет/страница /more",
+      "pass": true,
+      "severity": "info",
+      "detail": "HTTP 200 → ",
+      "repro": ""
+    },
+    {
+      "role": "PARTICIPANT",
+      "scenario": "Запрет staff: /admin",
+      "pass": true,
+      "severity": "info",
+      "detail": "HTTP 307 → /dashboard",
+      "repro": "PARTICIPANT открывает /admin"
+    },
+    {
+      "role": "PARTICIPANT",
+      "scenario": "Запрет staff: /admin/users",
+      "pass": true,
+      "severity": "info",
+      "detail": "HTTP 307 → /dashboard",
+      "repro": "PARTICIPANT открывает /admin/users"
+    },
+    {
+      "role": "PARTICIPANT",
+      "scenario": "Запрет staff: /ops",
+      "pass": true,
+      "severity": "info",
+      "detail": "HTTP 307 → /",
+      "repro": "PARTICIPANT открывает /ops"
+    },
+    {
+      "role": "PARTICIPANT",
+      "scenario": "Запрет staff: /api/admin/stats",
+      "pass": true,
+      "severity": "info",
+      "detail": "HTTP 403 → ",
+      "repro": "PARTICIPANT открывает /api/admin/stats"
+    },
+    {
+      "role": "PARTICIPANT",
+      "scenario": "Запрет staff: /api/ops/flags",
+      "pass": true,
+      "severity": "critical",
+      "detail": "HTTP 404 → ",
+      "repro": "PARTICIPANT открывает /api/ops/flags"
+    },
+    {
+      "role": "PARTICIPANT",
+      "scenario": "Запрет /scanner",
+      "pass": true,
+      "severity": "high",
+      "detail": "HTTP 307 → /dashboard",
+      "repro": ""
+    },
+    {
+      "role": "PARTICIPANT",
+      "scenario": "Редактирование профиля (PATCH)",
+      "pass": true,
+      "severity": "high",
+      "detail": "HTTP 200 {\"message\":\"Профиль успешно сохранен!\",\"user\":{\"id\":\"cmsfzh21c000137o64e8vygup\",\"publicCode\":\"YM-TV4",
+      "repro": ""
+    },
+    {
+      "role": "PARTICIPANT",
+      "scenario": "Нельзя сменить email через profile PATCH",
+      "pass": true,
+      "severity": "critical",
+      "detail": "HTTP 403",
+      "repro": ""
+    },
+    {
+      "role": "PARTICIPANT",
+      "scenario": "Список заявок",
+      "pass": true,
+      "severity": "medium",
+      "detail": "HTTP 200",
+      "repro": ""
+    },
+    {
+      "role": "PARTICIPANT",
+      "scenario": "Список броней",
+      "pass": true,
+      "severity": "medium",
+      "detail": "HTTP 200",
+      "repro": ""
+    },
+    {
+      "role": "PARTICIPANT",
+      "scenario": "Подача заявки в клуб",
+      "pass": true,
+      "severity": "high",
+      "detail": "HTTP 400 Клуб недоступен для заявок",
+      "repro": ""
+    },
+    {
+      "role": "PARTICIPANT",
+      "scenario": "Повторная заявка обработана без 500",
+      "pass": true,
+      "severity": "medium",
+      "detail": "HTTP 400",
+      "repro": ""
+    },
+    {
+      "role": "PARTICIPANT",
+      "scenario": "Friends API при OFF модуле",
+      "pass": false,
+      "severity": "medium",
+      "detail": "HTTP 503",
+      "repro": ""
+    },
+    {
+      "role": "PARTICIPANT",
+      "scenario": "Messages API при OFF модуле",
+      "pass": false,
+      "severity": "medium",
+      "detail": "HTTP 503",
+      "repro": ""
+    },
+    {
+      "role": "PARTICIPANT",
+      "scenario": "Eco API",
+      "pass": false,
+      "severity": "low",
+      "detail": "HTTP 503",
+      "repro": ""
+    },
+    {
+      "role": "PARTICIPANT",
+      "scenario": "Уведомления",
+      "pass": true,
+      "severity": "medium",
+      "detail": "HTTP 404",
+      "repro": ""
+    },
+    {
+      "role": "PARTICIPANT",
+      "scenario": "Сессия стабильна",
+      "pass": true,
+      "severity": "critical",
+      "detail": "\"PARTICIPANT\"",
+      "repro": ""
+    },
+    {
+      "role": "PARTICIPANT",
+      "scenario": "Выход (signout) отвечает",
+      "pass": true,
+      "severity": "medium",
+      "detail": "HTTP 200",
+      "repro": ""
+    },
+    {
+      "role": "MODERATOR",
+      "scenario": "Логин успешен",
+      "pass": true,
+      "severity": "info",
+      "detail": "got MODERATOR",
+      "repro": ""
+    },
+    {
+      "role": "MODERATOR",
+      "scenario": "GET /api/user/profile",
+      "pass": true,
+      "severity": "critical",
+      "detail": "HTTP 200",
+      "repro": ""
+    },
+    {
+      "role": "MODERATOR",
+      "scenario": "Кабинет/страница /dashboard",
+      "pass": true,
+      "severity": "info",
+      "detail": "HTTP 200 → ",
+      "repro": ""
+    },
+    {
+      "role": "MODERATOR",
+      "scenario": "Кабинет/страница /dashboard/edit",
+      "pass": true,
+      "severity": "info",
+      "detail": "HTTP 200 → ",
+      "repro": ""
+    },
+    {
+      "role": "MODERATOR",
+      "scenario": "Кабинет/страница /dashboard/settings",
+      "pass": true,
+      "severity": "info",
+      "detail": "HTTP 200 → ",
+      "repro": ""
+    },
+    {
+      "role": "MODERATOR",
+      "scenario": "Кабинет/страница /dashboard/applications",
+      "pass": true,
+      "severity": "info",
+      "detail": "HTTP 200 → ",
+      "repro": ""
+    },
+    {
+      "role": "MODERATOR",
+      "scenario": "Кабинет/страница /change-password",
+      "pass": true,
+      "severity": "info",
+      "detail": "HTTP 200 → ",
+      "repro": ""
+    },
+    {
+      "role": "MODERATOR",
+      "scenario": "Кабинет/страница /more",
+      "pass": true,
+      "severity": "info",
+      "detail": "HTTP 200 → ",
+      "repro": ""
+    },
+    {
+      "role": "MODERATOR",
+      "scenario": "Запрет staff: /admin",
+      "pass": false,
+      "severity": "critical",
+      "detail": "HTTP 200 → ",
+      "repro": "MODERATOR открывает /admin"
+    },
+    {
+      "role": "MODERATOR",
+      "scenario": "Запрет staff: /admin/users",
+      "pass": false,
+      "severity": "critical",
+      "detail": "HTTP 307 → /admin?denied=1",
+      "repro": "MODERATOR открывает /admin/users"
+    },
+    {
+      "role": "MODERATOR",
+      "scenario": "Запрет staff: /ops",
+      "pass": true,
+      "severity": "info",
+      "detail": "HTTP 307 → /",
+      "repro": "MODERATOR открывает /ops"
+    },
+    {
+      "role": "MODERATOR",
+      "scenario": "Запрет staff: /api/admin/stats",
+      "pass": false,
+      "severity": "critical",
+      "detail": "HTTP 200 → ",
+      "repro": "MODERATOR открывает /api/admin/stats"
+    },
+    {
+      "role": "MODERATOR",
+      "scenario": "Запрет staff: /api/ops/flags",
+      "pass": true,
+      "severity": "critical",
+      "detail": "HTTP 404 → ",
+      "repro": "MODERATOR открывает /api/ops/flags"
+    },
+    {
+      "role": "MODERATOR",
+      "scenario": "Запрет /scanner",
+      "pass": false,
+      "severity": "high",
+      "detail": "HTTP 200 → ",
+      "repro": ""
+    },
+    {
+      "role": "MODERATOR",
+      "scenario": "Редактирование профиля (PATCH)",
+      "pass": true,
+      "severity": "high",
+      "detail": "HTTP 200 {\"message\":\"Профиль успешно сохранен!\",\"user\":{\"id\":\"cmsfzh1yr000037o612va4o6f\",\"publicCode\":\"YM-XJJ",
+      "repro": ""
+    },
+    {
+      "role": "MODERATOR",
+      "scenario": "Нельзя сменить email через profile PATCH",
+      "pass": true,
+      "severity": "critical",
+      "detail": "HTTP 403",
+      "repro": ""
+    },
+    {
+      "role": "MODERATOR",
+      "scenario": "Список заявок",
+      "pass": true,
+      "severity": "medium",
+      "detail": "HTTP 200",
+      "repro": ""
+    },
+    {
+      "role": "MODERATOR",
+      "scenario": "Список броней",
+      "pass": true,
+      "severity": "medium",
+      "detail": "HTTP 200",
+      "repro": ""
+    },
+    {
+      "role": "MODERATOR",
+      "scenario": "Подача заявки в клуб",
+      "pass": true,
+      "severity": "high",
+      "detail": "HTTP 400 Клуб недоступен для заявок",
+      "repro": ""
+    },
+    {
+      "role": "MODERATOR",
+      "scenario": "Повторная заявка обработана без 500",
+      "pass": true,
+      "severity": "medium",
+      "detail": "HTTP 400",
+      "repro": ""
+    },
+    {
+      "role": "MODERATOR",
+      "scenario": "Friends API при OFF модуле",
+      "pass": false,
+      "severity": "medium",
+      "detail": "HTTP 503",
+      "repro": ""
+    },
+    {
+      "role": "MODERATOR",
+      "scenario": "Messages API при OFF модуле",
+      "pass": false,
+      "severity": "medium",
+      "detail": "HTTP 503",
+      "repro": ""
+    },
+    {
+      "role": "MODERATOR",
+      "scenario": "Eco API",
+      "pass": false,
+      "severity": "low",
+      "detail": "HTTP 503",
+      "repro": ""
+    },
+    {
+      "role": "MODERATOR",
+      "scenario": "Уведомления",
+      "pass": true,
+      "severity": "medium",
+      "detail": "HTTP 404",
+      "repro": ""
+    },
+    {
+      "role": "MODERATOR",
+      "scenario": "Сессия стабильна",
+      "pass": true,
+      "severity": "critical",
+      "detail": "\"MODERATOR\"",
+      "repro": ""
+    },
+    {
+      "role": "MODERATOR",
+      "scenario": "Выход (signout) отвечает",
+      "pass": true,
+      "severity": "medium",
+      "detail": "HTTP 200",
+      "repro": ""
+    },
+    {
+      "role": "MODERATOR",
+      "scenario": "Логин",
+      "pass": true,
+      "severity": "critical",
+      "detail": "MODERATOR",
+      "repro": ""
+    },
+    {
+      "role": "MODERATOR",
+      "scenario": "Доступ /admin (ANY_MOD)",
+      "pass": true,
+      "severity": "critical",
+      "detail": "HTTP 200 → ",
+      "repro": ""
+    },
+    {
+      "role": "MODERATOR",
+      "scenario": "ADMIN_ONLY deny /admin/users",
+      "pass": false,
+      "severity": "high",
+      "detail": "HTTP 307 → /admin?denied=1",
+      "repro": ""
+    },
+    {
+      "role": "MODERATOR",
+      "scenario": "ADMIN_ONLY deny /admin/settings",
+      "pass": false,
+      "severity": "high",
+      "detail": "HTTP 307 → /admin?denied=1",
+      "repro": ""
+    },
+    {
+      "role": "MODERATOR",
+      "scenario": "ADMIN_ONLY deny /admin/rkn",
+      "pass": false,
+      "severity": "high",
+      "detail": "HTTP 307 → /admin?denied=1",
+      "repro": ""
+    },
+    {
+      "role": "MODERATOR",
+      "scenario": "ADMIN_ONLY deny /admin/backup",
+      "pass": false,
+      "severity": "high",
+      "detail": "HTTP 307 → /admin?denied=1",
+      "repro": ""
+    },
+    {
+      "role": "MODERATOR",
+      "scenario": "ADMIN_ONLY deny /admin/system",
+      "pass": false,
+      "severity": "high",
+      "detail": "HTTP 307 → /unavailable?m=server_status&mode=hide",
+      "repro": ""
+    },
+    {
+      "role": "MODERATOR",
+      "scenario": "ADMIN_ONLY deny /admin/online",
+      "pass": false,
+      "severity": "high",
+      "detail": "HTTP 307 → /admin?denied=1",
+      "repro": ""
+    },
+    {
+      "role": "MODERATOR",
+      "scenario": "ADMIN_ONLY deny /admin/bots",
+      "pass": false,
+      "severity": "high",
+      "detail": "HTTP 307 → /unavailable?m=bots&mode=hide",
+      "repro": ""
+    },
+    {
+      "role": "MODERATOR",
+      "scenario": "Раздел по ACL /admin/news",
+      "pass": true,
+      "severity": "medium",
+      "detail": "HTTP 200 len=8000",
+      "repro": ""
+    },
+    {
+      "role": "MODERATOR",
+      "scenario": "Раздел по ACL /admin/moderation",
+      "pass": true,
+      "severity": "medium",
+      "detail": "HTTP 200 len=8000",
+      "repro": ""
+    },
+    {
+      "role": "MODERATOR",
+      "scenario": "Раздел по ACL /admin/applications",
+      "pass": true,
+      "severity": "medium",
+      "detail": "HTTP 200 len=8000",
+      "repro": ""
+    },
+    {
+      "role": "MODERATOR",
+      "scenario": "Раздел по ACL /admin/clubs",
+      "pass": true,
+      "severity": "medium",
+      "detail": "HTTP 200 len=8000",
+      "repro": ""
+    },
+    {
+      "role": "MODERATOR",
+      "scenario": "API admin/stats (по праву stats)",
+      "pass": true,
+      "severity": "medium",
+      "detail": "HTTP 200",
+      "repro": ""
+    },
+    {
+      "role": "MODERATOR",
+      "scenario": "Запрет RKN API",
+      "pass": true,
+      "severity": "critical",
+      "detail": "HTTP 403",
+      "repro": ""
+    },
+    {
+      "role": "ADMIN",
+      "scenario": "Логин успешен",
+      "pass": true,
+      "severity": "info",
+      "detail": "got ADMIN",
+      "repro": ""
+    },
+    {
+      "role": "ADMIN",
+      "scenario": "GET /api/user/profile",
+      "pass": true,
+      "severity": "critical",
+      "detail": "HTTP 200",
+      "repro": ""
+    },
+    {
+      "role": "ADMIN",
+      "scenario": "Кабинет/страница /dashboard",
+      "pass": true,
+      "severity": "info",
+      "detail": "HTTP 200 → ",
+      "repro": ""
+    },
+    {
+      "role": "ADMIN",
+      "scenario": "Кабинет/страница /dashboard/edit",
+      "pass": true,
+      "severity": "info",
+      "detail": "HTTP 200 → ",
+      "repro": ""
+    },
+    {
+      "role": "ADMIN",
+      "scenario": "Кабинет/страница /dashboard/settings",
+      "pass": true,
+      "severity": "info",
+      "detail": "HTTP 200 → ",
+      "repro": ""
+    },
+    {
+      "role": "ADMIN",
+      "scenario": "Кабинет/страница /dashboard/applications",
+      "pass": true,
+      "severity": "info",
+      "detail": "HTTP 200 → ",
+      "repro": ""
+    },
+    {
+      "role": "ADMIN",
+      "scenario": "Кабинет/страница /change-password",
+      "pass": true,
+      "severity": "info",
+      "detail": "HTTP 200 → ",
+      "repro": ""
+    },
+    {
+      "role": "ADMIN",
+      "scenario": "Кабинет/страница /more",
+      "pass": true,
+      "severity": "info",
+      "detail": "HTTP 200 → ",
+      "repro": ""
+    },
+    {
+      "role": "ADMIN",
+      "scenario": "Запрет staff: /admin",
+      "pass": false,
+      "severity": "critical",
+      "detail": "HTTP 200 → ",
+      "repro": "ADMIN открывает /admin"
+    },
+    {
+      "role": "ADMIN",
+      "scenario": "Запрет staff: /admin/users",
+      "pass": false,
+      "severity": "critical",
+      "detail": "HTTP 200 → ",
+      "repro": "ADMIN открывает /admin/users"
+    },
+    {
+      "role": "ADMIN",
+      "scenario": "Запрет staff: /ops",
+      "pass": true,
+      "severity": "info",
+      "detail": "HTTP 307 → /",
+      "repro": "ADMIN открывает /ops"
+    },
+    {
+      "role": "ADMIN",
+      "scenario": "Запрет staff: /api/admin/stats",
+      "pass": false,
+      "severity": "critical",
+      "detail": "HTTP 200 → ",
+      "repro": "ADMIN открывает /api/admin/stats"
+    },
+    {
+      "role": "ADMIN",
+      "scenario": "Запрет staff: /api/ops/flags",
+      "pass": true,
+      "severity": "critical",
+      "detail": "HTTP 404 → ",
+      "repro": "ADMIN открывает /api/ops/flags"
+    },
+    {
+      "role": "ADMIN",
+      "scenario": "Запрет /scanner",
+      "pass": false,
+      "severity": "high",
+      "detail": "HTTP 200 → ",
+      "repro": ""
+    },
+    {
+      "role": "ADMIN",
+      "scenario": "Редактирование профиля (PATCH)",
+      "pass": true,
+      "severity": "high",
+      "detail": "HTTP 200 {\"message\":\"Профиль успешно сохранен!\",\"user\":{\"id\":\"cmsggmfa00000lgjsuewcofus\",\"publicCode\":\"YM-NLQ",
+      "repro": ""
+    },
+    {
+      "role": "ADMIN",
+      "scenario": "Нельзя сменить email через profile PATCH",
+      "pass": true,
+      "severity": "critical",
+      "detail": "HTTP 403",
+      "repro": ""
+    },
+    {
+      "role": "ADMIN",
+      "scenario": "Список заявок",
+      "pass": true,
+      "severity": "medium",
+      "detail": "HTTP 200",
+      "repro": ""
+    },
+    {
+      "role": "ADMIN",
+      "scenario": "Список броней",
+      "pass": true,
+      "severity": "medium",
+      "detail": "HTTP 200",
+      "repro": ""
+    },
+    {
+      "role": "ADMIN",
+      "scenario": "Подача заявки в клуб",
+      "pass": true,
+      "severity": "high",
+      "detail": "HTTP 400 Клуб недоступен для заявок",
+      "repro": ""
+    },
+    {
+      "role": "ADMIN",
+      "scenario": "Повторная заявка обработана без 500",
+      "pass": true,
+      "severity": "medium",
+      "detail": "HTTP 400",
+      "repro": ""
+    },
+    {
+      "role": "ADMIN",
+      "scenario": "Friends API при OFF модуле",
+      "pass": false,
+      "severity": "medium",
+      "detail": "HTTP 503",
+      "repro": ""
+    },
+    {
+      "role": "ADMIN",
+      "scenario": "Messages API при OFF модуле",
+      "pass": false,
+      "severity": "medium",
+      "detail": "HTTP 503",
+      "repro": ""
+    },
+    {
+      "role": "ADMIN",
+      "scenario": "Eco API",
+      "pass": false,
+      "severity": "low",
+      "detail": "HTTP 503",
+      "repro": ""
+    },
+    {
+      "role": "ADMIN",
+      "scenario": "Уведомления",
+      "pass": true,
+      "severity": "medium",
+      "detail": "HTTP 404",
+      "repro": ""
+    },
+    {
+      "role": "ADMIN",
+      "scenario": "Сессия стабильна",
+      "pass": true,
+      "severity": "critical",
+      "detail": "\"ADMIN\"",
+      "repro": ""
+    },
+    {
+      "role": "ADMIN",
+      "scenario": "Выход (signout) отвечает",
+      "pass": true,
+      "severity": "medium",
+      "detail": "HTTP 200",
+      "repro": ""
+    },
+    {
+      "role": "ADMIN",
+      "scenario": "Логин",
+      "pass": true,
+      "severity": "critical",
+      "detail": "ADMIN",
+      "repro": ""
+    },
+    {
+      "role": "ADMIN",
+      "scenario": "Админ страница /admin",
+      "pass": true,
+      "severity": "info",
+      "detail": "HTTP 200 → ",
+      "repro": ""
+    },
+    {
+      "role": "ADMIN",
+      "scenario": "Админ страница /admin/users",
+      "pass": true,
+      "severity": "info",
+      "detail": "HTTP 200 → ",
+      "repro": ""
+    },
+    {
+      "role": "ADMIN",
+      "scenario": "Админ страница /admin/settings",
+      "pass": true,
+      "severity": "info",
+      "detail": "HTTP 200 → ",
+      "repro": ""
+    },
+    {
+      "role": "ADMIN",
+      "scenario": "Админ страница /admin/moderation",
+      "pass": true,
+      "severity": "info",
+      "detail": "HTTP 200 → ",
+      "repro": ""
+    },
+    {
+      "role": "ADMIN",
+      "scenario": "Админ страница /admin/news",
+      "pass": true,
+      "severity": "info",
+      "detail": "HTTP 200 → ",
+      "repro": ""
+    },
+    {
+      "role": "ADMIN",
+      "scenario": "Админ страница /admin/projects",
+      "pass": true,
+      "severity": "info",
+      "detail": "HTTP 200 → ",
+      "repro": ""
+    },
+    {
+      "role": "ADMIN",
+      "scenario": "Админ страница /admin/clubs",
+      "pass": true,
+      "severity": "info",
+      "detail": "HTTP 200 → ",
+      "repro": ""
+    },
+    {
+      "role": "ADMIN",
+      "scenario": "Админ страница /admin/spaces",
+      "pass": true,
+      "severity": "info",
+      "detail": "HTTP 200 → ",
+      "repro": ""
+    },
+    {
+      "role": "ADMIN",
+      "scenario": "Админ страница /admin/bookings",
+      "pass": true,
+      "severity": "info",
+      "detail": "HTTP 200 → ",
+      "repro": ""
+    },
+    {
+      "role": "ADMIN",
+      "scenario": "Админ страница /admin/applications",
+      "pass": true,
+      "severity": "info",
+      "detail": "HTTP 200 → ",
+      "repro": ""
+    },
+    {
+      "role": "ADMIN",
+      "scenario": "Админ страница /admin/scanner",
+      "pass": true,
+      "severity": "info",
+      "detail": "HTTP 200 → ",
+      "repro": ""
+    },
+    {
+      "role": "ADMIN",
+      "scenario": "Админ страница /admin/stats",
+      "pass": true,
+      "severity": "info",
+      "detail": "HTTP 200 → ",
+      "repro": ""
+    },
+    {
+      "role": "ADMIN",
+      "scenario": "Админ страница /admin/system",
+      "pass": true,
+      "severity": "info",
+      "detail": "HTTP 307 → /unavailable?m=server_status&mode=hide",
+      "repro": ""
+    },
+    {
+      "role": "ADMIN",
+      "scenario": "Админ страница /admin/online",
+      "pass": false,
+      "severity": "high",
+      "detail": "HTTP 404 → ",
+      "repro": ""
+    },
+    {
+      "role": "ADMIN",
+      "scenario": "Админ страница /admin/backup",
+      "pass": true,
+      "severity": "info",
+      "detail": "HTTP 200 → ",
+      "repro": ""
+    },
+    {
+      "role": "ADMIN",
+      "scenario": "Админ страница /admin/rkn",
+      "pass": true,
+      "severity": "info",
+      "detail": "HTTP 200 → ",
+      "repro": ""
+    },
+    {
+      "role": "ADMIN",
+      "scenario": "Админ страница /admin/bots",
+      "pass": true,
+      "severity": "info",
+      "detail": "HTTP 307 → /unavailable?m=bots&mode=hide",
+      "repro": ""
+    },
+    {
+      "role": "ADMIN",
+      "scenario": "Админ страница /admin/security",
+      "pass": true,
+      "severity": "info",
+      "detail": "HTTP 200 → ",
+      "repro": ""
+    },
+    {
+      "role": "ADMIN",
+      "scenario": "API admin/stats",
+      "pass": true,
+      "severity": "high",
+      "detail": "HTTP 200",
+      "repro": ""
+    },
+    {
+      "role": "ADMIN",
+      "scenario": "API nav-counts",
+      "pass": true,
+      "severity": "medium",
+      "detail": "HTTP 200",
+      "repro": ""
+    },
+    {
+      "role": "ADMIN",
+      "scenario": "API users list",
+      "pass": false,
+      "severity": "high",
+      "detail": "HTTP 404",
+      "repro": ""
+    },
+    {
+      "role": "ADMIN",
+      "scenario": "API online users",
+      "pass": true,
+      "severity": "medium",
+      "detail": "HTTP 404",
+      "repro": ""
+    },
+    {
+      "role": "ADMIN",
+      "scenario": "/ops для ADMIN (ожидаем deny или redirect)",
+      "pass": false,
+      "severity": "low",
+      "detail": "HTTP 307 → / (документируем фактическое поведение)",
+      "repro": ""
+    },
+    {
+      "role": "ADMIN",
+      "scenario": "Создание черновика новости",
+      "pass": true,
+      "severity": "medium",
+      "detail": "HTTP 404 {}",
+      "repro": ""
+    },
+    {
+      "role": "SCANNER",
+      "scenario": "Логин",
+      "pass": true,
+      "severity": "critical",
+      "detail": "SCANNER",
+      "repro": ""
+    },
+    {
+      "role": "SCANNER",
+      "scenario": "Доступ /scanner",
+      "pass": true,
+      "severity": "critical",
+      "detail": "HTTP 200 → ",
+      "repro": ""
+    },
+    {
+      "role": "SCANNER",
+      "scenario": "API scanner/events",
+      "pass": true,
+      "severity": "high",
+      "detail": "HTTP 200",
+      "repro": ""
+    },
+    {
+      "role": "SCANNER",
+      "scenario": "Запрет /admin",
+      "pass": true,
+      "severity": "critical",
+      "detail": "HTTP 307 → /scanner",
+      "repro": ""
+    },
+    {
+      "role": "SCANNER",
+      "scenario": "Запрет заявки в клуб",
+      "pass": true,
+      "severity": "high",
+      "detail": "HTTP 403",
+      "repro": ""
+    },
+    {
+      "role": "SCANNER",
+      "scenario": "Невалидный QR даёт понятную ошибку",
+      "pass": true,
+      "severity": "medium",
+      "detail": "HTTP 404 {}",
+      "repro": ""
+    },
+    {
+      "role": "TECH",
+      "scenario": "Логин",
+      "pass": true,
+      "severity": "critical",
+      "detail": "got TECH",
+      "repro": ""
+    },
+    {
+      "role": "TECH",
+      "scenario": "Доступ /ops",
+      "pass": true,
+      "severity": "critical",
+      "detail": "HTTP 200 → ",
+      "repro": ""
+    },
+    {
+      "role": "TECH",
+      "scenario": "GET /api/ops/flags",
+      "pass": true,
+      "severity": "critical",
+      "detail": "HTTP 200",
+      "repro": ""
+    },
+    {
+      "role": "TECH",
+      "scenario": "Запрет /admin для TECH",
+      "pass": true,
+      "severity": "info",
+      "detail": "HTTP 307 → /ops",
+      "repro": ""
+    },
+    {
+      "role": "TECH",
+      "scenario": "Публичный статус модулей согласован",
+      "pass": true,
+      "severity": "info",
+      "detail": "registration,messaging,places,gallery,vacancies,contests,friends,games,portfolio,eco,achievements,ratings,club_chat,faq,server_status,bots",
+      "repro": ""
+    }
+  ]
+}

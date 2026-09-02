@@ -1,0 +1,18 @@
+# CODEOWNERS — YoungPortal
+# Требует включённого branch protection + code owners review в GitHub.
+
+*       @Vcodec7
+
+/src/lib/module-flags.ts       @Vcodec7
+/src/lib/module-flags-edge.ts  @Vcodec7
+/src/proxy.ts                  @Vcodec7
+/src/lib/security.ts           @Vcodec7
+/prisma/                       @Vcodec7
+/scripts/install-*.sh          @Vcodec7
+/scripts/pack-*.sh             @Vcodec7
+/scripts/workflow-*.sh         @Vcodec7
+/deploy/                       @Vcodec7
+/docs/ORG-HANDOFF.md           @Vcodec7
+/docs/DEV-HANDBOOK.md          @Vcodec7
+/docs/REMOTE-DEPLOY.md         @Vcodec7
+/LICENSE                       @Vcodec7

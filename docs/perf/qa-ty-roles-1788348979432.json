@@ -1,0 +1,662 @@
+{
+  "base": "https://ty.idivles.ru",
+  "at": "2026-09-02T11:36:19.432Z",
+  "total": 93,
+  "pass": 88,
+  "fail": 5,
+  "critical": 0,
+  "high": 5,
+  "rows": [
+    {
+      "role": "GUEST",
+      "name": "public /",
+      "ok": true,
+      "severity": "info",
+      "detail": "HTTP 200"
+    },
+    {
+      "role": "GUEST",
+      "name": "public /events",
+      "ok": true,
+      "severity": "info",
+      "detail": "HTTP 200"
+    },
+    {
+      "role": "GUEST",
+      "name": "public /projects",
+      "ok": true,
+      "severity": "info",
+      "detail": "HTTP 200"
+    },
+    {
+      "role": "GUEST",
+      "name": "public /clubs",
+      "ok": true,
+      "severity": "info",
+      "detail": "HTTP 200"
+    },
+    {
+      "role": "GUEST",
+      "name": "public /spaces",
+      "ok": true,
+      "severity": "info",
+      "detail": "HTTP 200"
+    },
+    {
+      "role": "GUEST",
+      "name": "public /news",
+      "ok": true,
+      "severity": "info",
+      "detail": "HTTP 200"
+    },
+    {
+      "role": "GUEST",
+      "name": "public /coworking",
+      "ok": true,
+      "severity": "info",
+      "detail": "HTTP 200"
+    },
+    {
+      "role": "GUEST",
+      "name": "public /login",
+      "ok": true,
+      "severity": "info",
+      "detail": "HTTP 200"
+    },
+    {
+      "role": "GUEST",
+      "name": "public /privacy",
+      "ok": true,
+      "severity": "info",
+      "detail": "HTTP 200"
+    },
+    {
+      "role": "GUEST",
+      "name": "public /contacts",
+      "ok": true,
+      "severity": "info",
+      "detail": "HTTP 200"
+    },
+    {
+      "role": "GUEST",
+      "name": "deny /dashboard",
+      "ok": true,
+      "severity": "info",
+      "detail": "HTTP 307 → /login?callbackUrl=%2Fdashboard"
+    },
+    {
+      "role": "GUEST",
+      "name": "deny /dashboard/settings",
+      "ok": true,
+      "severity": "info",
+      "detail": "HTTP 307 → /login?callbackUrl=%2Fdashboard%2Fsettings"
+    },
+    {
+      "role": "GUEST",
+      "name": "deny /dashboard/applications",
+      "ok": true,
+      "severity": "info",
+      "detail": "HTTP 307 → /login?callbackUrl=%2Fdashboard%2Fapplications"
+    },
+    {
+      "role": "GUEST",
+      "name": "deny /more",
+      "ok": true,
+      "severity": "info",
+      "detail": "HTTP 200 → "
+    },
+    {
+      "role": "GUEST",
+      "name": "deny /admin",
+      "ok": true,
+      "severity": "info",
+      "detail": "HTTP 307 → /login?callbackUrl=/admin&staff=1"
+    },
+    {
+      "role": "GUEST",
+      "name": "deny /admin/occupancy",
+      "ok": true,
+      "severity": "info",
+      "detail": "HTTP 307 → /login?callbackUrl=/admin&staff=1"
+    },
+    {
+      "role": "GUEST",
+      "name": "deny /admin/spaces",
+      "ok": true,
+      "severity": "info",
+      "detail": "HTTP 307 → /login?callbackUrl=/admin&staff=1"
+    },
+    {
+      "role": "GUEST",
+      "name": "deny /admin/bookings",
+      "ok": true,
+      "severity": "info",
+      "detail": "HTTP 307 → /login?callbackUrl=/admin&staff=1"
+    },
+    {
+      "role": "GUEST",
+      "name": "deny /admin/users",
+      "ok": true,
+      "severity": "info",
+      "detail": "HTTP 307 → /login?callbackUrl=/admin&staff=1"
+    },
+    {
+      "role": "GUEST",
+      "name": "deny /scan",
+      "ok": true,
+      "severity": "info",
+      "detail": "HTTP 307 → /login?callbackUrl=%2Fscan&staff=1"
+    },
+    {
+      "role": "GUEST",
+      "name": "deny /scanner",
+      "ok": true,
+      "severity": "info",
+      "detail": "HTTP 307 → /login?callbackUrl=%2Fscanner&staff=1"
+    },
+    {
+      "role": "GUEST",
+      "name": "deny /admin/scanner",
+      "ok": true,
+      "severity": "info",
+      "detail": "HTTP 307 → /login?callbackUrl=/admin&staff=1"
+    },
+    {
+      "role": "GUEST",
+      "name": "deny /ops",
+      "ok": true,
+      "severity": "info",
+      "detail": "HTTP 307 → /"
+    },
+    {
+      "role": "USER",
+      "name": "login",
+      "ok": true,
+      "severity": "critical",
+      "detail": "USER"
+    },
+    {
+      "role": "USER",
+      "name": "cabinet /dashboard",
+      "ok": true,
+      "severity": "info",
+      "detail": "HTTP 200"
+    },
+    {
+      "role": "USER",
+      "name": "cabinet /dashboard/settings",
+      "ok": true,
+      "severity": "info",
+      "detail": "HTTP 200"
+    },
+    {
+      "role": "USER",
+      "name": "cabinet /dashboard/applications",
+      "ok": true,
+      "severity": "info",
+      "detail": "HTTP 200"
+    },
+    {
+      "role": "USER",
+      "name": "cabinet /more",
+      "ok": true,
+      "severity": "info",
+      "detail": "HTTP 200"
+    },
+    {
+      "role": "USER",
+      "name": "deny staff /admin",
+      "ok": true,
+      "severity": "info",
+      "detail": "HTTP 307 → /dashboard"
+    },
+    {
+      "role": "USER",
+      "name": "deny staff /admin/occupancy",
+      "ok": true,
+      "severity": "info",
+      "detail": "HTTP 307 → /dashboard"
+    },
+    {
+      "role": "USER",
+      "name": "deny staff /admin/spaces",
+      "ok": true,
+      "severity": "info",
+      "detail": "HTTP 307 → /dashboard"
+    },
+    {
+      "role": "USER",
+      "name": "deny staff /admin/bookings",
+      "ok": true,
+      "severity": "info",
+      "detail": "HTTP 307 → /dashboard"
+    },
+    {
+      "role": "USER",
+      "name": "deny staff /admin/users",
+      "ok": true,
+      "severity": "info",
+      "detail": "HTTP 307 → /dashboard"
+    },
+    {
+      "role": "USER",
+      "name": "deny scanner /scan",
+      "ok": true,
+      "severity": "info",
+      "detail": "HTTP 307 → /dashboard"
+    },
+    {
+      "role": "USER",
+      "name": "deny scanner /scanner",
+      "ok": true,
+      "severity": "info",
+      "detail": "HTTP 307 → /dashboard"
+    },
+    {
+      "role": "USER",
+      "name": "deny scanner /admin/scanner",
+      "ok": true,
+      "severity": "info",
+      "detail": "HTTP 307 → /dashboard"
+    },
+    {
+      "role": "USER",
+      "name": "deny tech /ops",
+      "ok": false,
+      "severity": "high",
+      "detail": "HTTP 307 → /"
+    },
+    {
+      "role": "USER",
+      "name": "public /",
+      "ok": true,
+      "severity": "info",
+      "detail": "HTTP 200"
+    },
+    {
+      "role": "USER",
+      "name": "public /coworking",
+      "ok": true,
+      "severity": "info",
+      "detail": "HTTP 200"
+    },
+    {
+      "role": "USER",
+      "name": "public /spaces",
+      "ok": true,
+      "severity": "info",
+      "detail": "HTTP 200"
+    },
+    {
+      "role": "PARTICIPANT",
+      "name": "login",
+      "ok": true,
+      "severity": "critical",
+      "detail": "PARTICIPANT"
+    },
+    {
+      "role": "PARTICIPANT",
+      "name": "cabinet /dashboard",
+      "ok": true,
+      "severity": "info",
+      "detail": "HTTP 200"
+    },
+    {
+      "role": "PARTICIPANT",
+      "name": "cabinet /dashboard/settings",
+      "ok": true,
+      "severity": "info",
+      "detail": "HTTP 200"
+    },
+    {
+      "role": "PARTICIPANT",
+      "name": "cabinet /dashboard/applications",
+      "ok": true,
+      "severity": "info",
+      "detail": "HTTP 200"
+    },
+    {
+      "role": "PARTICIPANT",
+      "name": "cabinet /more",
+      "ok": true,
+      "severity": "info",
+      "detail": "HTTP 200"
+    },
+    {
+      "role": "PARTICIPANT",
+      "name": "deny staff /admin",
+      "ok": true,
+      "severity": "info",
+      "detail": "HTTP 307 → /dashboard"
+    },
+    {
+      "role": "PARTICIPANT",
+      "name": "deny staff /admin/occupancy",
+      "ok": true,
+      "severity": "info",
+      "detail": "HTTP 307 → /dashboard"
+    },
+    {
+      "role": "PARTICIPANT",
+      "name": "deny staff /admin/spaces",
+      "ok": true,
+      "severity": "info",
+      "detail": "HTTP 307 → /dashboard"
+    },
+    {
+      "role": "PARTICIPANT",
+      "name": "deny staff /admin/bookings",
+      "ok": true,
+      "severity": "info",
+      "detail": "HTTP 307 → /dashboard"
+    },
+    {
+      "role": "PARTICIPANT",
+      "name": "deny staff /admin/users",
+      "ok": true,
+      "severity": "info",
+      "detail": "HTTP 307 → /dashboard"
+    },
+    {
+      "role": "PARTICIPANT",
+      "name": "deny scanner /scan",
+      "ok": true,
+      "severity": "info",
+      "detail": "HTTP 307 → /dashboard"
+    },
+    {
+      "role": "PARTICIPANT",
+      "name": "deny scanner /scanner",
+      "ok": true,
+      "severity": "info",
+      "detail": "HTTP 307 → /dashboard"
+    },
+    {
+      "role": "PARTICIPANT",
+      "name": "deny scanner /admin/scanner",
+      "ok": true,
+      "severity": "info",
+      "detail": "HTTP 307 → /dashboard"
+    },
+    {
+      "role": "PARTICIPANT",
+      "name": "deny tech /ops",
+      "ok": false,
+      "severity": "high",
+      "detail": "HTTP 307 → /"
+    },
+    {
+      "role": "PARTICIPANT",
+      "name": "public /",
+      "ok": true,
+      "severity": "info",
+      "detail": "HTTP 200"
+    },
+    {
+      "role": "PARTICIPANT",
+      "name": "public /coworking",
+      "ok": true,
+      "severity": "info",
+      "detail": "HTTP 200"
+    },
+    {
+      "role": "PARTICIPANT",
+      "name": "public /spaces",
+      "ok": true,
+      "severity": "info",
+      "detail": "HTTP 200"
+    },
+    {
+      "role": "MODERATOR",
+      "name": "login",
+      "ok": true,
+      "severity": "critical",
+      "detail": "MODERATOR"
+    },
+    {
+      "role": "MODERATOR",
+      "name": "cabinet /dashboard",
+      "ok": true,
+      "severity": "info",
+      "detail": "HTTP 200"
+    },
+    {
+      "role": "MODERATOR",
+      "name": "cabinet /dashboard/settings",
+      "ok": true,
+      "severity": "info",
+      "detail": "HTTP 200"
+    },
+    {
+      "role": "MODERATOR",
+      "name": "cabinet /dashboard/applications",
+      "ok": true,
+      "severity": "info",
+      "detail": "HTTP 200"
+    },
+    {
+      "role": "MODERATOR",
+      "name": "cabinet /more",
+      "ok": true,
+      "severity": "info",
+      "detail": "HTTP 200"
+    },
+    {
+      "role": "MODERATOR",
+      "name": "admin /admin",
+      "ok": true,
+      "severity": "info",
+      "detail": "HTTP 200"
+    },
+    {
+      "role": "MODERATOR",
+      "name": "admin /admin/occupancy",
+      "ok": true,
+      "severity": "info",
+      "detail": "HTTP 307 → /admin?denied=1"
+    },
+    {
+      "role": "MODERATOR",
+      "name": "admin /admin/spaces",
+      "ok": true,
+      "severity": "info",
+      "detail": "HTTP 200"
+    },
+    {
+      "role": "MODERATOR",
+      "name": "admin /admin/bookings",
+      "ok": true,
+      "severity": "info",
+      "detail": "HTTP 200"
+    },
+    {
+      "role": "MODERATOR",
+      "name": "admin /admin/users",
+      "ok": true,
+      "severity": "info",
+      "detail": "HTTP 307 → /admin?denied=1"
+    },
+    {
+      "role": "MODERATOR",
+      "name": "deny tech /ops",
+      "ok": false,
+      "severity": "high",
+      "detail": "HTTP 307 → /"
+    },
+    {
+      "role": "ADMIN",
+      "name": "login",
+      "ok": true,
+      "severity": "critical",
+      "detail": "ADMIN"
+    },
+    {
+      "role": "ADMIN",
+      "name": "cabinet /dashboard",
+      "ok": true,
+      "severity": "info",
+      "detail": "HTTP 200"
+    },
+    {
+      "role": "ADMIN",
+      "name": "cabinet /dashboard/settings",
+      "ok": true,
+      "severity": "info",
+      "detail": "HTTP 200"
+    },
+    {
+      "role": "ADMIN",
+      "name": "cabinet /dashboard/applications",
+      "ok": true,
+      "severity": "info",
+      "detail": "HTTP 200"
+    },
+    {
+      "role": "ADMIN",
+      "name": "cabinet /more",
+      "ok": true,
+      "severity": "info",
+      "detail": "HTTP 200"
+    },
+    {
+      "role": "ADMIN",
+      "name": "admin /admin",
+      "ok": true,
+      "severity": "info",
+      "detail": "HTTP 200"
+    },
+    {
+      "role": "ADMIN",
+      "name": "admin /admin/occupancy",
+      "ok": true,
+      "severity": "info",
+      "detail": "HTTP 200"
+    },
+    {
+      "role": "ADMIN",
+      "name": "admin /admin/spaces",
+      "ok": true,
+      "severity": "info",
+      "detail": "HTTP 200"
+    },
+    {
+      "role": "ADMIN",
+      "name": "admin /admin/bookings",
+      "ok": true,
+      "severity": "info",
+      "detail": "HTTP 200"
+    },
+    {
+      "role": "ADMIN",
+      "name": "admin /admin/users",
+      "ok": true,
+      "severity": "info",
+      "detail": "HTTP 200"
+    },
+    {
+      "role": "ADMIN",
+      "name": "admin+ /admin/settings",
+      "ok": true,
+      "severity": "info",
+      "detail": "HTTP 200"
+    },
+    {
+      "role": "ADMIN",
+      "name": "admin+ /admin/occupancy",
+      "ok": true,
+      "severity": "info",
+      "detail": "HTTP 200"
+    },
+    {
+      "role": "ADMIN",
+      "name": "deny tech /ops",
+      "ok": false,
+      "severity": "high",
+      "detail": "HTTP 307 → /"
+    },
+    {
+      "role": "SCANNER",
+      "name": "login",
+      "ok": true,
+      "severity": "critical",
+      "detail": "SCANNER"
+    },
+    {
+      "role": "SCANNER",
+      "name": "scan /scan",
+      "ok": true,
+      "severity": "info",
+      "detail": "HTTP 200"
+    },
+    {
+      "role": "SCANNER",
+      "name": "scan /scanner",
+      "ok": true,
+      "severity": "info",
+      "detail": "HTTP 200"
+    },
+    {
+      "role": "SCANNER",
+      "name": "scan /admin/scanner",
+      "ok": true,
+      "severity": "info",
+      "detail": "HTTP 307 → /scanner"
+    },
+    {
+      "role": "SCANNER",
+      "name": "deny admin /admin",
+      "ok": true,
+      "severity": "info",
+      "detail": "HTTP 307 → /scanner"
+    },
+    {
+      "role": "SCANNER",
+      "name": "deny admin /admin/users",
+      "ok": true,
+      "severity": "info",
+      "detail": "HTTP 307 → /scanner"
+    },
+    {
+      "role": "SCANNER",
+      "name": "deny admin /admin/settings",
+      "ok": true,
+      "severity": "info",
+      "detail": "HTTP 307 → /scanner"
+    },
+    {
+      "role": "SCANNER",
+      "name": "deny tech /ops",
+      "ok": false,
+      "severity": "high",
+      "detail": "HTTP 307 → /"
+    },
+    {
+      "role": "SYSTEM",
+      "name": "health ok",
+      "ok": true,
+      "severity": "critical",
+      "detail": "{\"ok\":true,\"db\":true,\"version\":\"1.6.0\",\"maintenanceMode\":false,\"siteName\":\"Молодёжь Сочи\",\"uptimeSec\":1022,\"latencyMs\":3}"
+    },
+    {
+      "role": "SYSTEM",
+      "name": "hero video class",
+      "ok": true,
+      "severity": "high",
+      "detail": ""
+    },
+    {
+      "role": "SYSTEM",
+      "name": "hero CTAs",
+      "ok": true,
+      "severity": "high",
+      "detail": ""
+    },
+    {
+      "role": "SYSTEM",
+      "name": "no QA tutorial SSR",
+      "ok": true,
+      "severity": "info",
+      "detail": ""
+    }
+  ]
+}

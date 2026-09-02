@@ -1,0 +1,289 @@
+/* Immersive presentation deck player */
+.yp-deck {
+  --ypd-bg0: #061018;
+  --ypd-bg1: #0c2430;
+  --ypd-sea: #1aa6a0;
+  --ypd-sand: #f2e6d4;
+  --ypd-ink: #f7fbff;
+  --ypd-muted: rgba(247, 251, 255, 0.72);
+  --ypd-line: rgba(255, 255, 255, 0.14);
+  position: relative;
+  min-height: 100svh;
+  color: var(--ypd-ink);
+  background:
+    radial-gradient(900px 500px at 8% -10%, rgba(26, 166, 160, 0.28), transparent 55%),
+    radial-gradient(700px 420px at 100% 0%, rgba(255, 138, 76, 0.16), transparent 50%),
+    linear-gradient(160deg, var(--ypd-bg0), var(--ypd-bg1) 55%, #102532);
+  overflow: hidden;
+  touch-action: pan-y;
+  user-select: none;
+}
+.yp-deck.is-fs,
+.yp-deck.is-css-fs {
+  position: fixed;
+  inset: 0;
+  z-index: 200000;
+  min-height: 100%;
+  height: 100%;
+}
+.yp-deck__progress {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 3px;
+  background: var(--ypd-sea);
+  z-index: 5;
+  transition: width 0.25s ease;
+}
+.yp-deck__top {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  align-items: flex-start;
+  padding: max(0.75rem, env(safe-area-inset-top)) 1rem 0.35rem;
+  position: relative;
+  z-index: 4;
+}
+.yp-deck__top strong {
+  display: block;
+  font-family: var(--font-unbounded), Manrope, sans-serif;
+  font-size: 0.95rem;
+}
+.yp-deck__top span {
+  color: var(--ypd-muted);
+  font-size: 0.78rem;
+}
+.yp-deck__top-actions {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 0.35rem;
+  justify-content: flex-end;
+  align-items: center;
+  flex-shrink: 0;
+  max-width: 58%;
+}
+.yp-deck__chip {
+  appearance: none;
+  border: 1px solid var(--ypd-line);
+  background: rgba(0, 0, 0, 0.35);
+  color: var(--ypd-ink);
+  border-radius: 999px;
+  padding: 0.35rem 0.55rem;
+  font: inherit;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  min-height: 34px;
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+}
+.yp-deck__stage {
+  position: relative;
+  padding: 0.5rem 1rem 5.5rem;
+  max-width: 1180px;
+  margin: 0 auto;
+  min-height: calc(100svh - 5.5rem);
+  display: grid;
+  align-content: center;
+}
+.yp-deck__hit {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 22%;
+  max-width: 160px;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  z-index: 2;
+}
+.yp-deck__hit--prev {
+  left: 0;
+}
+.yp-deck__hit--next {
+  right: 0;
+}
+.yp-deck__slide {
+  position: relative;
+  z-index: 1;
+  animation: ypDeckIn 0.45s ease both;
+  pointer-events: none;
+}
+.yp-deck__slide a,
+.yp-deck__slide button {
+  pointer-events: auto;
+}
+@keyframes ypDeckIn {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.yp-deck__body {
+  display: grid;
+  gap: 1.1rem;
+}
+@media (min-width: 900px) {
+  .yp-deck__body {
+    grid-template-columns: 1.05fr 0.95fr;
+    align-items: center;
+  }
+}
+.yp-deck__kicker {
+  display: inline-block;
+  padding: 0.35rem 0.7rem;
+  border-radius: 999px;
+  border: 1px solid var(--ypd-line);
+  color: var(--ypd-sand);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 0.55rem;
+}
+.yp-deck__title {
+  margin: 0;
+  font-family: var(--font-unbounded), Manrope, sans-serif;
+  font-size: clamp(1.55rem, 5vw, 2.8rem);
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+  max-width: 16ch;
+}
+.yp-deck__lead {
+  margin: 0.7rem 0 0;
+  color: var(--ypd-muted);
+  font-size: clamp(1rem, 2vw, 1.15rem);
+  line-height: 1.55;
+  max-width: 42rem;
+}
+.yp-deck__list {
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0 0;
+  display: grid;
+  gap: 0.45rem;
+}
+.yp-deck__list li {
+  padding: 0.55rem 0.75rem;
+  border-left: 3px solid var(--ypd-sea);
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--ypd-muted);
+}
+.yp-deck__cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 0.7rem;
+  margin-top: 1rem;
+}
+.yp-deck__card {
+  border: 1px solid var(--ypd-line);
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02));
+  border-radius: 14px;
+  padding: 0.85rem 0.95rem;
+}
+.yp-deck__card h3 {
+  margin: 0 0 0.3rem;
+  font-size: 0.95rem;
+}
+.yp-deck__card p {
+  margin: 0;
+  color: var(--ypd-muted);
+  font-size: 0.85rem;
+  line-height: 1.4;
+}
+.yp-deck__shot {
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid var(--ypd-line);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+  background: #000;
+}
+.yp-deck__shot img {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 52vh;
+  object-fit: cover;
+  object-position: top;
+}
+.yp-deck__foot {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 1.25rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--ypd-line);
+  color: var(--ypd-muted);
+  font-size: 0.82rem;
+}
+.yp-deck__contacts {
+  color: var(--ypd-sand);
+  font-weight: 650;
+  letter-spacing: 0.01em;
+}
+.yp-deck__controls {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: max(1rem, calc(env(safe-area-inset-bottom) + 1rem));
+  z-index: 200001;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.4rem;
+  border-radius: 999px;
+  border: 1px solid var(--ypd-line);
+  background: rgba(6, 16, 24, 0.88);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+}
+.yp-deck__controls button {
+  appearance: none;
+  border: 1px solid var(--ypd-line);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--ypd-ink);
+  width: 48px;
+  height: 48px;
+  border-radius: 999px;
+  font-size: 1.15rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+.yp-deck__controls button:active {
+  transform: scale(0.96);
+}
+.yp-deck__counter {
+  min-width: 4.5rem;
+  text-align: center;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  color: var(--ypd-sand);
+  font-size: 0.9rem;
+}
+.yp-deck__fs {
+  margin-left: 0.15rem;
+}
+
+/* Hide site chrome leftovers on view routes */
+body:has(.yp-deck) .animated-bg,
+body:has(.yp-deck) .site-footer,
+body:has(.yp-deck) .bottom-nav,
+body:has(.yp-deck) .navbar,
+body:has(.yp-deck) .yp-consent,
+body:has(.yp-deck) .pwa-install,
+body:has(.yp-deck) .pwa-update {
+  display: none !important;
+}
+body:has(.yp-deck) .main-content {
+  padding: 0 !important;
+  margin: 0 !important;
+  max-width: none !important;
+}
+body:has(.yp-deck).has-bottom-nav {
+  padding-bottom: 0 !important;
+}
