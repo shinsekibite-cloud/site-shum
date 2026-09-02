@@ -8,6 +8,7 @@ import {
 } from '@/lib/hall-occupancy';
 import { spaceCover } from '@/lib/theme-covers';
 import EntityCoverImage from '@/components/EntityCoverImage';
+import GuestAuthPrompt from '@/components/GuestAuthPrompt';
 import { encodeRouteParam } from '@/lib/route-id';
 import { isCoworkingSpace } from '@/lib/coworking';
 import { isNextBuildPhase } from '@/lib/build-phase';
@@ -117,9 +118,13 @@ export default async function FreeNowSpaces({ limit = 4 }: { limit?: number }) {
                   Сетка
                 </Link>
                 {coworking ? (
-                  <Link href={`/coworking?space=${encodeURIComponent(space.id)}`} className="btn btn-primary">
+                  <GuestAuthPrompt
+                    href={`/coworking?space=${encodeURIComponent(space.id)}`}
+                    className="btn btn-primary"
+                    asButton
+                  >
                     В коворкинг
-                  </Link>
+                  </GuestAuthPrompt>
                 ) : (
                   <Link href={`/spaces/${encodeRouteParam(space.id)}/book`} className="btn btn-primary">
                     Забронировать

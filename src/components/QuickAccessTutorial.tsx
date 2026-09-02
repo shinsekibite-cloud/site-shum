@@ -85,6 +85,12 @@ export function QuickAccessTutorial({ forceOpen = false, restartKey = 0 }: Props
     return () => window.removeEventListener(COOKIE_BANNER_VISIBILITY_EVENT, onCookieVis as EventListener)
   }, [forceOpen, open])
 
+  useEffect(() => {
+    if (!open) return
+    document.body.classList.add('yp-modal-open')
+    return () => document.body.classList.remove('yp-modal-open')
+  }, [open])
+
   const persist = useCallback(
     async (next: Exclude<QuickAccessTutorialState, 'pending'>) => {
       setBusy(true)

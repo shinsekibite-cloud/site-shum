@@ -58,6 +58,7 @@ import {
 import { usePathname } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { useEffect, useId, useRef, useState, type ReactNode } from 'react';
+import GuestAuthPrompt from '@/components/GuestAuthPrompt';
 import SiteBrand from '@/components/SiteBrand';
 import NavProfileCard from '@/components/NavProfileCard';
 import NotificationsBell from '@/components/NotificationsBell';
@@ -562,17 +563,26 @@ export default function Navbar({ spaces = [], clubs = [], projects = [], pages =
     if (!isAuthenticated) {
       return (
         <div className="nav-auth-mobile__row nav-auth-mobile__row--guest">
-          <Link href="/coworking" className="nav-pill nav-pill--solid nav-pill--mobile-cta" title="Записаться">
+          <GuestAuthPrompt
+            href="/coworking"
+            className="nav-pill nav-pill--solid nav-pill--mobile-cta"
+            title="Записаться"
+            asButton
+          >
             Запись
-          </Link>
+          </GuestAuthPrompt>
         </div>
       );
     }
     return (
       <div className="nav-auth-mobile__row nav-auth-mobile__row--session">
-        <Link href="/coworking" className="nav-pill nav-pill--solid nav-pill--mobile-cta" title="Записаться">
+        <GuestAuthPrompt
+          href="/coworking"
+          className="nav-pill nav-pill--solid nav-pill--mobile-cta"
+          title="Записаться"
+        >
           Запись
-        </Link>
+        </GuestAuthPrompt>
         <Link
           href={profileHref}
           className={`nav-icon-btn nav-auth-mobile__profile${isActive(profileHref) ? ' is-active' : ''}`}

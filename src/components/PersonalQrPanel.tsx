@@ -88,7 +88,7 @@ export default function PersonalQrPanel() {
           {error ? <p className="presence-error">{error}</p> : null}
           {url ? (
             <div className="presence-qr-wrap">
-              <QRCodeDisplay value={url} size={260} />
+              <QRCodeDisplay value={url} size={200} />
               <div className="presence-qr-actions">
                 <button type="button" className="btn btn-primary" onClick={() => setFullscreen(true)}>
                   <Maximize2 size={16} /> На весь экран

@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import CoworkingSignupFlow from '@/components/CoworkingSignupFlow';
+import CoworkingGuestGate from '@/components/CoworkingGuestGate';
 import { getCoworkingAvailability } from '@/lib/coworking-availability';
 import { getSiteIdentity } from '@/lib/site-identity';
 
@@ -18,6 +19,10 @@ export default async function CoworkingPage({
 }) {
   const sp = await searchParams;
   const { dayKey, spaces } = await getCoworkingAvailability();
+  const callback =
+    sp.space != null && sp.space !== ''
+      ? `/coworking?space=${encodeURIComponent(sp.space)}`
+      : '/coworking';
   return (
     <div className="container cw-page cw-page--wide">
       <header className="cw-page-head">
@@ -25,11 +30,13 @@ export default async function CoworkingPage({
         <h1>Записаться в коворкинг</h1>
         <p>Площадка, день и интервал — без лишних шагов.</p>
       </header>
-      <CoworkingSignupFlow
-        initialSpaceId={sp.space}
-        initialDayKey={dayKey}
-        initialSpaces={spaces}
-      />
+      <CoworkingGuestGate callbackPath={callback}>
+        <CoworkingSignupFlow
+          initialSpaceId={sp.space}
+          initialDayKey={dayKey}
+          initialSpaces={spaces}
+        />
+      </CoworkingGuestGate>
     </div>
   );
 }

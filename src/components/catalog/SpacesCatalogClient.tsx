@@ -5,6 +5,7 @@ import { useMemo } from 'react';
 import { useSafeSearchParams } from '@/lib/use-safe-search-params';
 import { MapPin } from 'lucide-react';
 import EntityCoverImage from '@/components/EntityCoverImage';
+import GuestAuthPrompt from '@/components/GuestAuthPrompt';
 import SpaceFilterBar from '@/components/SpaceFilterBar';
 import {
   SPACE_CATEGORIES,
@@ -117,9 +118,19 @@ export default function SpacesCatalogClient({ items }: { items: PublicSpaceCard[
                   </p>
                   <p className={`svc-space-card__status${coworking ? ' is-cowork' : ''}`}>{statusLine}</p>
                   {space.status !== 'COMPLETED' ? (
-                    <Link href={ctaHref} className="svc-pill svc-pill--brand svc-space-card__cta">
-                      {ctaLabel}
-                    </Link>
+                    coworking ? (
+                      <GuestAuthPrompt
+                        href={ctaHref}
+                        className="svc-pill svc-pill--brand svc-space-card__cta"
+                        asButton
+                      >
+                        {ctaLabel}
+                      </GuestAuthPrompt>
+                    ) : (
+                      <Link href={ctaHref} className="svc-pill svc-pill--brand svc-space-card__cta">
+                        {ctaLabel}
+                      </Link>
+                    )
                   ) : null}
                 </div>
               </article>

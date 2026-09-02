@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
+import GuestAuthPrompt from '@/components/GuestAuthPrompt';
 
 type Cta = { href: string; label: string };
 
@@ -12,6 +13,10 @@ type Props = {
   secondary?: Cta | null;
   faceUrls?: string[];
 };
+
+function needsAuth(href: string) {
+  return href.startsWith('/coworking') || href.includes('/book');
+}
 
 /**
  * Hero = image (or video) only. Dual CTAs sit below the fold as service cards.
@@ -28,6 +33,21 @@ export default function HomeServiceHero({
   const video = (videoUrl || '').trim();
   const wantVideo = mediaKind === 'video' && Boolean(video);
   const faces = faceUrls.filter(Boolean).slice(0, 4);
+
+  const primaryInner = primary ? (
+    <>
+      <div className="svc-cta-card__faces" aria-hidden>
+        {(faces.length ? faces : [poster, poster, poster]).slice(0, 3).map((src, i) => (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img key={`${src}-${i}`} src={src} alt="" />
+        ))}
+      </div>
+      <span className="svc-pill svc-pill--brand">{primary.label}</span>
+      <span className="svc-cta-card__arrow" aria-hidden>
+        <ArrowRight size={18} />
+      </span>
+    </>
+  ) : null;
 
   return (
     <section className="svc-hero svc-hero--image-only" aria-label="Главный баннер">
@@ -53,18 +73,15 @@ export default function HomeServiceHero({
       {(primary || secondary) && (
         <div className="container svc-hero__actions">
           {primary ? (
-            <Link href={primary.href} className="svc-cta-card" prefetch>
-              <div className="svc-cta-card__faces" aria-hidden>
-                {(faces.length ? faces : [poster, poster, poster]).slice(0, 3).map((src, i) => (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img key={`${src}-${i}`} src={src} alt="" />
-                ))}
-              </div>
-              <span className="svc-pill svc-pill--brand">{primary.label}</span>
-              <span className="svc-cta-card__arrow" aria-hidden>
-                <ArrowRight size={18} />
-              </span>
-            </Link>
+            needsAuth(primary.href) ? (
+              <GuestAuthPrompt href={primary.href} className="svc-cta-card" asButton>
+                {primaryInner}
+              </GuestAuthPrompt>
+            ) : (
+              <Link href={primary.href} className="svc-cta-card" prefetch>
+                {primaryInner}
+              </Link>
+            )
           ) : null}
           {secondary ? (
             <Link href={secondary.href} className="svc-cta-card svc-cta-card--alt" prefetch>
