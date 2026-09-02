@@ -1,0 +1,293 @@
+{
+  "base": "https://young.idivles.ru",
+  "at": "2026-08-11T07:39:08.759Z",
+  "siteName": "Центр развития молодежи Сочи",
+  "flags": {
+    "registration": false,
+    "messaging": false,
+    "events": true,
+    "tickets_scan": true,
+    "places": false,
+    "gallery": false,
+    "projects": true,
+    "clubs": true,
+    "spaces": true,
+    "programs": true,
+    "vacancies": false,
+    "contests": false,
+    "friends": false,
+    "games": false,
+    "news": true,
+    "portfolio": false,
+    "eco": false,
+    "achievements": false,
+    "ratings": false,
+    "club_chat": false,
+    "faq": false,
+    "server_status": false,
+    "bots": false,
+    "maintenance": true
+  },
+  "offModes": {
+    "registration": "hide",
+    "messaging": "hide",
+    "places": "soon",
+    "gallery": "soon",
+    "vacancies": "soon",
+    "contests": "soon",
+    "friends": "soon",
+    "games": "soon",
+    "portfolio": "soon",
+    "eco": "soon",
+    "achievements": "soon",
+    "ratings": "soon",
+    "club_chat": "soon",
+    "faq": "soon",
+    "server_status": "hide",
+    "bots": "hide"
+  },
+  "passed": 25,
+  "failed": 0,
+  "results": [
+    {
+      "path": "/",
+      "expect": "on",
+      "kind": "on",
+      "pass": true,
+      "status": 200
+    },
+    {
+      "path": "/privacy",
+      "expect": "on",
+      "kind": "on",
+      "pass": true,
+      "status": 200
+    },
+    {
+      "path": "/rules",
+      "expect": "on",
+      "kind": "on",
+      "pass": true,
+      "status": 200
+    },
+    {
+      "path": "/contacts",
+      "expect": "on",
+      "kind": "on",
+      "pass": true,
+      "status": 200
+    },
+    {
+      "path": "/documents",
+      "expect": "on",
+      "kind": "on",
+      "pass": true,
+      "status": 200
+    },
+    {
+      "path": "/login",
+      "expect": "on",
+      "kind": "on",
+      "pass": true,
+      "status": 200
+    },
+    {
+      "path": "/api/health",
+      "expect": "on",
+      "kind": "on",
+      "pass": true,
+      "status": 200
+    },
+    {
+      "module": "registration",
+      "path": "/register",
+      "enabled": false,
+      "mode": "hide",
+      "expect": "off:hide",
+      "kind": "redirect-off",
+      "status": 307,
+      "loc": "/unavailable?m=registration&mode=hide",
+      "pass": true
+    },
+    {
+      "module": "messaging",
+      "path": "/messages",
+      "enabled": false,
+      "mode": "hide",
+      "expect": "off:hide",
+      "kind": "redirect-off",
+      "status": 307,
+      "loc": "/unavailable?m=messaging&mode=hide",
+      "pass": true
+    },
+    {
+      "module": "events",
+      "path": "/events",
+      "enabled": true,
+      "mode": "soon",
+      "expect": "on",
+      "kind": "on",
+      "status": 200,
+      "loc": "",
+      "pass": true
+    },
+    {
+      "module": "tickets_scan",
+      "path": "/scanner",
+      "enabled": true,
+      "mode": "soon",
+      "expect": "on",
+      "kind": "redirect-off",
+      "status": 307,
+      "loc": "/login?callbackUrl=/scanner&staff=1",
+      "pass": true
+    },
+    {
+      "module": "places",
+      "path": "/places",
+      "enabled": false,
+      "mode": "soon",
+      "expect": "off:soon",
+      "kind": "redirect-off",
+      "status": 307,
+      "loc": "/unavailable?m=places&mode=soon",
+      "pass": true
+    },
+    {
+      "module": "gallery",
+      "path": "/gallery",
+      "enabled": false,
+      "mode": "soon",
+      "expect": "off:soon",
+      "kind": "redirect-off",
+      "status": 307,
+      "loc": "/unavailable?m=gallery&mode=soon",
+      "pass": true
+    },
+    {
+      "module": "projects",
+      "path": "/projects",
+      "enabled": true,
+      "mode": "soon",
+      "expect": "on",
+      "kind": "on",
+      "status": 200,
+      "loc": "",
+      "pass": true
+    },
+    {
+      "module": "clubs",
+      "path": "/clubs",
+      "enabled": true,
+      "mode": "soon",
+      "expect": "on",
+      "kind": "on",
+      "status": 200,
+      "loc": "",
+      "pass": true
+    },
+    {
+      "module": "spaces",
+      "path": "/spaces",
+      "enabled": true,
+      "mode": "soon",
+      "expect": "on",
+      "kind": "on",
+      "status": 200,
+      "loc": "",
+      "pass": true
+    },
+    {
+      "module": "programs",
+      "path": "/grants",
+      "enabled": true,
+      "mode": "soon",
+      "expect": "on",
+      "kind": "on",
+      "status": 200,
+      "loc": "",
+      "pass": true
+    },
+    {
+      "module": "vacancies",
+      "path": "/vacancies",
+      "enabled": false,
+      "mode": "soon",
+      "expect": "off:soon",
+      "kind": "redirect-off",
+      "status": 307,
+      "loc": "/unavailable?m=vacancies&mode=soon",
+      "pass": true
+    },
+    {
+      "module": "contests",
+      "path": "/contests",
+      "enabled": false,
+      "mode": "soon",
+      "expect": "off:soon",
+      "kind": "redirect-off",
+      "status": 307,
+      "loc": "/unavailable?m=contests&mode=soon",
+      "pass": true
+    },
+    {
+      "module": "friends",
+      "path": "/friends",
+      "enabled": false,
+      "mode": "soon",
+      "expect": "off:soon",
+      "kind": "redirect-off",
+      "status": 307,
+      "loc": "/unavailable?m=friends&mode=soon",
+      "pass": true
+    },
+    {
+      "module": "games",
+      "path": "/games",
+      "enabled": false,
+      "mode": "soon",
+      "expect": "off:soon",
+      "kind": "redirect-off",
+      "status": 307,
+      "loc": "/unavailable?m=games&mode=soon",
+      "pass": true
+    },
+    {
+      "module": "news",
+      "path": "/news",
+      "enabled": true,
+      "mode": "soon",
+      "expect": "on",
+      "kind": "on",
+      "status": 200,
+      "loc": "",
+      "pass": true
+    },
+    {
+      "module": "portfolio",
+      "path": "/portfolio",
+      "enabled": false,
+      "mode": "soon",
+      "expect": "off:soon",
+      "kind": "redirect-off",
+      "status": 307,
+      "loc": "/unavailable?m=portfolio&mode=soon",
+      "pass": true
+    },
+    {
+      "module": "faq",
+      "path": "/faq",
+      "enabled": false,
+      "mode": "soon",
+      "expect": "off:soon",
+      "kind": "redirect-off",
+      "status": 307,
+      "loc": "/unavailable?m=faq&mode=soon",
+      "pass": true
+    },
+    {
+      "check": "privacy-dynamic",
+      "pass": true
+    }
+  ]
+}
