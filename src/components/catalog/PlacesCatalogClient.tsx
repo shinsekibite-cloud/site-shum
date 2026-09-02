@@ -67,16 +67,15 @@ export default function PlacesCatalogClient({ items }: { items: PublicPlaceCard[
 
   return (
     <div className="places-page catalog-page">
-      <header className="places-hero" style={{ backgroundImage: `url(${heroCover})` }}>
-        <div className="places-hero__veil" />
-        <div className="container places-hero__inner">
-          <p className="places-brand">Центр развития молодежи Сочи</p>
-          <h1 className="places-title">Куда сходить</h1>
-          <p className="places-lead">
-            Сочи 2026: пляжи, горы, парки и смотровые — короткий гид с маршрутом и советами.
-          </p>
-        </div>
+      <header className="places-hero places-hero--image-only" style={{ backgroundImage: `url(${heroCover})` }} aria-label="Куда сходить">
+        <span className="sr-only">Куда сходить — гид по Сочи</span>
       </header>
+      <div className="container places-page__head">
+        <h1 className="page-hero-title">Куда сходить</h1>
+        <p className="page-hero-subtitle" style={{ marginTop: 0 }}>
+          Пляжи, горы, парки и смотровые — с маршрутом и советами.
+        </p>
+      </div>
 
       <div className="container places-catalog">
         <div className="places-toolbar places-toolbar--stack">

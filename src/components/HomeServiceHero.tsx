@@ -14,11 +14,9 @@ type Props = {
 };
 
 /**
- * Service-style first viewport: pill headlines + rounded media + dual CTAs.
- * Brand stays hero-level; no full-bleed dark overlay.
+ * Hero = image (or video) only. Dual CTAs sit below the fold as service cards.
  */
 export default function HomeServiceHero({
-  siteName,
   imageUrl,
   videoUrl,
   mediaKind = 'image',
@@ -32,18 +30,9 @@ export default function HomeServiceHero({
   const faces = faceUrls.filter(Boolean).slice(0, 4);
 
   return (
-    <section className="svc-hero">
-      <div className="container svc-hero__grid">
-        <div className="svc-hero__copy">
-          <div className="svc-hero__pills" aria-label="Направления">
-            <span className="svc-pill svc-pill--hero">{siteName}</span>
-            <span className="svc-pill svc-pill--hero">Пространства</span>
-            <span className="svc-pill svc-pill--hero">События. Ты.</span>
-          </div>
-          <p className="svc-hero__lead">Свободные залы, коворкинг и афиша — без лишних шагов.</p>
-        </div>
-
-        <div className="svc-hero__media">
+    <section className="svc-hero svc-hero--image-only" aria-label="Главный баннер">
+      <div className="container">
+        <div className="svc-hero__media svc-hero__media--solo">
           {wantVideo ? (
             <video
               className="svc-hero__video"
@@ -57,15 +46,6 @@ export default function HomeServiceHero({
           ) : (
             // eslint-disable-next-line @next/next/no-img-element
             <img className="svc-hero__img" src={poster} alt="" />
-          )}
-          {(primary || secondary) && (
-            <Link
-              href={(primary || secondary)!.href}
-              className="svc-hero__media-arrow"
-              aria-label={(primary || secondary)!.label}
-            >
-              <ArrowRight size={22} />
-            </Link>
           )}
         </div>
       </div>

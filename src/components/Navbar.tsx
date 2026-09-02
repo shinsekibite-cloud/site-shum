@@ -557,13 +557,13 @@ export default function Navbar({ spaces = [], clubs = [], projects = [], pages =
   }, [headerMainPages.length, projects.length, clubs.length, spaces.length]);
 
 
-  /** Mobile: Записаться CTA + account — no icon cluster. */
+  /** Mobile: CTA + burger only — search lives inside the menu (no header crush). */
   const renderMobileHeaderActions = () => {
     if (!isAuthenticated) {
       return (
         <div className="nav-auth-mobile__row nav-auth-mobile__row--guest">
           <Link href="/coworking" className="nav-pill nav-pill--solid nav-pill--mobile-cta" title="Записаться">
-            Записаться
+            Запись
           </Link>
         </div>
       );
@@ -571,7 +571,7 @@ export default function Navbar({ spaces = [], clubs = [], projects = [], pages =
     return (
       <div className="nav-auth-mobile__row nav-auth-mobile__row--session">
         <Link href="/coworking" className="nav-pill nav-pill--solid nav-pill--mobile-cta" title="Записаться">
-          Записаться
+          Запись
         </Link>
         <Link
           href={profileHref}
@@ -802,7 +802,9 @@ export default function Navbar({ spaces = [], clubs = [], projects = [], pages =
           <div className="nav-search-desktop" aria-hidden={false}>
             {renderSearch('desktop')}
           </div>
-          <div className="nav-header-mobile">{renderSearch('mobile')}</div>
+          <div className="nav-header-mobile nav-header-mobile--compact" aria-hidden>
+            {/* Search moves into burger menu on narrow screens to avoid logo crush */}
+          </div>
           <div
             className={`nav-auth-desktop${isAuthenticated ? ' nav-auth-desktop--session' : ' nav-auth-desktop--guest'}`}
           >
@@ -876,6 +878,10 @@ export default function Navbar({ spaces = [], clubs = [], projects = [], pages =
             </div>
 
             <div className="mobile-menu__auth">
+              <form action="/search" method="GET" className="mobile-menu__search" onSubmit={closeMenu}>
+                <Search size={16} aria-hidden />
+                <input type="search" name="q" placeholder="Поиск по сайту…" aria-label="Поиск" />
+              </form>
               {!isAuthenticated ? (
                 <div className="mobile-menu__auth-guest">
                   <Link href="/login" onClick={closeMenu} className="mobile-menu__login btn btn-primary">
