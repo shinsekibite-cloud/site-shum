@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { BookOpen } from 'lucide-react';
-import OnboardingSheet from '@/components/OnboardingSheet';
+import ServiceSplitModal from '@/components/ServiceSplitModal';
 import {
   COOKIE_BANNER_VISIBILITY_EVENT,
   COOKIE_CONSENT_EVENT,
@@ -184,17 +184,34 @@ export default function InstructionsWelcomeModal() {
   if (state !== 'show') return null;
 
   return (
-    <OnboardingSheet
-      className="yp-instr-sheet"
-      ariaLabel="Инструктаж портала"
+    <ServiceSplitModal
+      open
+      onClose={() => {
+        void persist('dismiss');
+      }}
       zIndex={10040}
-      icon={<BookOpen size={18} color="#5eead4" />}
-      title="Пройти инструктаж?"
-      actions={
+      title="ДОБРО ПОЖАЛОВАТЬ"
+      ariaLabel="Инструктаж портала"
+      aside={
+        <div className="svc-modal__aside-inner">
+          <div className="svc-modal__brand-mark" aria-hidden>
+            <BookOpen size={28} />
+          </div>
+          <div className="svc-modal__circles" aria-hidden>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/brand/hero-cover.jpg" alt="" />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/brand/hero-cover.jpg" alt="" />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/brand/hero-cover.jpg" alt="" />
+          </div>
+        </div>
+      }
+      footer={
         <>
           <Link
             href="/dashboard/guides"
-            className="yp-onboard-btn yp-onboard-btn--primary"
+            className="btn btn-primary"
             onClick={() => {
               writeLocal('skipped');
               try {
@@ -205,11 +222,11 @@ export default function InstructionsWelcomeModal() {
               setState('hide');
             }}
           >
-            Пройти
+            Пройти инструктаж
           </Link>
           <button
             type="button"
-            className="yp-onboard-btn yp-onboard-btn--ghost"
+            className="btn btn-secondary"
             disabled={busy}
             onClick={() => void persist('skip')}
           >
@@ -217,7 +234,7 @@ export default function InstructionsWelcomeModal() {
           </button>
           <button
             type="button"
-            className="yp-onboard-btn yp-onboard-btn--link"
+            className="btn btn-secondary"
             disabled={busy}
             onClick={() => void persist('dismiss')}
           >
@@ -226,7 +243,9 @@ export default function InstructionsWelcomeModal() {
         </>
       }
     >
-      <p>Коротко: билеты, рейтинги, эко-баллы и безопасность. За прохождение — достижение.</p>
-    </OnboardingSheet>
+      <p className="svc-modal__lead">
+        Коротко: билеты, рейтинги, эко-баллы и безопасность. За прохождение — достижение. Показываем один раз.
+      </p>
+    </ServiceSplitModal>
   );
 }

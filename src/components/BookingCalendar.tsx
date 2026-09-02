@@ -38,6 +38,9 @@ interface BookingCalendarProps {
   openTime?: string;
   closeTime?: string;
   minBookingHours?: number;
+  /** Prefill from hall occupancy slot (ISO). */
+  initialStartIso?: string | null;
+  initialEndIso?: string | null;
 }
 
 type ProfileContacts = {
@@ -63,24 +66,60 @@ function defaultBookingTimes(openTime: string, closeTime: string): { start: stri
   return { start, end };
 }
 
+function hhmmFromIso(iso: string | null | undefined, fallback: string) {
+  if (!iso) return fallback;
+  try {
+    return new Intl.DateTimeFormat('en-GB', {
+      timeZone: 'Europe/Moscow',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false,
+    }).format(new Date(iso));
+  } catch {
+    return fallback;
+  }
+}
+
+function dateFromIso(iso: string | null | undefined): Date | null {
+  if (!iso) return null;
+  try {
+    const parts = new Intl.DateTimeFormat('en-CA', {
+      timeZone: 'Europe/Moscow',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+    }).formatToParts(new Date(iso));
+    const y = Number(parts.find((p) => p.type === 'year')?.value);
+    const m = Number(parts.find((p) => p.type === 'month')?.value);
+    const d = Number(parts.find((p) => p.type === 'day')?.value);
+    if (!y || !m || !d) return null;
+    return new Date(y, m - 1, d);
+  } catch {
+    return null;
+  }
+}
+
 export default function BookingCalendar({
   spaceId,
   spaceCapacity = 50,
   openTime = '09:00',
   closeTime = '21:00',
   minBookingHours = 3,
+  initialStartIso = null,
+  initialEndIso = null,
 }: BookingCalendarProps) {
   const { data: session } = useSession();
   const router = useRouter();
 
   const timeOptions = workingHourOptions(openTime, closeTime);
   const initialTimes = defaultBookingTimes(openTime, closeTime);
+  const prefillDate = dateFromIso(initialStartIso);
 
-  const [currentDate, setCurrentDate] = useState(new Date());
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [currentDate, setCurrentDate] = useState(prefillDate || new Date());
+  const [selectedDate, setSelectedDate] = useState<Date | null>(prefillDate);
 
-  const [startTime, setStartTime] = useState(initialTimes.start);
-  const [endTime, setEndTime] = useState(initialTimes.end);
+  const [startTime, setStartTime] = useState(hhmmFromIso(initialStartIso, initialTimes.start));
+  const [endTime, setEndTime] = useState(hhmmFromIso(initialEndIso, initialTimes.end));
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [category, setCategory] = useState<EventCategory>('Общее');
@@ -97,10 +136,20 @@ export default function BookingCalendar({
   const [existingBookings, setExistingBookings] = useState<Booking[]>([]);
 
   useEffect(() => {
+    if (initialStartIso) {
+      const d = dateFromIso(initialStartIso);
+      if (d) {
+        setCurrentDate(d);
+        setSelectedDate(d);
+      }
+      setStartTime(hhmmFromIso(initialStartIso, initialTimes.start));
+      setEndTime(hhmmFromIso(initialEndIso, initialTimes.end));
+      return;
+    }
     const next = defaultBookingTimes(openTime, closeTime);
     setStartTime(next.start);
     setEndTime(next.end);
-  }, [openTime, closeTime]);
+  }, [openTime, closeTime, initialStartIso, initialEndIso]);
 
   useEffect(() => {
     fetch(`/api/spaces/${spaceId}/bookings`)

@@ -36,13 +36,11 @@ export default function HomeServiceHero({
       <div className="container svc-hero__grid">
         <div className="svc-hero__copy">
           <div className="svc-hero__pills" aria-label="Направления">
-            <span className="svc-pill">{siteName}</span>
-            <span className="svc-pill">Пространства</span>
-            <span className="svc-pill">События. Ты.</span>
+            <span className="svc-pill svc-pill--hero">{siteName}</span>
+            <span className="svc-pill svc-pill--hero">Пространства</span>
+            <span className="svc-pill svc-pill--hero">События. Ты.</span>
           </div>
-          <p className="svc-hero__lead">
-            Свободные залы, коворкинг и афиша — без лишних шагов.
-          </p>
+          <p className="svc-hero__lead">Свободные залы, коворкинг и афиша — без лишних шагов.</p>
         </div>
 
         <div className="svc-hero__media">
@@ -59,6 +57,15 @@ export default function HomeServiceHero({
           ) : (
             // eslint-disable-next-line @next/next/no-img-element
             <img className="svc-hero__img" src={poster} alt="" />
+          )}
+          {(primary || secondary) && (
+            <Link
+              href={(primary || secondary)!.href}
+              className="svc-hero__media-arrow"
+              aria-label={(primary || secondary)!.label}
+            >
+              <ArrowRight size={22} />
+            </Link>
           )}
         </div>
       </div>
@@ -83,7 +90,7 @@ export default function HomeServiceHero({
             <Link href={secondary.href} className="svc-cta-card svc-cta-card--alt" prefetch>
               <div
                 className="svc-cta-card__round"
-                style={{ backgroundImage: `url(${poster})` }}
+                style={{ backgroundImage: `url(${faces[0] || poster})` }}
                 aria-hidden
               />
               <div className="svc-cta-card__text">

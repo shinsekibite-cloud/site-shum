@@ -91,6 +91,7 @@ export async function GET(
     return NextResponse.json({
       spaceId: space.id,
       title: space.title,
+      capacity: space.capacity,
       stepMin: step,
       openMin,
       closeMin,

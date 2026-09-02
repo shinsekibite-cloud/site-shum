@@ -16,15 +16,19 @@ type Signup = {
 export default function CoworkingCabinetList() {
   const [rows, setRows] = useState<Signup[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
 
   const load = useCallback(() => {
+    setLoading(true);
     fetch('/api/coworking?mine=1', { credentials: 'same-origin' })
       .then(async (r) => {
         const data = await r.json();
         if (!r.ok) throw new Error(data.message || 'Ошибка');
         setRows(data.signups || []);
+        setError(null);
       })
-      .catch((e) => setError(e.message));
+      .catch((e) => setError(e.message))
+      .finally(() => setLoading(false));
   }, []);
 
   useEffect(() => {
@@ -47,32 +51,50 @@ export default function CoworkingCabinetList() {
   return (
     <section className="cw-cabinet" aria-label="Мои записи в коворкинг">
       <div className="cw-cabinet-head">
-        <h2>Мои записи в коворкинг</h2>
-        <Link href="/coworking" className="btn btn-primary">
+        <h2>Мои записи</h2>
+        <Link href="/coworking" className="svc-pill svc-pill--brand">
           Записаться
         </Link>
       </div>
       {error ? <p className="cw-error">{error}</p> : null}
-      {rows.length === 0 ? (
-        <p className="presence-muted">Пока нет активных записей.</p>
-      ) : (
-        <ul className="cw-cabinet-list">
+      {loading ? (
+        <div className="svc-skel" aria-hidden>
+          <div className="svc-skel__pill" />
+          <div className="svc-skel__pill" />
+        </div>
+      ) : null}
+      {!loading && rows.length === 0 ? (
+        <p className="svc-empty-inline">
+          Пока нет записей. <Link href="/coworking">Записаться в коворкинг</Link>
+        </p>
+      ) : null}
+      {!loading && rows.length > 0 ? (
+        <ul className="cw-cabinet-pills">
           {rows.map((row) => {
-            const today =
-              new Date(row.startTime).toDateString() === new Date().toDateString() &&
-              ['CONFIRMED', 'PENDING', 'ATTENDED'].includes(row.status);
+            const day = new Date(row.startTime).toLocaleDateString('ru-RU', {
+              timeZone: 'Europe/Moscow',
+              day: 'numeric',
+              month: 'short',
+            });
+            const slot = `${new Date(row.startTime).toLocaleTimeString('ru-RU', {
+              timeZone: 'Europe/Moscow',
+              hour: '2-digit',
+              minute: '2-digit',
+            })}–${new Date(row.endTime).toLocaleTimeString('ru-RU', {
+              timeZone: 'Europe/Moscow',
+              hour: '2-digit',
+              minute: '2-digit',
+            })}`;
             return (
-              <li key={row.id}>
-                <div>
-                  <strong>{row.space.title}</strong>
-                  <span>
-                    {new Date(row.startTime).toLocaleString('ru-RU', { timeZone: 'Europe/Moscow' })} · {row.seats} мест ·{' '}
-                    {statusRu(row.status)}
-                  </span>
-                  {today ? <em className="cw-today">Сегодня — покажите QR на входе</em> : null}
-                </div>
+              <li key={row.id} className="cw-cabinet-pill">
+                <span className="cw-cabinet-pill__day">{day}</span>
+                <span className="cw-cabinet-pill__slot">{slot}</span>
+                <span className="cw-cabinet-pill__place">{row.space.title}</span>
+                <span className={`cw-cabinet-pill__status status-${row.status.toLowerCase()}`}>
+                  {statusRu(row.status)}
+                </span>
                 {['PENDING', 'CONFIRMED', 'WAITLIST'].includes(row.status) ? (
-                  <button type="button" className="btn btn-secondary" onClick={() => cancel(row.id)}>
+                  <button type="button" className="cw-cabinet-pill__cancel" onClick={() => cancel(row.id)}>
                     Отменить
                   </button>
                 ) : null}
@@ -80,7 +102,7 @@ export default function CoworkingCabinetList() {
             );
           })}
         </ul>
-      )}
+      ) : null}
     </section>
   );
 }
@@ -94,7 +116,7 @@ function statusRu(s: string) {
     case 'CANCELLED':
       return 'отменена';
     case 'ATTENDED':
-      return 'визит состоялся';
+      return 'визит';
     case 'NO_SHOW':
       return 'неявка';
     case 'WAITLIST':

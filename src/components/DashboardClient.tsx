@@ -47,7 +47,6 @@ import { collectDeviceFingerprint } from '@/lib/device-fingerprint';
 import ProfileHeroCard from '@/components/ProfileHeroCard';
 import PersonalQrPanel from '@/components/PersonalQrPanel';
 import CoworkingCabinetList from '@/components/CoworkingCabinetList';
-import CabinetQuickNav from '@/components/CabinetQuickNav';
 import { zodiacFromDate } from '@/lib/profile-meta';
 import { formatMskDate, formatMskDateTime, formatMskTime } from '@/lib/booking-hours';
 import { fairyTaleAvatarUrl, fairyTaleDisplayName } from '@/lib/privacy-alias';
@@ -1604,6 +1603,8 @@ function DashboardInner({ view = 'overview' }: DashboardClientProps) {
               <div className="dashboard-stack" style={{ maxWidth: "100%", width: "100%", display: "flex", flexDirection: "column", gap: "0.55rem" }}>
                 <div className="profile-overview-top" id="profile-hub">
                   <div className="profile-view profile-view--unified profile-view--modern profile-view--hub">
+                    <PersonalQrPanel />
+                    <CoworkingCabinetList />
                     <ProfileHeroCard
                       name={legalName || session.user?.name}
                       nickname={profile?.nickname || session.user?.nickname}
@@ -1659,16 +1660,6 @@ function DashboardInner({ view = 'overview' }: DashboardClientProps) {
                       showRatings={modOn('ratings')}
                       showEco={modOn('eco')}
                     />
-                    <CabinetQuickNav
-                      ecoPoints={profile?.ecoPoints ?? 0}
-                      showAchievements={modOn('achievements')}
-                      showShop={modOn('eco')}
-                      showPortfolio={modOn('portfolio')}
-                      guidesDone={Boolean(profile?.instructionsCompletedAt)}
-                      role={session?.user?.role}
-                    />
-                    <PersonalQrPanel />
-                    <CoworkingCabinetList />
 
                   </div>
 

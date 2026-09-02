@@ -5,6 +5,9 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { ArrowRight, MapPin } from 'lucide-react';
 import { COWORKING_PERIODS } from '@/lib/coworking';
+import SvcDateField from '@/components/SvcDateField';
+import ServiceSplitModal from '@/components/ServiceSplitModal';
+import QRCodeDisplay from '@/components/QRCodeDisplay';
 
 type PeriodInfo = {
   id: string;
@@ -36,13 +39,12 @@ function todayYmd() {
   }).format(new Date());
 }
 
-function formatRuDay(ymd: string) {
+function formatRuLong(ymd: string) {
   const [y, m, d] = ymd.split('-').map(Number);
   if (!y || !m || !d) return ymd;
   return new Date(y, m - 1, d).toLocaleDateString('ru-RU', {
     day: 'numeric',
     month: 'long',
-    weekday: 'short',
   });
 }
 
@@ -58,6 +60,15 @@ export default function CoworkingSignupFlow({ initialSpaceId }: { initialSpaceId
   const [submitting, setSubmitting] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [successOpen, setSuccessOpen] = useState(false);
+  const [successMeta, setSuccessMeta] = useState<{
+    title: string;
+    day: string;
+    start: string;
+    end: string;
+    waitlist: boolean;
+  } | null>(null);
+  const [qrUrl, setQrUrl] = useState('');
 
   useEffect(() => {
     setLoading(true);
@@ -76,6 +87,7 @@ export default function CoworkingSignupFlow({ initialSpaceId }: { initialSpaceId
   const periodInfo = space?.periods.find((p) => p.id === period) || null;
   const left = periodInfo?.left ?? 0;
   const cover = space?.image || '/brand/hero-cover.jpg';
+  const periodDef = COWORKING_PERIODS.find((p) => p.id === period);
 
   async function submit(waitlist = false) {
     setSubmitting(true);
@@ -97,8 +109,23 @@ export default function CoworkingSignupFlow({ initialSpaceId }: { initialSpaceId
         }
         return;
       }
-      setMessage(data.signup?.status === 'WAITLIST' ? 'Вы в листе ожидания' : 'Запись подтверждена');
-      router.push('/dashboard?tab=coworking');
+      const wait = data.signup?.status === 'WAITLIST';
+      setMessage(wait ? 'Вы в листе ожидания' : 'Запись подтверждена');
+      setSuccessMeta({
+        title: space?.title || 'Коворкинг',
+        day: dayKey,
+        start: periodDef?.start || '',
+        end: periodDef?.end || '',
+        waitlist: wait,
+      });
+      try {
+        const qrRes = await fetch('/api/presence-qr', { credentials: 'same-origin' });
+        const qrData = await qrRes.json();
+        if (qrRes.ok) setQrUrl(qrData.qr?.url || '');
+      } catch {
+        /* optional */
+      }
+      setSuccessOpen(true);
       router.refresh();
     } catch (e) {
       setError((e as Error).message);
@@ -142,11 +169,7 @@ export default function CoworkingSignupFlow({ initialSpaceId }: { initialSpaceId
             </select>
           </label>
 
-          <label className="cw-field">
-            <span>Дата</span>
-            <input type="date" value={dayKey} min={todayYmd()} onChange={(e) => setDayKey(e.target.value)} />
-            <em className="cw-field-hint">{formatRuDay(dayKey)}</em>
-          </label>
+          <SvcDateField value={dayKey} min={todayYmd()} onChange={setDayKey} />
 
           <fieldset className="cw-field">
             <legend>Интервал</legend>
@@ -165,7 +188,13 @@ export default function CoworkingSignupFlow({ initialSpaceId }: { initialSpaceId
                     <span>
                       {p.start}–{p.end}
                     </span>
-                    <em>{typeof slotLeft === 'number' ? `${slotLeft} мест` : '…'}</em>
+                    <em>
+                      {typeof slotLeft === 'number'
+                        ? slotLeft > 0
+                          ? `${slotLeft} мест`
+                          : 'мест нет'
+                        : 'Загрузка…'}
+                    </em>
                   </button>
                 );
               })}
@@ -199,7 +228,7 @@ export default function CoworkingSignupFlow({ initialSpaceId }: { initialSpaceId
         </div>
 
         {error ? <p className="cw-error">{error}</p> : null}
-        {message ? <p className="cw-ok">{message}</p> : null}
+        {message && !successOpen ? <p className="cw-ok">{message}</p> : null}
 
         <div className="cw-actions">
           {left > 0 ? (
@@ -227,6 +256,51 @@ export default function CoworkingSignupFlow({ initialSpaceId }: { initialSpaceId
         </div>
         {left > 0 ? <p className="cw-left-note">Осталось {left} мест на выбранный интервал</p> : null}
       </div>
+
+      <ServiceSplitModal
+        open={successOpen}
+        onClose={() => {
+          setSuccessOpen(false);
+          router.push('/dashboard?tab=coworking');
+        }}
+        title={successMeta?.waitlist ? 'В листе ожидания' : 'Ты в коворкинге'}
+        ariaLabel="Запись оформлена"
+        aside={
+          <div className="svc-modal__aside-inner">
+            <div className="svc-modal__circles" aria-hidden>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={cover} alt="" />
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={cover} alt="" />
+            </div>
+            {qrUrl && !successMeta?.waitlist ? (
+              <div className="svc-modal__qr">
+                <QRCodeDisplay value={qrUrl} size={200} />
+              </div>
+            ) : (
+              <p className="svc-modal__aside-note">Покажите пропуск из кабинета на входе</p>
+            )}
+          </div>
+        }
+        footer={
+          <>
+            <Link href="/dashboard" className="btn btn-primary" onClick={() => setSuccessOpen(false)}>
+              {qrUrl ? 'Показать QR на входе' : 'В кабинет'}
+            </Link>
+            <button type="button" className="btn btn-secondary" onClick={() => setSuccessOpen(false)}>
+              Закрыть
+            </button>
+          </>
+        }
+      >
+        {successMeta ? (
+          <p className="svc-modal__lead">
+            {successMeta.waitlist ? 'Заявка в лист ожидания: ' : ''}
+            «{successMeta.title}», {formatRuLong(successMeta.day)}
+            {successMeta.start ? `, ${successMeta.start}–${successMeta.end}` : ''}.
+          </p>
+        ) : null}
+      </ServiceSplitModal>
     </div>
   );
 }
