@@ -48,7 +48,13 @@ export default function PwaUpdateBanner() {
       ) {
         return;
       }
-      // One soft reload after SW swap — no banner.
+      try {
+        // Suppress install/onboarding sheets that would pop up right after this reload.
+        sessionStorage.setItem('yp-sw-just-updated', '1');
+        sessionStorage.setItem('yp-pwa-install-dismissed-session', '1');
+      } catch {
+        /* ignore */
+      }
       window.location.reload();
     };
     navigator.serviceWorker.addEventListener('controllerchange', onControllerChange);

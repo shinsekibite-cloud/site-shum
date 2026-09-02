@@ -61,7 +61,17 @@ export default function PwaInstallBanner({ siteName = 'Молодёжь Сочи
     const forever =
       localStorage.getItem(DISMISS_FOREVER) === '1' ||
       (userId && localStorage.getItem(DISMISS_USER_PREFIX + userId) === '1');
-    const sessionDismissed = sessionStorage.getItem(DISMISS_SESSION) === '1';
+    let sessionDismissed = sessionStorage.getItem(DISMISS_SESSION) === '1';
+    try {
+      // After a silent service-worker reload, do not pop the install sheet again.
+      if (sessionStorage.getItem('yp-sw-just-updated') === '1') {
+        sessionStorage.removeItem('yp-sw-just-updated');
+        sessionStorage.setItem(DISMISS_SESSION, '1');
+        sessionDismissed = true;
+      }
+    } catch {
+      /* ignore */
+    }
 
     const isStandalone =
       window.matchMedia('(display-mode: standalone)').matches ||
