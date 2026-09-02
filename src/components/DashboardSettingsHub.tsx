@@ -54,11 +54,11 @@ const SECTIONS: {
   desc: string;
   icon: typeof ShieldCheck;
 }[] = [
-  { id: 'privacy', title: 'Конфиденциальность', desc: 'Видимость профиля и статус «в сети»', icon: UserRound },
+  { id: 'privacy', title: 'Публичность', desc: 'Кто видит профиль и «в сети»', icon: UserRound },
   { id: 'password', title: 'Пароль', desc: 'Смена пароля входа', icon: KeyRound },
-  { id: 'security', title: 'Безопасность', desc: 'Устройства, 2FA, удаление аккаунта', icon: ShieldCheck },
-  { id: 'consents', title: 'Согласия', desc: 'Политика, правила, cookie', icon: BadgeCheck },
-  { id: 'notifications', title: 'Уведомления', desc: 'Что присылать на почту и в пуш', icon: Bell },
+  { id: 'security', title: 'Безопасность', desc: 'Устройства, 2FA, удаление', icon: ShieldCheck },
+  { id: 'consents', title: 'Согласия', desc: 'Политика и cookie', icon: BadgeCheck },
+  { id: 'notifications', title: 'Уведомления', desc: 'Почта и пуш', icon: Bell },
   { id: 'messengers', title: 'Мессенджеры', desc: 'Telegram и MAX', icon: MessageCircle },
 ];
 

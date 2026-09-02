@@ -126,9 +126,13 @@ export default async function FreeNowSpaces({ limit = 4 }: { limit?: number }) {
                     В коворкинг
                   </GuestAuthPrompt>
                 ) : (
-                  <Link href={`/spaces/${encodeRouteParam(space.id)}/book`} className="btn btn-primary">
+                  <GuestAuthPrompt
+                    href={`/spaces/${encodeRouteParam(space.id)}/book`}
+                    className="btn btn-primary"
+                    asButton
+                  >
                     Забронировать
-                  </Link>
+                  </GuestAuthPrompt>
                 )}
               </div>
             </div>

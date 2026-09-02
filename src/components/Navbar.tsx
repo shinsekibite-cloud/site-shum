@@ -358,6 +358,14 @@ export default function Navbar({ spaces = [], clubs = [], projects = [], pages =
     >
       {!isAuthenticated ? (
         <div className="nav-auth-icons nav-auth-guest">
+          <GuestAuthPrompt
+            href="/coworking"
+            className="nav-pill nav-pill--solid nav-pill--desktop-cta"
+            title="Записаться"
+            asButton
+          >
+            Запись
+          </GuestAuthPrompt>
           <Link href="/login" className="nav-pill nav-pill--ghost" title="Вход">
             Вход
           </Link>

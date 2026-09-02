@@ -125,6 +125,9 @@ function LoginForm() {
           callbackUrl.startsWith('/tickets') ||
           callbackUrl.startsWith('/friends') ||
           callbackUrl.startsWith('/messages') ||
+          callbackUrl.startsWith('/coworking') ||
+          callbackUrl.startsWith('/spaces') ||
+          callbackUrl.startsWith('/events') ||
           callbackUrl.startsWith('/u/');
         if (staffMode || !callbackUrl || callbackUrl === '/' || (!userSurface && !callbackUrl.startsWith('/admin'))) {
           dest = '/admin';

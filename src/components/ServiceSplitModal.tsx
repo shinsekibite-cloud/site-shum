@@ -28,7 +28,7 @@ export default function ServiceSplitModal({
   aside,
   children,
   footer,
-  zIndex = 10100,
+  zIndex = 13000,
 }: Props) {
   const titleId = useId();
 

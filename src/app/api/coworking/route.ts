@@ -1,8 +1,7 @@
 import { NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth/next';
-import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import { assertSameOrigin } from '@/lib/csrf-origin';
+import { aclJsonError, requireEndUser, requireUser } from '@/lib/acl';
 import {
   activeSignupStatuses,
   canCancelFree,
@@ -24,21 +23,22 @@ export async function GET(req: Request) {
   const dayKey = url.searchParams.get('day') || todayKey();
 
   if (mine) {
-    const session = await getServerSession(authOptions);
-    if (!session?.user) {
-      return NextResponse.json({ message: 'Нужна авторизация' }, { status: 401 });
+    try {
+      const session = await requireUser();
+      const rows = await prisma.coworkingSignup.findMany({
+        where: {
+          userId: session.user.id,
+          status: { in: [...activeSignupStatuses(), 'ATTENDED'] },
+          endTime: { gte: new Date(Date.now() - 2 * 86400000) },
+        },
+        orderBy: { startTime: 'asc' },
+        include: { space: { select: { id: true, title: true, address: true, image: true, capacity: true } } },
+        take: 40,
+      });
+      return NextResponse.json({ signups: rows });
+    } catch (e) {
+      return aclJsonError(e);
     }
-    const rows = await prisma.coworkingSignup.findMany({
-      where: {
-        userId: session.user.id,
-        status: { in: [...activeSignupStatuses(), 'ATTENDED'] },
-        endTime: { gte: new Date(Date.now() - 2 * 86400000) },
-      },
-      orderBy: { startTime: 'asc' },
-      include: { space: { select: { id: true, title: true, address: true, image: true, capacity: true } } },
-      take: 40,
-    });
-    return NextResponse.json({ signups: rows });
   }
 
   const payload = await getCoworkingAvailability(dayKey);
@@ -50,9 +50,11 @@ export async function POST(req: Request) {
   const originBlock = assertSameOrigin(req);
   if (originBlock) return originBlock;
 
-  const session = await getServerSession(authOptions);
-  if (!session?.user) {
-    return NextResponse.json({ message: 'Нужна авторизация' }, { status: 401 });
+  let session;
+  try {
+    session = await requireEndUser();
+  } catch (e) {
+    return aclJsonError(e);
   }
 
   const body = await req.json().catch(() => null);
@@ -139,9 +141,11 @@ export async function DELETE(req: Request) {
   const originBlock = assertSameOrigin(req);
   if (originBlock) return originBlock;
 
-  const session = await getServerSession(authOptions);
-  if (!session?.user) {
-    return NextResponse.json({ message: 'Нужна авторизация' }, { status: 401 });
+  let session;
+  try {
+    session = await requireEndUser();
+  } catch (e) {
+    return aclJsonError(e);
   }
 
   const url = new URL(req.url);

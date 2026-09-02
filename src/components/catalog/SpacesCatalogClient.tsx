@@ -118,19 +118,13 @@ export default function SpacesCatalogClient({ items }: { items: PublicSpaceCard[
                   </p>
                   <p className={`svc-space-card__status${coworking ? ' is-cowork' : ''}`}>{statusLine}</p>
                   {space.status !== 'COMPLETED' ? (
-                    coworking ? (
-                      <GuestAuthPrompt
-                        href={ctaHref}
-                        className="svc-pill svc-pill--brand svc-space-card__cta"
-                        asButton
-                      >
-                        {ctaLabel}
-                      </GuestAuthPrompt>
-                    ) : (
-                      <Link href={ctaHref} className="svc-pill svc-pill--brand svc-space-card__cta">
-                        {ctaLabel}
-                      </Link>
-                    )
+                    <GuestAuthPrompt
+                      href={ctaHref}
+                      className="svc-pill svc-pill--brand svc-space-card__cta"
+                      asButton
+                    >
+                      {ctaLabel}
+                    </GuestAuthPrompt>
                   ) : null}
                 </div>
               </article>

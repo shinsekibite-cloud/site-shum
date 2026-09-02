@@ -563,7 +563,8 @@ function DashboardInner({ view = 'overview' }: DashboardClientProps) {
       if (hash === '#messengers' || hash === '#settings') {
         setEditOpen(false);
         setPreviewOpen(false);
-        setSettingsOpen(true);
+        setSettingsOpen(false);
+        router.push(hash === '#messengers' ? '/dashboard/settings?section=messengers' : '/dashboard/settings');
         return;
       }
       if (hash === '#profile-hub') {
@@ -573,7 +574,7 @@ function DashboardInner({ view = 'overview' }: DashboardClientProps) {
     applyHash();
     window.addEventListener('hashchange', applyHash);
     return () => window.removeEventListener('hashchange', applyHash);
-  }, [view, status, session]);
+  }, [view, status, session, router]);
 
   useEffect(() => {
     if (view === 'edit') setEditOpen(true);
@@ -608,10 +609,31 @@ function DashboardInner({ view = 'overview' }: DashboardClientProps) {
     };
   }, [editOpen, previewOpen, settingsOpen, closeSettings]);
 
-  if (status === 'loading' || !session) {
+  if (status === 'loading') {
     return (
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '50vh' }}>
-        Загрузка...
+      <div className="container dashboard-shell dashboard-shell--boot" aria-busy="true">
+        <div className="svc-skel" aria-hidden>
+          <div className="svc-skel__pill" />
+          <div className="svc-skel__row" />
+          <div className="svc-skel__row" />
+        </div>
+        <p className="svc-empty-inline">Открываем кабинет…</p>
+      </div>
+    );
+  }
+  if (!session) {
+    return (
+      <div className="container yp-surface yp-guest-gate" style={{ margin: '2rem auto', maxWidth: 420, padding: '1.5rem', textAlign: 'center' }}>
+        <h2 style={{ marginTop: 0 }}>Войдите в кабинет</h2>
+        <p style={{ color: 'var(--muted)' }}>Профиль, QR и записи доступны после входа.</p>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.55rem' }}>
+          <a href="/login?callbackUrl=%2Fdashboard" className="btn btn-primary">
+            Войти
+          </a>
+          <a href="/register?callbackUrl=%2Fdashboard" className="btn btn-secondary">
+            Регистрация
+          </a>
+        </div>
       </div>
     );
   }
@@ -1576,7 +1598,7 @@ function DashboardInner({ view = 'overview' }: DashboardClientProps) {
                   <div>
                     <h2 className="profile-view__title">Настройки</h2>
                     <p className="profile-view__lead">
-                      Профиль, безопасность, уведомления и публичность.
+                      Безопасность, уведомления и публичность — в одном месте.
                     </p>
                   </div>
                   <Link href="/dashboard" className="btn btn-secondary">
@@ -2364,34 +2386,6 @@ function DashboardInner({ view = 'overview' }: DashboardClientProps) {
                   </div>
                 </form>
                 </div>
-                  </div>
-                </div>
-                ) : null}
-                {settingsOpen ? (
-                <div className="yp-sheet yp-sheet--profile yp-sheet--settings" role="dialog" aria-modal="true" aria-labelledby="profile-settings-title">
-                  <button type="button" className="yp-sheet__backdrop" aria-label="Закрыть" onClick={closeSettings} />
-                  <div className="yp-sheet__panel">
-                    <header className="yp-sheet__head">
-                      <h2 id="profile-settings-title">Настройки</h2>
-                      <button type="button" className="yp-sheet__close" onClick={closeSettings} aria-label="Закрыть">
-                        ×
-                      </button>
-                    </header>
-                    <div className="yp-sheet__body">
-                    <DashboardSettingsHub
-                      embedded
-                      onClose={closeSettings}
-                      profile={profile}
-                      profileVisibility={profileVisibility}
-                      onlineVisibility={onlineVisibility}
-                      profileSaving={profileSaving}
-                      setProfileVisibility={setProfileVisibility}
-                      setOnlineVisibility={setOnlineVisibility}
-                      setProfileSaving={setProfileSaving}
-                      setProfile={setProfile}
-                      readJsonSafe={readJsonSafe}
-                    />
-                    </div>
                   </div>
                 </div>
                 ) : null}

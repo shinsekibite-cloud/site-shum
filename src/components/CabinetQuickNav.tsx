@@ -40,7 +40,7 @@ export default function CabinetQuickNav({
             <span className="cabinet-quick__icon" aria-hidden>
               <Ticket size={18} />
             </span>
-            <strong>Мои брони</strong>
+            <strong>Билеты</strong>
             <span>Билеты и история записей</span>
           </Link>
         </>

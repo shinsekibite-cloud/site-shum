@@ -438,8 +438,8 @@ function MessagesInner() {
         if (!cancelled) setLoading(false);
       }
     };
-    setLoading(true);
-    initialize();
+    // Soft: keep inbox visible after first load (don't setLoading(true) on every tab change).
+    void initialize();
     return () => {
       cancelled = true;
     };
@@ -823,7 +823,7 @@ function MessagesInner() {
     return (
       <div key={message.id} className={`msg-bubble${mine ? ' is-mine' : ''}${message.flagged ? ' is-flagged' : ''}${group ? ` ${group}` : ''}`}>
         {!mine && activeGroup && message.senderName ? (
-          <div style={{ fontSize: '0.72rem', fontWeight: 700, color: '#2563eb', marginBottom: 2 }}>{message.senderName}</div>
+          <div style={{ fontSize: '0.72rem', fontWeight: 700, color: 'var(--primary)', marginBottom: 2 }}>{message.senderName}</div>
         ) : null}
         <div className={message.flagged ? 'msg-bubble__blurred' : undefined}>
           <MessageBodyText body={message.body} />
@@ -834,7 +834,10 @@ function MessagesInner() {
     );
   };
 
-  if (status === 'loading' || loading) {
+  if (status === 'loading') {
+    return <div className="messages-root"><div className="messages-thread__empty">Загрузка…</div></div>;
+  }
+  if (loading && dmList.length === 0 && groupList.length === 0 && !activeUser && !activeGroup) {
     return <div className="messages-root"><div className="messages-thread__empty">Загрузка…</div></div>;
   }
 

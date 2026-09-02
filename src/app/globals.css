@@ -10347,7 +10347,7 @@ a.yp-modal-close {
 .tickets-fullscreen {
   position: fixed;
   inset: 0;
-  z-index: 500;
+  z-index: var(--z-lightbox, 14000);
   background: #fff;
   display: grid;
   place-items: center;
@@ -16344,7 +16344,7 @@ body.has-bottom-nav {
     left: 0;
     right: 0;
     bottom: 0;
-    z-index: 9000;
+    z-index: var(--z-dock, 1000);
     height: var(--yp-bottom-nav-h);
     min-height: calc(3.55rem + env(safe-area-inset-bottom, 0px));
     box-sizing: border-box;
@@ -22882,7 +22882,7 @@ body.yp-scroll-locked {
 .presence-delta.is-plus { color: #0f766e; font-weight: 800; }
 .presence-delta.is-minus { color: #b91c1c; font-weight: 800; }
 .presence-fs {
-  position: fixed; inset: 0; z-index: 80; background: #fff;
+  position: fixed; inset: 0; z-index: var(--z-lightbox, 14000); background: #fff;
   display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1rem;
 }
 .presence-fs-close {
@@ -23854,7 +23854,7 @@ fieldset.svc-form-group,
 .svc-date__day:not(.is-disabled):hover { background: var(--brand-soft); }
 
 /* Hall book drawer */
-.svc-drawer { position: fixed; inset: 0; z-index: 10200; }
+.svc-drawer { position: fixed; inset: 0; z-index: var(--z-sheet, 12000); }
 .svc-drawer__backdrop {
   position: absolute; inset: 0; border: 0;
   background: rgba(18, 34, 31, 0.45); cursor: pointer;
@@ -24005,13 +24005,27 @@ fieldset.svc-form-group,
 
 /* ===== Mobile overlays + image-only hero ===== */
 
-/* Hide edge FAB on phone/tablet — overlaps content; quick access stays in burger */
-@media (max-width: 900px) {
+/* Hide edge FAB on phone/tablet/small laptop — overlaps content; quick access in burger/account */
+@media (max-width: 1100px) {
   .qa-fab {
     display: none !important;
   }
   body {
     padding-right: 0 !important;
+  }
+}
+@media (min-width: 1101px) {
+  /* Keep FAB from covering content: reserve a slim rail */
+  body:not(.is-admin):not(.mobile-nav-open) {
+    padding-right: 0;
+  }
+  .qa-fab {
+    width: 28px !important;
+    min-width: 28px !important;
+    padding: 0 !important;
+  }
+  .qa-fab-caption {
+    display: none !important;
   }
 }
 
@@ -24614,8 +24628,12 @@ body.yp-modal-open {
   grid-template-columns: 1fr 1fr;
   gap: 0.55rem;
 }
-.cw-guest-gate__actions .btn {
-  justify-content: center;
+.cw-guest-gate--static {
+  position: relative;
+  inset: auto;
+  transform: none;
+  margin: 1rem auto;
+  max-width: 440px;
 }
 
 /* CTA / nav pills used as <button> must match Link look */

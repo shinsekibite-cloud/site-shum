@@ -64,15 +64,9 @@ export default function GuestAuthPrompt({
 
   return (
     <>
-      {asButton ? (
-        <button type="button" className={className} title={title} onClick={() => setOpen(true)}>
-          {children}
-        </button>
-      ) : (
-        <button type="button" className={className} title={title} onClick={() => setOpen(true)}>
-          {children}
-        </button>
-      )}
+      <button type="button" className={className} title={title} onClick={() => setOpen(true)}>
+        {children}
+      </button>
 
       {open ? (
         <div className="svc-modal is-open yp-guest-prompt" role="presentation" onClick={() => setOpen(false)}>

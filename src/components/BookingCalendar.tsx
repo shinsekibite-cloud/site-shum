@@ -202,6 +202,13 @@ export default function BookingCalendar({
       router.push('/login?callbackUrl=' + encodeURIComponent(window.location.pathname));
       return;
     }
+    if (session.user?.moderationPending) {
+      setMessage({
+        type: 'error',
+        text: 'Аккаунт на проверке — запись на событие пока недоступна.',
+      });
+      return;
+    }
 
     try {
       const res = await fetch(`/api/bookings/${eventId}/join`, { method: 'POST' });
@@ -228,6 +235,13 @@ export default function BookingCalendar({
     e.preventDefault();
     if (!session) {
       router.push('/login?callbackUrl=' + encodeURIComponent(window.location.pathname));
+      return;
+    }
+    if (session.user?.moderationPending) {
+      setMessage({
+        type: 'error',
+        text: 'Ваш аккаунт на проверке. Бронь будет доступна после одобрения администратором.',
+      });
       return;
     }
 
@@ -675,11 +689,20 @@ export default function BookingCalendar({
 
             <button
               type="submit"
-              disabled={isSubmitting}
+              disabled={isSubmitting || Boolean(session?.user?.moderationPending)}
               style={{ width: '100%', padding: '0.6rem', border: 'none', borderRadius: 'var(--radius-sm)', background: 'var(--accent)', color: 'white', fontWeight: 600, fontSize: '0.9rem', cursor: 'pointer', marginTop: '0.25rem' }}
             >
-              {isSubmitting ? 'Отправка...' : 'Отправить заявку'}
+              {session?.user?.moderationPending
+                ? 'Аккаунт на проверке'
+                : isSubmitting
+                  ? 'Отправка...'
+                  : 'Отправить заявку'}
             </button>
+            {session?.user?.moderationPending ? (
+              <p style={{ margin: '0.45rem 0 0', fontSize: '0.8rem', color: 'var(--muted)', textAlign: 'center' }}>
+                Бронь откроется после одобрения администратором.
+              </p>
+            ) : null}
           </form>
         </div>
       )}

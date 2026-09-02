@@ -4,6 +4,16 @@
 Версия в футере и в `package.json` / `src/lib/app-version.ts` должны совпадать.  
 Каждый пользовательский релиз на ty → запись здесь + bump версии **до** staging deploy.
 
+## [1.6.4] — 2026-09-02
+
+### Fixed
+- Коворкинг: `requireEndUser` + gate для гостей/модерации; soft loading сессии
+- Fullscreen QR и drawer/modal на токенах z-index выше nav/dock
+- Edge FAB не перекрывает контент ≤1100px; на desktop — узкая полоска без подписи
+- Dashboard: skeleton вместо blank; настройки только страница (без sheet-дубля)
+- Messages soft refresh; guest book CTAs единые; login callback для coworking/spaces/events
+- Бронь зала: UI при pending moderation; копирайт «Билеты»
+
 ## [1.6.3] — 2026-09-02
 
 ### Fixed
