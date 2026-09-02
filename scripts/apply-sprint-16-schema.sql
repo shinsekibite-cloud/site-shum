@@ -6,7 +6,13 @@ ALTER TABLE "User"
   ADD COLUMN IF NOT EXISTS "mBall" INTEGER NOT NULL DEFAULT 0,
   ADD COLUMN IF NOT EXISTS "ecoBallPublic" BOOLEAN NOT NULL DEFAULT false,
   ADD COLUMN IF NOT EXISTS "presenceQrToken" TEXT,
-  ADD COLUMN IF NOT EXISTS "presenceQrExpiresAt" TIMESTAMP(3);
+  ADD COLUMN IF NOT EXISTS "presenceQrExpiresAt" TIMESTAMP(3),
+  ADD COLUMN IF NOT EXISTS "moderationApprovedAt" TIMESTAMP(3);
+
+-- Existing active users are treated as already approved for login gates
+UPDATE "User"
+SET "moderationApprovedAt" = COALESCE("moderationApprovedAt", "createdAt", NOW())
+WHERE "blockedAt" IS NULL AND "deletedAt" IS NULL AND "moderationApprovedAt" IS NULL;
 
 CREATE UNIQUE INDEX IF NOT EXISTS "User_presenceQrToken_key" ON "User"("presenceQrToken");
 
