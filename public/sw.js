@@ -1,4 +1,4 @@
-const CACHE = "sochi-shell-v27-mobile";
+const CACHE = "sochi-shell-v28-ui";
 const PRECACHE = [
   "/manifest.webmanifest",
   "/offline.html",

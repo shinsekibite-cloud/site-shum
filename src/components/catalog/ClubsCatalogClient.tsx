@@ -99,7 +99,7 @@ export default function ClubsCatalogClient({ items }: { items: PublicClubCard[] 
     <div className="container catalog-page">
       <div className="catalog-page-header">
         <div className="catalog-page-header__intro">
-          <h1 className="text-gradient page-hero-title">Молодёжные клубы</h1>
+          <h1 className="page-hero-title">Молодёжные клубы</h1>
           <p className="catalog-page-header__count">
             {total ? `${total} ${total === 1 ? 'клуб' : total < 5 ? 'клуба' : 'клубов'}` : 'Каталог клубов'}
           </p>

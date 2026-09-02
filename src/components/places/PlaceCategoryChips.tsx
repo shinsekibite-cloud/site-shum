@@ -38,11 +38,7 @@ export default function PlaceCategoryChips() {
             className={`places-chip ${current === code ? 'is-active' : ''}`}
             role="tab"
             aria-selected={current === code}
-            style={
-              current === code
-                ? { background: meta.bg, color: meta.color, borderColor: meta.color }
-                : undefined
-            }
+            data-cat={code}
           >
             {meta.label}
           </Link>

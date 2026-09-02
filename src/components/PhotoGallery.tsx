@@ -67,7 +67,7 @@ export default function PhotoGallery({ images, hideTitle = false }: PhotoGallery
             position: 'fixed',
             top: 0, left: 0, right: 0, bottom: 0,
             backgroundColor: 'rgba(0,0,0,0.85)',
-            zIndex: 9999,
+            zIndex: 14000,
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',

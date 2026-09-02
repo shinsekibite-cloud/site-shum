@@ -54,11 +54,10 @@ export default function SpacesCatalogClient({ items }: { items: PublicSpaceCard[
   return (
     <div className="container catalog-page">
       <div className="catalog-page-header" style={{ flexDirection: 'column', alignItems: 'stretch' }}>
-        <h1 className="page-hero-title" style={{ marginBottom: '0.75rem' }}>
-          Молодёжные пространства
-        </h1>
-        <SpaceFilterBar placeholder="Поиск пространств…" categories={usedCategories} />
+        <h1 className="page-hero-title">Молодёжные пространства</h1>
+        <p className="page-hero-subtitle">Коворкинг и залы ЦРМ — запись и бронь в одном стиле</p>
       </div>
+      <SpaceFilterBar placeholder="Поиск пространств…" categories={usedCategories} />
 
       {spaces.length === 0 ? (
         <div className="svc-empty">

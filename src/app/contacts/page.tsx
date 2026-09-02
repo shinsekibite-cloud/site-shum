@@ -111,7 +111,7 @@ export default async function ContactsPage() {
   return (
     <div className="container" style={{ padding: '1.25rem 1.25rem 2rem', minHeight: 'auto' }}>
       <div>
-        <h1 className="text-gradient page-hero-title" style={{ textAlign: 'center', marginBottom: '0.35rem' }}>
+        <h1 className="page-hero-title" style={{ textAlign: 'center', marginBottom: '0.35rem' }}>
           Контакты
         </h1>
         <p style={{ textAlign: 'center', color: 'var(--muted)', marginBottom: '1.15rem', fontSize: '1rem', lineHeight: 1.45 }}>

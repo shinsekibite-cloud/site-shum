@@ -26,7 +26,7 @@ export default function NewsCatalogClient({ items }: { items: PublicNewsCard[] }
 
   return (
     <div className="container" style={{ padding: '1rem', minHeight: 'auto' }}>
-      <h1 className="text-gradient page-hero-title" style={{ textAlign: 'center' }}>
+      <h1 className="page-hero-title" style={{ textAlign: 'center' }}>
         Новости
       </h1>
       <p className="page-hero-subtitle" style={{ textAlign: 'center' }}>

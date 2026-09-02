@@ -38,7 +38,7 @@ export default async function FaqPage() {
   return (
     <div className="cms-page-shell faq-page" style={{ paddingTop: '2rem', paddingBottom: '3rem' }}>
       <header className="faq-page__header">
-        <h1 className="text-gradient page-hero-title faq-page__title">Вопросы и ответы</h1>
+        <h1 className="page-hero-title faq-page__title">Вопросы и ответы</h1>
         <p className="faq-page__lead">
           Как пользоваться кабинетом, событиями, сообщениями, эко-баллами и другими разделами портала.
           Есть поиск и фильтр по категориям.

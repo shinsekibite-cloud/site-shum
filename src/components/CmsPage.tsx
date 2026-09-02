@@ -32,7 +32,7 @@ export default function CmsPage({ page, siteName = '', publicOrigin = '' }: CmsP
 
   const renderDefault = () => (
     <div className="cms-page-shell" style={{ paddingTop: '2rem', paddingBottom: '3rem' }}>
-      <h1 className="text-gradient page-hero-title" style={{ marginBottom: '1.5rem', textAlign: 'left' }}>
+      <h1 className="page-hero-title" style={{ marginBottom: '1.5rem', textAlign: 'left' }}>
         {page.title}
       </h1>
       {cover ? (
@@ -185,7 +185,7 @@ export default function CmsPage({ page, siteName = '', publicOrigin = '' }: CmsP
 
   const renderGallery = () => (
     <div className="cms-page-shell" style={{ paddingTop: '2rem', paddingBottom: '3rem' }}>
-      <h1 className="text-gradient page-hero-title" style={{ marginBottom: '1.5rem', textAlign: 'left' }}>
+      <h1 className="page-hero-title" style={{ marginBottom: '1.5rem', textAlign: 'left' }}>
         {page.title}
       </h1>
       <div style={{ width: '100%' }}>
@@ -213,7 +213,7 @@ export default function CmsPage({ page, siteName = '', publicOrigin = '' }: CmsP
 
   const renderFAQ = () => (
     <div className="cms-page-shell" style={{ paddingTop: '2rem', paddingBottom: '3rem' }}>
-      <h1 className="text-gradient page-hero-title" style={{ marginBottom: '2rem', textAlign: 'left' }}>
+      <h1 className="page-hero-title" style={{ marginBottom: '2rem', textAlign: 'left' }}>
         {page.title}
       </h1>
       <div className="prose faq-content cms-page-prose" dangerouslySetInnerHTML={{ __html: safeContent }} />

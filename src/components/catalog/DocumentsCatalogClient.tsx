@@ -35,7 +35,7 @@ export default function DocumentsCatalogClient({ items }: { items: PublicDocumen
   return (
     <div className="container docs-page-shell" style={{ padding: '2rem 1rem', minHeight: '60vh' }}>
       <div>
-        <h1 className="text-gradient page-hero-title">Документы</h1>
+        <h1 className="page-hero-title">Документы</h1>
         <p style={{ color: 'var(--muted)', marginBottom: '1.75rem', fontSize: '1.05rem' }}>
           Положения, формы и правила портала. Откройте документ прямо на сайте или скачайте файл.
         </p>

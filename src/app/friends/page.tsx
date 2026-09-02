@@ -230,7 +230,7 @@ export default function FriendsPage() {
   return (
     <main className="container" style={{ padding: '1.25rem 1rem 2rem' }}>
       <div style={{ marginBottom: '1rem' }}>
-        <h1 className="text-gradient page-hero-title" style={{ margin: 0 }}>
+        <h1 className="page-hero-title" style={{ margin: 0 }}>
           Друзья
         </h1>
         <p style={{ margin: '0.35rem 0 0', color: 'var(--muted)', lineHeight: 1.45 }}>

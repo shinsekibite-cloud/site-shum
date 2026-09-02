@@ -78,7 +78,7 @@ export default function ProjectsCatalogClient({ items }: { items: PublicProjectC
     <div className="container catalog-page">
       <div className="catalog-page-header">
         <div className="catalog-page-header__intro">
-          <h1 className="text-gradient page-hero-title">Молодёжные проекты</h1>
+          <h1 className="page-hero-title">Молодёжные проекты</h1>
           <p className="catalog-page-header__count">
             {total ? `${total} ${total === 1 ? 'проект' : total < 5 ? 'проекта' : 'проектов'}` : 'Каталог проектов'}
           </p>
