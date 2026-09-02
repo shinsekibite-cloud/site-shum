@@ -716,28 +716,6 @@ export default function Navbar({ spaces = [], clubs = [], projects = [], pages =
             </Link>
           ) : null}
 
-          {/* Secondary destinations live under «Ещё» (TZ: 4–6 primary links) */}
-          {false && (siteSettings?.galleryPageEnabled ?? true) && modOn(siteSettings, 'gallery') && (
-            <Link href="/gallery" data-nav-id="gallery" style={getLinkStyle('/gallery')}>
-              Галерея
-            </Link>
-          )}
-          {false && modOn(siteSettings, 'places') && (
-            <Link href="/places" data-nav-id="places" style={getLinkStyle('/places')}>
-              Куда сходить
-            </Link>
-          )}
-          {false && modOn(siteSettings, 'vacancies') && (
-            <Link href="/vacancies" data-nav-id="vacancies" style={getLinkStyle('/vacancies')}>
-              Вакансии
-            </Link>
-          )}
-          {false && modOn(siteSettings, 'contests') && (
-            <Link href="/contests" data-nav-id="contests" style={getLinkStyle('/contests')}>
-              Конкурсы
-            </Link>
-          )}
-
           {renderDropdown(
               'more',
               <button

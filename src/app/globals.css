@@ -23048,6 +23048,7 @@ body.yp-scroll-locked {
 /* Home service hero */
 .svc-hero {
   padding: clamp(1.25rem, 3vw, 2rem) 0 clamp(1.5rem, 3vw, 2.25rem);
+  background: #f4fbfb;
 }
 .svc-hero__grid {
   display: grid;
