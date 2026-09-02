@@ -554,7 +554,6 @@ function DashboardInner({ view = 'overview' }: DashboardClientProps) {
     const applyHash = () => {
       const hash = window.location.hash;
       if (hash === '#profile-edit') {
-        setSettingsOpen(false);
         setPreviewOpen(false);
         setEditOpen(true);
         return;
@@ -562,7 +561,6 @@ function DashboardInner({ view = 'overview' }: DashboardClientProps) {
       if (hash === '#messengers' || hash === '#settings') {
         setEditOpen(false);
         setPreviewOpen(false);
-        setSettingsOpen(false);
         router.push(hash === '#messengers' ? '/dashboard/settings?section=messengers' : '/dashboard/settings');
         return;
       }
@@ -653,7 +651,6 @@ function DashboardInner({ view = 'overview' }: DashboardClientProps) {
         return;
       }
       if (section === 'settings') {
-        setSettingsOpen(false);
         router.push('/dashboard/settings');
         return;
       }
@@ -1635,13 +1632,11 @@ function DashboardInner({ view = 'overview' }: DashboardClientProps) {
                           : undefined
                       }
                       onEdit={() => {
-                        setSettingsOpen(false);
                         setEditOpen(true);
                       }}
                       onPreview={() => setPreviewOpen(true)}
                       onSettings={() => {
                         setEditOpen(false);
-                        setSettingsOpen(false);
                         router.push('/dashboard/settings');
                       }}
                       onAvatarPick={(file) => {
