@@ -9,6 +9,7 @@
 ### Fixed
 - Z-index: модалки / drawer / QR поверх sticky nav; cookie ниже nav
 - Гость: soft-gate «Забронировать» на карточке зала и в сетке занятости
+- Главная: CTA «Забронировать» через GuestAuthPrompt (без hard redirect)
 - QuickAccess: кабинетные ссылки только USER/PARTICIPANT/MOD/ADMIN; FAB скрыт на `/ops`
 - Navbar: TECH/SCANNER — корректные профиль/настройки в мобильном меню
 - Настройки: один page-head через SettingsHub (без sheet и двойного заголовка)

@@ -60,7 +60,11 @@ export default function GuestAuthPrompt({
         className={className}
         title={title}
         aria-busy={status === 'loading' ? true : undefined}
-        onClick={() => setOpen(true)}
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          setOpen(true);
+        }}
       >
         {children}
       </button>

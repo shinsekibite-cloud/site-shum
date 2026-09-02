@@ -16,6 +16,7 @@ import EntityCoverImage from '@/components/EntityCoverImage';
 import NewsMediaBadge from '@/components/NewsMediaBadge';
 import Link from 'next/link';
 import { Metadata } from 'next';
+import GuestAuthPrompt from '@/components/GuestAuthPrompt';
 
 export async function generateMetadata(): Promise<Metadata> {
   const { siteName, publicOrigin } = await getSiteIdentity();
@@ -220,20 +221,14 @@ export default async function Home() {
                       <span className="catalog-card-more">Подробнее</span>
                     </div>
                     <div className="catalog-card__interactive" style={{ marginTop: '0.65rem' }}>
-                      <Link
+                      <GuestAuthPrompt
                         href={`/spaces/${encodeURIComponent(space.id)}/book`}
                         className="btn btn-primary"
-                        style={{
-                          width: '100%',
-                          justifyContent: 'center',
-                          textDecoration: 'none',
-                          fontSize: '0.88rem',
-                          fontWeight: 700,
-                          padding: '0.55rem 0.9rem',
-                        }}
+                        title="Забронировать зал"
+                        asButton
                       >
                         Забронировать
-                      </Link>
+                      </GuestAuthPrompt>
                     </div>
                   </div>
                 </article>
