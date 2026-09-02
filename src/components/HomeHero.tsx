@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, type CSSProperties } from 'react';
 
 type Props = {
   imageUrl: string;
@@ -13,10 +13,10 @@ type Props = {
 };
 
 /**
- * Hero media: strictly one plane — image or video.
- * CSS `--home-hero-image` poster stays under the <video> until the first frame
- * (video starts at opacity 0) so refresh does not flash a dark empty plane.
- * On video error → fall back to image (video unmounted).
+ * One media plane only:
+ * - image mode → CSS background (optional Ken Burns)
+ * - video mode → <video> only (browser poster until first frame; no CSS photo under it)
+ * Never crossfade photo↔video — that reads as jerking.
  */
 export default function HomeHero({
   imageUrl,
@@ -27,40 +27,34 @@ export default function HomeHero({
 }: Props) {
   const videoSrc = (videoUrl || '').trim();
   const poster = (imageUrl || '/brand/hero-cover.jpg').trim().replace(/^["']|["']$/g, '');
+  const posterUrl = poster.startsWith('/') || poster.startsWith('http') ? poster : `/${poster}`;
+
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const [reduceMotion, setReduceMotion] = useState(false);
   const [needsTap, setNeedsTap] = useState(false);
-  const [playing, setPlaying] = useState(false);
   const [failed, setFailed] = useState(false);
-  const playingRef = useRef(false);
-  const mediaKeyRef = useRef(`${mediaKind}|${videoSrc}`);
 
   useEffect(() => {
-    setReduceMotion(window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const sync = () => setReduceMotion(mq.matches);
+    sync();
+    mq.addEventListener('change', sync);
+    return () => mq.removeEventListener('change', sync);
   }, []);
 
   useEffect(() => {
-    const key = `${mediaKind}|${videoSrc}`;
-    if (mediaKeyRef.current === key) return;
-    mediaKeyRef.current = key;
     setFailed(false);
-    setPlaying(false);
     setNeedsTap(false);
-    playingRef.current = false;
   }, [videoSrc, mediaKind]);
 
   const wantVideo = mediaKind === 'video' && Boolean(videoSrc) && !failed && !reduceMotion;
   const className = [
     'home-hero',
     wantVideo ? 'home-hero--video' : `home-hero--${mode}`,
-    wantVideo && playing ? 'home-hero--playing' : '',
     wantVideo && needsTap ? 'home-hero--needs-tap' : '',
   ]
     .filter(Boolean)
     .join(' ');
-
-  const posterCss = `url(${poster.startsWith('/') || poster.startsWith('http') ? poster : `/${poster}`})`;
-  const cssUrl = posterCss;
 
   useEffect(() => {
     if (!wantVideo) return;
@@ -68,9 +62,6 @@ export default function HomeHero({
     if (!el) return;
 
     let cancelled = false;
-    let attempts = 0;
-    const MAX_ATTEMPTS = 3;
-    playingRef.current = false;
 
     const armAttrs = () => {
       el.muted = true;
@@ -81,63 +72,38 @@ export default function HomeHero({
     };
     armAttrs();
 
-    const markPlaying = () => {
-      if (cancelled) return;
-      playingRef.current = true;
-      setNeedsTap(false);
-      setPlaying(true);
-    };
-
     const tryPlay = () => {
-      if (cancelled || failed || attempts >= MAX_ATTEMPTS) return;
-      attempts += 1;
+      if (cancelled) return;
       armAttrs();
       if (!el.paused && !el.ended) {
-        markPlaying();
+        setNeedsTap(false);
         return;
       }
       const p = el.play();
       if (p && typeof p.then === 'function') {
-        p.then(markPlaying).catch(() => {
-          if (!cancelled) {
-            setNeedsTap(true);
-            setPlaying(false);
-          }
+        p.then(() => {
+          if (!cancelled) setNeedsTap(false);
+        }).catch(() => {
+          if (!cancelled) setNeedsTap(true);
         });
       }
     };
 
-    const onFrame = () => {
-      if (cancelled) return;
-      if (el.readyState >= 2) markPlaying();
-      tryPlay();
-    };
-
-    if (el.readyState >= 2) onFrame();
-    else {
-      el.addEventListener('loadeddata', onFrame, { once: true });
-      el.addEventListener('canplay', onFrame, { once: true });
-    }
-
-    el.addEventListener('playing', markPlaying);
     const onError = () => {
+      // Only hard-fallback to photo on a real media error — not on slow networks.
       if (!cancelled) setFailed(true);
     };
-    el.addEventListener('error', onError);
-    const stallTimer = window.setTimeout(() => {
-      if (!cancelled && !playingRef.current) setFailed(true);
-    }, 8000);
 
-    // Avoid el.load() on every mount — it resets the media element and flashes
-    // blank/poster under the opacity:0 <video> before the first decoded frame.
+    el.addEventListener('loadeddata', tryPlay, { once: true });
+    el.addEventListener('canplay', tryPlay, { once: true });
+    el.addEventListener('playing', () => {
+      if (!cancelled) setNeedsTap(false);
+    });
+    el.addEventListener('error', onError);
     tryPlay();
 
     return () => {
       cancelled = true;
-      window.clearTimeout(stallTimer);
-      el.removeEventListener('loadeddata', onFrame);
-      el.removeEventListener('canplay', onFrame);
-      el.removeEventListener('playing', markPlaying);
       el.removeEventListener('error', onError);
       try {
         el.pause();
@@ -145,7 +111,7 @@ export default function HomeHero({
         /* ignore */
       }
     };
-  }, [wantVideo, videoSrc, failed]);
+  }, [wantVideo, videoSrc]);
 
   const startFromTap = () => {
     const el = videoRef.current;
@@ -154,22 +120,25 @@ export default function HomeHero({
     el.defaultMuted = true;
     el.volume = 0;
     void el.play()
-      .then(() => {
-        setNeedsTap(false);
-        setPlaying(true);
-      })
+      .then(() => setNeedsTap(false))
       .catch(() => undefined);
   };
 
+  // Image mode paints CSS background. Video mode must NOT — otherwise poster + video
+  // fight and look like photo↔video flicker.
+  const sectionStyle = wantVideo
+    ? undefined
+    : ({ ['--home-hero-image' as string]: `url(${posterUrl})` } as React.CSSProperties);
+
   return (
-    <section className={className} style={{ ['--home-hero-image' as string]: cssUrl }}>
+    <section className={className} style={sectionStyle}>
       <div className="home-hero-media" aria-hidden>
         {wantVideo ? (
           <video
             ref={videoRef}
             className="home-hero-video"
             src={videoSrc}
-            poster={poster}
+            poster={posterUrl}
             autoPlay
             muted
             loop

@@ -1474,10 +1474,16 @@ body.yp-no-copy pre {
   inset: 0;
   z-index: 0;
   overflow: hidden;
-  background-image: var(--home-hero-image, url('/brand/hero-cover.jpg'));
+  background-color: #0c1f1c;
+  background-image: none;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+}
+/* Photo mode only — never under a playing/loading <video> */
+.home-hero--animated .home-hero-media,
+.home-hero--static .home-hero-media {
+  background-image: var(--home-hero-image, url('/brand/hero-cover.jpg'));
 }
 .home-hero-video {
   position: absolute;
@@ -1486,16 +1492,16 @@ body.yp-no-copy pre {
   height: 100%;
   object-fit: cover;
   object-position: center;
-  /* Stay transparent until first frame; poster is the CSS background under it */
-  opacity: 0;
-  transition: opacity 0.28s ease;
+  /* Single plane: visible immediately (browser poster until first frame). No opacity fade. */
+  opacity: 1;
+  transition: none;
 }
 .home-hero--video .home-hero-media {
-  /* Keep --home-hero-image poster painted — do not cover with flat dark fill */
-  background-color: transparent;
+  background-image: none !important;
+  background-color: #0c1f1c;
 }
 .home-hero--playing .home-hero-media {
-  background-color: transparent;
+  background-image: none !important;
 }
 .home-hero-play {
   position: absolute;
@@ -1565,18 +1571,14 @@ body.yp-no-copy pre {
 .home-hero--animated .home-hero-glow {
   animation: home-hero-glow-shift 14s ease-in-out infinite alternate;
 }
-/* Entrance: transform only — opacity:0→1 on every F5 reads as a blink. */
+/* No entrance fade/slide on every refresh — keeps hero text rock-steady. */
 .home-hero--animated .home-hero-title,
-.home-hero--video .home-hero-title {
-  animation: home-hero-title-in 0.55s ease-out both;
-}
+.home-hero--video .home-hero-title,
 .home-hero--animated .home-hero-lead,
-.home-hero--video .home-hero-lead {
-  animation: home-hero-title-in 0.55s ease-out 0.06s both;
-}
+.home-hero--video .home-hero-lead,
 .home-hero--animated .home-hero-actions,
 .home-hero--video .home-hero-actions {
-  animation: home-hero-title-in 0.55s ease-out 0.12s both;
+  animation: none;
 }
 @keyframes home-hero-kenburns {
   from { transform: scale(1) translate3d(0, 0, 0); }
@@ -1587,8 +1589,8 @@ body.yp-no-copy pre {
   to { opacity: 1; transform: translate3d(2%, -1%, 0); }
 }
 @keyframes home-hero-title-in {
-  from { transform: translateY(8px); }
-  to { transform: translateY(0); }
+  from { transform: none; }
+  to { transform: none; }
 }
 @media (prefers-reduced-motion: reduce) {
   .home-hero--animated .home-hero-media,
@@ -1637,10 +1639,11 @@ body.yp-no-copy pre {
   font-size: clamp(1.35rem, 4.2vw, 2.15rem);
   font-weight: 800;
   letter-spacing: -0.03em;
-  line-height: 1.1;
+  line-height: 1.15;
   text-transform: none;
   color: #fff;
-  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.4);
+  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.4);
+  overflow-wrap: anywhere;
 }
 .home-hero-actions {
   display: flex;
@@ -18387,10 +18390,15 @@ body.is-admin .ops-page-shell__top .yp-notif-bell {
   place-items: center;
 }
 .home-hero--video .home-hero-video {
-  opacity: 0;
+  opacity: 1;
 }
 .home-hero--video.home-hero--playing .home-hero-video {
   opacity: 1;
+}
+
+.home-hero--video.home-hero--playing .home-hero-media {
+  background-image: none !important;
+  background-color: #0c1f1c;
 }
 
 /* ===== Catalog spacing + filters (projects/clubs/spaces/places) ===== */
@@ -18493,8 +18501,8 @@ body.is-admin .ops-page-shell__top .yp-notif-bell {
 }
 
 .home-hero--video.home-hero--playing .home-hero-media {
-  /* Poster stays as fallback under the video; no dark flash on play */
-  background-color: transparent;
+  background-image: none !important;
+  background-color: #0c1f1c;
 }
 
 /* Places: less void above footer */
@@ -22594,6 +22602,8 @@ body.yp-scroll-locked {
   background: rgba(255,255,255,0.92);
   border: 1px solid var(--card-border);
   box-shadow: var(--shadow-sm);
+  min-width: 0;
+  align-items: flex-start;
 }
 .free-now-avatar {
   width: 72px;
@@ -22601,8 +22611,9 @@ body.yp-scroll-locked {
   border-radius: 999px;
   overflow: hidden;
   flex-shrink: 0;
+  background: #e2e8f0;
 }
-.free-now-img { width: 100%; height: 100%; object-fit: cover; }
+.free-now-img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .free-now-badge {
   display: inline-block;
   font-size: 0.75rem;
@@ -22612,10 +22623,40 @@ body.yp-scroll-locked {
   background: rgba(13,148,136,0.12);
   color: var(--primary);
   margin-bottom: 0.25rem;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
-.free-now-body h3 { font-size: 1.05rem; margin-bottom: 0.15rem; }
-.free-now-body p { color: var(--muted); font-size: 0.88rem; margin-bottom: 0.35rem; }
-.free-now-slot { color: var(--primary-hover); display: block; margin-bottom: 0.55rem; }
+.free-now-body {
+  min-width: 0;
+  flex: 1;
+}
+.free-now-body h3 {
+  font-size: 1.05rem;
+  margin: 0 0 0.15rem;
+  line-height: 1.25;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.free-now-body p {
+  color: var(--muted);
+  font-size: 0.88rem;
+  margin: 0 0 0.35rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.free-now-slot {
+  color: var(--primary-hover);
+  display: block;
+  margin-bottom: 0.55rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 .free-now-actions { display: flex; gap: 0.45rem; flex-wrap: wrap; }
 
 .hall-week {
