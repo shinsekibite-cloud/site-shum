@@ -1492,9 +1492,12 @@ body.yp-no-copy pre {
   height: 100%;
   object-fit: cover;
   object-position: center;
-  /* Single plane: visible immediately (browser poster until first frame). No opacity fade. */
-  opacity: 1;
+  /* Hidden until first frame — no poster photo, so reload never flashes two images */
+  opacity: 0;
   transition: none;
+}
+.home-hero-video.is-ready {
+  opacity: 1;
 }
 .home-hero--video .home-hero-media {
   background-image: none !important;
