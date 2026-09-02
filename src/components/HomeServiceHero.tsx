@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Building2, CalendarPlus } from 'lucide-react';
 import GuestAuthPrompt from '@/components/GuestAuthPrompt';
 
 type Cta = { href: string; label: string };
@@ -19,40 +19,33 @@ function needsAuth(href: string) {
 }
 
 /**
- * Hero = image (or video) only. Dual CTAs sit below the fold as service cards.
+ * Hero: brand + short lead + media, then practical full-width CTAs.
  */
 export default function HomeServiceHero({
+  siteName,
   imageUrl,
   videoUrl,
   mediaKind = 'image',
   primary,
   secondary,
-  faceUrls = [],
 }: Props) {
   const poster = (imageUrl || '/brand/hero-cover.jpg').trim();
   const video = (videoUrl || '').trim();
   const wantVideo = mediaKind === 'video' && Boolean(video);
-  const faces = faceUrls.filter(Boolean).slice(0, 4);
-
-  const primaryInner = primary ? (
-    <>
-      <div className="svc-cta-card__faces" aria-hidden>
-        {(faces.length ? faces : [poster, poster, poster]).slice(0, 3).map((src, i) => (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img key={`${src}-${i}`} src={src} alt="" />
-        ))}
-      </div>
-      <span className="svc-pill svc-pill--brand">{primary.label}</span>
-      <span className="svc-cta-card__arrow" aria-hidden>
-        <ArrowRight size={18} />
-      </span>
-    </>
-  ) : null;
+  const brand = (siteName || 'Молодёжь Сочи').trim();
 
   return (
-    <section className="svc-hero svc-hero--image-only" aria-label="Главный баннер">
-      <div className="container">
-        <div className="svc-hero__media svc-hero__media--solo">
+    <section className="svc-hero" aria-label="Главный баннер">
+      <div className="container svc-hero__grid">
+        <div className="svc-hero__copy">
+          <p className="svc-hero__eyebrow">Официальный портал</p>
+          <h1 className="svc-hero__title">{brand}</h1>
+          <p className="svc-hero__lead">
+            Свободные залы, коворкинг и афиша — без лишних шагов.
+          </p>
+        </div>
+
+        <div className="svc-hero__media">
           {wantVideo ? (
             <video
               className="svc-hero__video"
@@ -71,32 +64,25 @@ export default function HomeServiceHero({
       </div>
 
       {(primary || secondary) && (
-        <div className="container svc-hero__actions">
+        <div className="container svc-hero__actions svc-hero__actions--practical">
           {primary ? (
             needsAuth(primary.href) ? (
-              <GuestAuthPrompt href={primary.href} className="svc-cta-card" asButton>
-                {primaryInner}
+              <GuestAuthPrompt href={primary.href} className="btn btn-primary svc-hero__cta" asButton>
+                <CalendarPlus size={18} aria-hidden />
+                {primary.label}
               </GuestAuthPrompt>
             ) : (
-              <Link href={primary.href} className="svc-cta-card" prefetch>
-                {primaryInner}
+              <Link href={primary.href} className="btn btn-primary svc-hero__cta" prefetch>
+                <CalendarPlus size={18} aria-hidden />
+                {primary.label}
               </Link>
             )
           ) : null}
           {secondary ? (
-            <Link href={secondary.href} className="svc-cta-card svc-cta-card--alt" prefetch>
-              <div
-                className="svc-cta-card__round"
-                style={{ backgroundImage: `url(${faces[0] || poster})` }}
-                aria-hidden
-              />
-              <div className="svc-cta-card__text">
-                <p>Ближайшие окна на площадках ЦРМ</p>
-                <span className="svc-pill svc-pill--soft">{secondary.label}</span>
-              </div>
-              <span className="svc-cta-card__arrow" aria-hidden>
-                <ArrowRight size={18} />
-              </span>
+            <Link href={secondary.href} className="btn btn-secondary svc-hero__cta" prefetch>
+              <Building2 size={18} aria-hidden />
+              {secondary.label}
+              <ArrowRight size={16} aria-hidden />
             </Link>
           ) : null}
         </div>

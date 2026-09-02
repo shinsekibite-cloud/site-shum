@@ -24092,7 +24092,7 @@ fieldset.svc-form-group,
   }
 }
 
-/* Image-only hero */
+/* Image-only hero (legacy) — prefer text+media layout below */
 .svc-hero--image-only {
   padding-top: 0.75rem;
   padding-bottom: 0.5rem;
@@ -24111,7 +24111,45 @@ fieldset.svc-form-group,
 .svc-hero--image-only .svc-hero__actions {
   margin-top: 1rem;
 }
+
+/* Practical home hero: brand copy + media + clear CTAs */
+.svc-hero__eyebrow {
+  margin: 0 0 0.45rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--primary, #0f766e);
+}
+.svc-hero__title {
+  margin: 0 0 0.65rem;
+  font-size: clamp(1.85rem, 5.5vw, 2.75rem);
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  color: var(--foreground, #0f172a);
+}
+.svc-hero__actions--practical {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  margin-top: clamp(1rem, 2.5vw, 1.5rem);
+}
+.svc-hero__cta {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  min-height: 3rem;
+  width: 100%;
+  font-weight: 700 !important;
+  text-decoration: none;
+  box-sizing: border-box;
+}
 @media (max-width: 640px) {
+  .svc-hero__actions--practical {
+    grid-template-columns: 1fr;
+  }
   .svc-hero__media--solo {
     aspect-ratio: 4 / 3;
     border-radius: 1.15rem;
@@ -24145,15 +24183,17 @@ fieldset.svc-form-group,
   object-fit: cover;
 }
 
-/* Compact mobile header — stop logo crush */
+/* Compact mobile header — keep full name readable */
 @media (max-width: 640px) {
   .site-brand--header .site-brand-name,
   .site-brand-nav .site-brand-name {
-    max-width: 7.5rem;
+    max-width: min(12rem, 44vw);
     overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    font-size: 0.92rem !important;
+    font-size: 0.86rem !important;
+    line-height: 1.15;
+    white-space: normal;
+    visibility: visible;
+    opacity: 1;
   }
   .nav-pill--mobile-cta {
     height: 2rem;
@@ -24281,9 +24321,26 @@ main,
     flex-wrap: wrap;
   }
 
-  /* Logo: mark only on very narrow phones */
+  /* Keep full brand name visible on phones */
   .site-brand-nav .site-brand-name {
-    display: none !important;
+    display: flex !important;
+    max-width: min(11.5rem, 42vw);
+    overflow: hidden;
+    font-size: 0.82rem !important;
+    line-height: 1.15 !important;
+    white-space: normal;
+  }
+  .site-brand-nav .site-brand-name.is-stacked {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+  }
+  .site-brand-nav .site-brand-name__line {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 100%;
   }
   .site-brand-nav .site-brand-mark,
   .site-brand-nav .site-brand-logo {
