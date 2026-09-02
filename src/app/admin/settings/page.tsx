@@ -460,7 +460,7 @@ export default async function AdminSettings({ searchParams }: { searchParams: Pr
     { id: 'moderation', label: 'Модерация',       icon: ShieldAlert, group: 'Правила' },
     { id: 'maintenance', label: 'Работы', icon: Construction, group: 'Правила' },
     { id: 'modules', label: 'Модули', icon: ToggleLeft, group: 'Правила' },
-    { id: 'eco',        label: 'Эко-баллы',       icon: Leaf, group: 'Система' },
+    { id: 'eco',        label: 'мбаллы',       icon: Leaf, group: 'Система' },
     { id: 'replica',    label: 'Репликация',      icon: Server, group: 'Система' },
     { id: 'load',       label: 'Нагрузка',        icon: Activity, group: 'Система' },
     { id: 'analytics',  label: 'Аналитика',       icon: Zap, group: 'Система' },
@@ -1606,7 +1606,7 @@ export default async function AdminSettings({ searchParams }: { searchParams: Pr
           <div className="tab-content">
             <div style={cardStyle}>
               <h2 style={{ margin: '0 0 0.75rem', fontSize: '1.15rem', fontWeight: 800, display: 'flex', alignItems: 'center', gap: 8 }}>
-                <Leaf size={18} /> Эко-баллы и М-пул
+                <Leaf size={18} /> мбаллы и М-пул
               </h2>
               <p style={{ margin: '0 0 1rem', color: '#64748b', fontSize: '0.9rem' }}>
                 Общий лимит портала (по умолчанию 1&nbsp;000&nbsp;000). Выдача участникам и награды в конкурсах
@@ -1619,7 +1619,7 @@ export default async function AdminSettings({ searchParams }: { searchParams: Pr
               <ul style={{ margin: 0, paddingLeft: '1.1rem', color: '#475569', fontSize: '0.88rem', lineHeight: 1.55 }}>
                 <li>Покупка в магазине сразу надевает предмет (голос/тема применяются без второго шага).</li>
                 <li>Админ может выдать баллы на карточке пользователя и здесь по коду профиля.</li>
-                <li>В конкурсах — ручная награда эко-баллами + авто при одобрении/победе.</li>
+                <li>В конкурсах — ручная награда мбаллами + авто при одобрении/победе.</li>
               </ul>
             </div>
           </div>

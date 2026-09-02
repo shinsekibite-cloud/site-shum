@@ -187,7 +187,7 @@ export async function POST(req: Request) {
       userId: me.id,
       type: 'CHECK_IN',
       title: 'Билет активирован',
-      body: `«${booking.title}» · ${eventSpace?.title || 'Вход'}. +${ECO.CHECK_IN} эко-баллов.`,
+      body: `«${booking.title}» · ${eventSpace?.title || 'Вход'}. +${ECO.CHECK_IN} мбаллов.`,
       meta: {
         bookingId: booking.id,
         spaceId: eventSpace?.id,

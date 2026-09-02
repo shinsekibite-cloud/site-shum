@@ -380,7 +380,7 @@ export function AdminEcoPoolPanel() {
         </label>
         <label style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
           <input type="checkbox" checked={showInShop} onChange={(e) => setShowInShop(e.target.checked)} />
-          Показывать счётчик в магазине эко-баллов
+          Показывать счётчик в магазине мбаллов
         </label>
         <label style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
           <input
@@ -408,7 +408,7 @@ export function AdminEcoPoolPanel() {
           onClick={() => {
             if (
               !window.confirm(
-                'Сброс эко-баллов по ролям: пользователи 50, модераторы 500, админы/TECH 1000. История ECO обнулится. Продолжить?'
+                'Сброс мбаллов по ролям: пользователи 50, модераторы 500, админы/TECH 1000. История ECO обнулится. Продолжить?'
               )
             ) {
               return;
@@ -449,7 +449,7 @@ export function AdminEcoPoolPanel() {
           maxWidth: 480,
         }}
       >
-        <h3 style={{ margin: 0, fontSize: '1rem' }}>Выдать эко-баллы</h3>
+        <h3 style={{ margin: 0, fontSize: '1rem' }}>Выдать мбаллы</h3>
         <p style={{ margin: 0, fontSize: '0.85rem', color: '#64748b' }}>
           По публичному коду профиля (например YM-NLQX7B). Учитывается остаток пула.
         </p>

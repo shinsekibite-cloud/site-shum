@@ -222,7 +222,7 @@ export default async function AdminDashboard() {
   if (isAdmin) {
     kpiCards.push({
       href: '/admin/users',
-      label: 'С эко-баллами',
+      label: 'С мбаллами',
       value: ecoSpenders,
       icon: Leaf,
     });

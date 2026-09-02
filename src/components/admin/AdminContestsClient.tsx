@@ -108,7 +108,7 @@ export default function AdminContestsClient() {
       </section>
 
       <section className="card-surface" style={{ padding: '1rem' }}>
-        <h2 style={{ fontSize: '1.05rem', marginTop: 0 }}>Наградить эко-баллами</h2>
+        <h2 style={{ fontSize: '1.05rem', marginTop: 0 }}>Наградить мбаллами</h2>
         <p style={{ margin: '0 0 8px', fontSize: '0.85rem', color: 'var(--muted)' }}>
           Ручная награда участнику (учитывается общий пул). Авто-начисления при одобрении/победе
           уже работают.
@@ -160,7 +160,7 @@ export default function AdminContestsClient() {
                 .catch((e) => toast.error(e.message))
             }
           >
-            Выдать эко-баллы
+            Выдать мбаллы
           </button>
         </div>
       </section>

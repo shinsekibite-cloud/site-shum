@@ -108,7 +108,7 @@ function CheckInInner() {
         <p className="check-in-card__text">{result.message}</p>
         {typeof result.ecoEarned === 'number' && result.ecoEarned > 0 && (
           <p className="check-in-eco">
-            <Leaf size={16} aria-hidden /> +{result.ecoEarned} эко-баллов
+            <Leaf size={16} aria-hidden /> +{result.ecoEarned} мбаллов
             {typeof result.ecoPoints === 'number' ? ` · всего ${result.ecoPoints}` : ''}
           </p>
         )}

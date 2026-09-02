@@ -40,7 +40,7 @@ export default async function FaqPage() {
       <header className="faq-page__header">
         <h1 className="page-hero-title faq-page__title">Вопросы и ответы</h1>
         <p className="faq-page__lead">
-          Как пользоваться кабинетом, событиями, сообщениями, эко-баллами и другими разделами портала.
+          Как пользоваться кабинетом, событиями, сообщениями, мбаллами и другими разделами портала.
           Есть поиск и фильтр по категориям.
         </p>
         <p className="faq-page__contacts">

@@ -201,7 +201,7 @@ export async function grantEcoPoints(
   try {
     const { isModuleEnabled } = await import('@/lib/module-flags');
     if (!(await isModuleEnabled('eco'))) {
-      return { ok: false, message: 'Модуль эко-баллов временно отключён' };
+      return { ok: false, message: 'Модуль мбаллов временно отключён' };
     }
   } catch {
     /* fail-open */
@@ -269,14 +269,14 @@ export async function spendEcoPoints(userId: string, cosmeticId: string) {
       const owned = parseCosmetics(user.cosmeticsJson);
       if (owned.includes(cosmeticId)) return { ok: false as const, message: 'Уже куплено' };
       if ((user.ecoPoints ?? 0) < item.cost) {
-        return { ok: false as const, message: `Нужно ${item.cost} эко-баллов` };
+        return { ok: false as const, message: `Нужно ${item.cost} мбаллов` };
       }
       const spent = await tx.user.updateMany({
         where: { id: userId, ecoPoints: { gte: item.cost } },
         data: { ecoPoints: { decrement: item.cost } },
       });
       if (spent.count !== 1) {
-        return { ok: false as const, message: `Нужно ${item.cost} эко-баллов` };
+        return { ok: false as const, message: `Нужно ${item.cost} мбаллов` };
       }
       const nextOwned = [...owned, cosmeticId];
       const loadout = parseEcoLoadout(user.ecoLoadoutJson);
@@ -314,8 +314,8 @@ export async function spendEcoPoints(userId: string, cosmeticId: string) {
           createUserNotification({
             userId,
             type: 'ECO',
-            title: 'Покупка за эко-баллы',
-            body: `«${result.label}» за ${result.cost} эко. Предмет надет на профиль.`,
+            title: 'Покупка за мбаллы',
+            body: `«${result.label}» за ${result.cost} мб. Предмет надет на профиль.`,
             meta: { href: '/dashboard/shop', kind: 'eco_purchase', cosmeticId },
           })
         )
@@ -346,14 +346,14 @@ export async function openCardPack(userId: string, packId: string) {
       });
       if (!user) return { ok: false as const, message: 'Пользователь не найден' };
       if ((user.ecoPoints ?? 0) < pack.cost) {
-        return { ok: false as const, message: `Нужно ${pack.cost} эко-баллов` };
+        return { ok: false as const, message: `Нужно ${pack.cost} мбаллов` };
       }
       const spent = await tx.user.updateMany({
         where: { id: userId, ecoPoints: { gte: pack.cost } },
         data: { ecoPoints: { decrement: pack.cost } },
       });
       if (spent.count !== 1) {
-        return { ok: false as const, message: `Нужно ${pack.cost} эко-баллов` };
+        return { ok: false as const, message: `Нужно ${pack.cost} мбаллов` };
       }
       const prev = parseCollectibles(user.collectiblesJson);
       const drops = rollPack(pack.id, { pity: prev.pity || 0 });
@@ -389,8 +389,8 @@ export async function openCardPack(userId: string, packId: string) {
           createUserNotification({
             userId,
             type: 'ECO',
-            title: 'Пак карт за эко-баллы',
-            body: `«${result.label}» за ${result.cost} эко${dropNames ? `. Выпало: ${dropNames}` : ''}.`,
+            title: 'Пак карт за мбаллы',
+            body: `«${result.label}» за ${result.cost} мб${dropNames ? `. Выпало: ${dropNames}` : ''}.`,
             meta: { href: '/dashboard/shop', kind: 'eco_pack', packId: result.pack.id },
           })
         )

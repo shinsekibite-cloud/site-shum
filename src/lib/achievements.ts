@@ -496,7 +496,7 @@ const ACHIEVEMENTS_SEED: AchievementSeed[] = [
   {
     code: 'ECO_COLLECTOR',
     title: 'Коллекционер',
-    description: 'Купили 3 предмета за эко-баллы',
+    description: 'Купили 3 предмета за мбаллы',
     tier: 'silver',
     icon: 'Sparkles',
     accent: '#16a34a',
@@ -512,7 +512,7 @@ const ACHIEVEMENTS_SEED: AchievementSeed[] = [
   {
     code: 'ECO_STARTER',
     title: 'Эко-старт',
-    description: 'Получили первые эко-баллы за активность',
+    description: 'Получили первые мбаллы за активность',
     tier: 'bronze',
     icon: 'Leaf',
     accent: '#16a34a',
@@ -520,7 +520,7 @@ const ACHIEVEMENTS_SEED: AchievementSeed[] = [
   {
     code: 'ECO_GARDENER',
     title: 'Садовник',
-    description: 'Накопили 50+ эко-баллов или купили косметику',
+    description: 'Накопили 50+ мбаллов или купили косметику',
     tier: 'silver',
     icon: 'Leaf',
     accent: '#15803d',
@@ -802,7 +802,7 @@ const ACHIEVEMENTS_SEED: AchievementSeed[] = [
   {
     code: 'ECO_SPENDER',
     title: 'Свой стиль',
-    description: 'Купили 5 предметов за эко-баллы',
+    description: 'Купили 5 предметов за мбаллы',
     tier: 'silver',
     icon: 'Leaf',
     accent: '#22c55e',

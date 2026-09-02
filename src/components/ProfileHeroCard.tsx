@@ -516,7 +516,7 @@ export default function ProfileHeroCard({
       </div>
 
       {showHud ? (
-        <div className="profile-hero__stats" aria-label="Уровень, рейтинги и эко">
+        <div className="profile-hero__stats" aria-label="Уровень, рейтинги и мбаллы">
           <PlayerProgressPanel
             level={levelNum}
             title={levelTitle}

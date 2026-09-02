@@ -1,5 +1,6 @@
 /**
- * Экобал + М-бал — две независимые шкалы репутации ЦРМ (не деньги, не магазин ecoPoints).
+ * М-балл + зелёный балл — две независимые шкалы репутации ЦРМ
+ * (не деньги, не магазин ecoPoints / мбаллы).
  */
 import { prisma } from '@/lib/prisma';
 import { logReputationEvent, type ReputationKind } from '@/lib/reputation-history';

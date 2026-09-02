@@ -67,11 +67,11 @@ export const PRESTIGE_STEP = 400;
 export const PRESTIGE_BASE = 1500;
 
 export const PRESTIGE_SEASONS = [
-  { star: 1, title: 'Сезон Прибоя', perk: '+15 эко за звезду' },
-  { star: 2, title: 'Сезон Маяка', perk: '+20 эко за звезду' },
-  { star: 3, title: 'Сезон Олимпии', perk: '+25 эко за звезду' },
-  { star: 4, title: 'Сезон Хребта', perk: '+30 эко за звезду' },
-  { star: 5, title: 'Сезон Солнца', perk: '+40 эко за звезду' },
+  { star: 1, title: 'Сезон Прибоя', perk: '+15 мбаллов за звезду' },
+  { star: 2, title: 'Сезон Маяка', perk: '+20 мбаллов за звезду' },
+  { star: 3, title: 'Сезон Олимпии', perk: '+25 мбаллов за звезду' },
+  { star: 4, title: 'Сезон Хребта', perk: '+30 мбаллов за звезду' },
+  { star: 5, title: 'Сезон Солнца', perk: '+40 мбаллов за звезду' },
 ] as const;
 
 export function prestigeProgress(contribution: number) {
@@ -116,11 +116,11 @@ const LEVELS: Omit<ProfileLevel, 'next'>[] = [
     level: 2,
     id: 'sprout',
     title: 'Росток',
-    blurb: 'Первые эко-баллы и знакомство с городом',
+    blurb: 'Первые мбаллы и знакомство с городом',
     color: '#14b8a6',
     min: 25,
     band: 'shore',
-    reward: { eco: 8, perk: '+эко за старт прогрессии' },
+    reward: { eco: 8, perk: '+мбаллы за старт прогрессии' },
   },
   {
     level: 3,
@@ -336,15 +336,15 @@ export const RATING_METER_COPY = {
     color: '#0d9488',
   },
   ECO: {
-    label: 'Эко-кошелёк',
-    short: 'Эко',
-    tip: 'Тратьте на стиль и карты — вклад в уровень остаётся',
-    color: '#059669',
+    label: 'М-кошелёк',
+    short: 'мб',
+    tip: 'Тратьте мбаллы на стиль и карты — вклад в уровень остаётся',
+    color: '#0f766e',
   },
   LEVEL: {
     label: 'Уровень',
     short: 'Ранг',
-    tip: 'Общий вклад на портале: эко + стиль + коллекция',
+    tip: 'Общий вклад на портале: мбаллы + стиль + коллекция',
     color: '#ea580c',
   },
 } as const;

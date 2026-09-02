@@ -18900,6 +18900,69 @@ body.is-admin .ops-page-shell__top .yp-notif-bell {
   margin-bottom: 0 !important;
 }
 
+/* Dashboard overview greeting — matches catalog/settings page heads */
+.dashboard-hello.profile-page-head {
+  margin: 0 0 1rem;
+  padding: 0;
+  align-items: center;
+}
+.dashboard-hello__role {
+  display: inline-flex;
+  align-items: center;
+  margin: 0 0 0.35rem;
+  padding: 0.2rem 0.65rem;
+  border-radius: var(--radius-pill, 999px);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  background: var(--brand-pill, #e8f5f2);
+  color: var(--primary, #0f766e);
+  border: 1px solid color-mix(in srgb, var(--primary, #0f766e) 22%, transparent);
+}
+.dashboard-hello__role.role-pill--admin {
+  background: color-mix(in srgb, var(--primary, #0f766e) 12%, #fff);
+  color: var(--primary-hover, #0d9488);
+  border-color: color-mix(in srgb, var(--primary, #0f766e) 28%, transparent);
+}
+.dashboard-hello__role.role-pill--moderator {
+  background: color-mix(in srgb, var(--primary, #0f766e) 10%, #fff);
+  color: var(--primary, #0f766e);
+}
+.dashboard-hello__name {
+  margin: 0;
+  font-size: clamp(1.35rem, 3.5vw, 1.75rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--foreground, #0f172a);
+  line-height: 1.2;
+}
+.dashboard-hello__lead {
+  margin: 0.35rem 0 0 !important;
+  max-width: 36rem;
+  color: var(--muted, #64748b);
+  font-size: 0.92rem;
+  font-weight: 500;
+  line-height: 1.45;
+}
+
+.score-ring-shop {
+  background: color-mix(in srgb, var(--primary, #0f766e) 8%, #fff);
+  border: 1px solid color-mix(in srgb, var(--primary, #0f766e) 18%, transparent);
+}
+.score-ring-shop .score-ring-bar > span {
+  background: var(--primary, #0f766e);
+}
+a.score-ring-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+a.score-ring-link:hover {
+  border-color: var(--primary, #0f766e);
+  background: color-mix(in srgb, var(--primary, #0f766e) 12%, #fff);
+}
+
 @media (max-width: 860px) {
   .project-detail-grid {
     grid-template-columns: 1fr !important;

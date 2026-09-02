@@ -1,4 +1,4 @@
-const CACHE = "sochi-shell-v33-roles";
+const CACHE = "sochi-shell-v34-mball";
 const PRECACHE = [
   "/manifest.webmanifest",
   "/offline.html",

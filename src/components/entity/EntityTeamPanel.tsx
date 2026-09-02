@@ -71,7 +71,7 @@ export default function EntityTeamPanel({ kind, entityId, entityTitle }: Props) 
         <Users size={16} aria-hidden /> Для команды
       </h3>
       <p className="entity-team-panel__lead">
-        Зовите друзей с сайта или по реферальной ссылке — за приглашённых и их друзей начисляются эко-баллы
+        Зовите друзей с сайта или по реферальной ссылке — за приглашённых и их друзей начисляются мбаллы
         (2 уровня).
       </p>
 

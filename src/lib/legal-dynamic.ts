@@ -82,7 +82,7 @@ function moduleLines(modules?: ModuleFlags) {
     <li><strong>Доступные разделы сейчас:</strong> ${on.length ? escape(on.join(', ')) : 'нет'}.</li>
     <li><strong>Временно недоступные разделы:</strong> ${off.length ? escape(off.join(', ')) : 'нет'}.</li>
     ${maint}
-    <li>Если раздел отключён, связанные возможности (общение, заявки, эко-баллы, достижения и т.п.) <strong>недоступны</strong>, пока оператор не включит их снова. Базовые тексты Политики и Правил описывают полный функционал; этот блок отражает <em>текущий</em> контекст.</li>
+    <li>Если раздел отключён, связанные возможности (общение, заявки, мбаллы, достижения и т.п.) <strong>недоступны</strong>, пока оператор не включит их снова. Базовые тексты Политики и Правил описывают полный функционал; этот блок отражает <em>текущий</em> контекст.</li>
   `;
 }
 
@@ -181,7 +181,7 @@ export function buildRulesDynamicAppendix(input: LegalDynamicInput): string {
       );
     }
     if (input.modules?.eco !== false) {
-      parts.push('Эко-баллы начисляются за полезную активность и тратятся на оформление профиля.');
+      parts.push('мбаллы начисляются за полезную активность и тратятся на оформление профиля.');
     }
   }
   if (input.modules?.club_chat === false) {
@@ -194,7 +194,7 @@ export function buildRulesDynamicAppendix(input: LegalDynamicInput): string {
     parts.push('Отображение рейтингов временно отключено.');
   }
   if (input.modules?.eco === false) {
-    parts.push('Эко-баллы и магазин оформления временно недоступны.');
+    parts.push('мбаллы и магазин оформления временно недоступны.');
   }
   if (input.modules?.faq === false) {
     parts.push('Раздел FAQ временно отключён.');

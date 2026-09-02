@@ -103,7 +103,7 @@ export default function CabinetQuickNav({
             <ShoppingBag size={18} />
           </span>
           <strong>Магазин</strong>
-          <span>{ecoPoints.toLocaleString('ru-RU')} эко</span>
+          <span>{ecoPoints.toLocaleString('ru-RU')} мб</span>
         </Link>
       ) : null}
       {showAchievements ? (

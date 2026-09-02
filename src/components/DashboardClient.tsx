@@ -704,42 +704,24 @@ function DashboardInner({ view = 'overview' }: DashboardClientProps) {
         </div>
       ) : null}
       {isOverview ? (
-        <p className="dashboard-hello" style={{ margin: '0 0 0.75rem', fontSize: '1.05rem' }}>
-          Здравствуйте{legalName ? `, ${legalName.split(' ')[0]}` : ''}
-          {roleBadge ? (
-            <>
-              {' '}
-              <span
-                className={`role-pill role-pill--${(session?.user?.role || 'USER').toLowerCase()}`}
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  padding: '0.15rem 0.55rem',
-                  borderRadius: 999,
-                  fontSize: '0.78rem',
-                  fontWeight: 800,
-                  background:
-                    session?.user?.role === 'ADMIN'
-                      ? 'color-mix(in srgb, #b45309 16%, #fff)'
-                      : session?.user?.role === 'MODERATOR'
-                        ? 'color-mix(in srgb, #7c3aed 16%, #fff)'
-                        : 'color-mix(in srgb, var(--primary, #0d9488) 14%, #fff)',
-                  color:
-                    session?.user?.role === 'ADMIN'
-                      ? '#b45309'
-                      : session?.user?.role === 'MODERATOR'
-                        ? '#6d28d9'
-                        : 'var(--primary, #0d9488)',
-                }}
-              >
+        <header className="profile-page-head dashboard-hello">
+          <div>
+            {roleBadge ? (
+              <p className={`dashboard-hello__role role-pill role-pill--${(session?.user?.role || 'USER').toLowerCase()}`}>
                 {roleBadge}
-              </span>
-            </>
-          ) : null}
-          <span style={{ display: 'block', marginTop: 4, fontSize: '0.85rem', color: 'var(--muted)', fontWeight: 500 }}>
-            {roleHint}
-          </span>
-        </p>
+              </p>
+            ) : null}
+            <h1 className="profile-view__title dashboard-hello__name">
+              {legalName ? legalName.split(' ')[0] : 'Профиль'}
+            </h1>
+            <p className="profile-view__lead dashboard-hello__lead">{roleHint}</p>
+          </div>
+          {(session?.user?.role === 'ADMIN' || session?.user?.role === 'MODERATOR') && (
+            <Link href="/admin" className="btn btn-secondary">
+              Панель
+            </Link>
+          )}
+        </header>
       ) : null}
       <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
         <div
@@ -837,9 +819,9 @@ function DashboardInner({ view = 'overview' }: DashboardClientProps) {
 
             <div className="dashboard-aside-foot">
               {modOn('eco') ? (
-                <Link href="/dashboard/shop" className="dashboard-aside-eco" title="Ваш баланс эко-баллов">
+                <Link href="/dashboard/shop" className="dashboard-aside-eco" title="Ваш баланс мбаллов">
                   <Leaf size={15} />
-                  <span>Эко</span>
+                  <span>мб</span>
                   <strong>{(profile?.ecoPoints ?? 0).toLocaleString('ru-RU')}</strong>
                 </Link>
               ) : null}
@@ -1543,7 +1525,7 @@ function DashboardInner({ view = 'overview' }: DashboardClientProps) {
               <div className="profile-view profile-shop">
                 <h2 className="profile-view__title">Магазин</h2>
                 <p className="profile-view__lead">
-                  Тратьте эко-капитал на рамки, ауры, темы и голос. Покупка сразу надевается на профиль.
+                  Тратьте мбаллы на рамки, ауры, темы и голос. Покупка сразу надевается на профиль.
                 </p>
                 <EcoPointsPanel
                   mode="shop"

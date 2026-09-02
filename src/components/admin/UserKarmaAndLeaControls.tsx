@@ -115,7 +115,7 @@ export default function UserKarmaAndLeaControls({
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || 'Ошибка');
-      toast.success(`Эко-баллы начислены. Баланс: ${data.ecoPoints}`);
+      toast.success(`мбаллы начислены. Баланс: ${data.ecoPoints}`);
       setEcoReason('');
     } catch (e) {
       toast.error(e instanceof Error ? e.message : 'Ошибка');
@@ -296,7 +296,7 @@ export default function UserKarmaAndLeaControls({
           gap: 8,
         }}
       >
-        <div style={{ fontWeight: 700, fontSize: '0.9rem' }}>Эко-баллы</div>
+        <div style={{ fontWeight: 700, fontSize: '0.9rem' }}>мбаллы</div>
         <div style={{ display: 'grid', gridTemplateColumns: '100px 1fr', gap: 8 }}>
           <input
             type="number"
@@ -320,7 +320,7 @@ export default function UserKarmaAndLeaControls({
           onClick={() => void grantEco()}
           style={{ justifySelf: 'start' }}
         >
-          {ecoBusy ? '…' : 'Выдать эко-баллы'}
+          {ecoBusy ? '…' : 'Выдать мбаллы'}
         </button>
       </div>
     </div>

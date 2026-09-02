@@ -191,7 +191,7 @@ export default function ReferralPanel() {
               <b>{data.rewards.ECO_CHECKIN_REFEREE}</b> другу.
             </li>
             <li>
-              Вехи 3 / 10 check-in: +{data.rewards.ECO_MILESTONE_3} / +{data.rewards.ECO_MILESTONE_10} эко.
+              Вехи 3 / 10 check-in: +{data.rewards.ECO_MILESTONE_3} / +{data.rewards.ECO_MILESTONE_10} мб.
             </li>
             <li>
               Уровень 2: если ваш друг пригласит своего друга, вам ~{Math.round((data.rewards.L2_SIGNUP_PCT || 0.2) * 100)}%

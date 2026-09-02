@@ -39,8 +39,8 @@ const META: Record<
   },
   ECO: {
     Icon: Leaf,
-    short: 'Э',
-    chipLabel: 'Эко',
+    short: 'мб',
+    chipLabel: 'мб',
     defaultColor: RATING_METER_COPY.ECO.color,
   },
 };
@@ -377,7 +377,7 @@ export function PlayerProgressPanel({
         >
           <Gift size={14} aria-hidden />
           <span>
-            Награда ур. {nextReward.level}: <b>+{nextReward.eco} эко</b>
+            Награда ур. {nextReward.level}: <b>+{nextReward.eco} мб</b>
             <em> · {nextReward.perk}</em>
           </span>
         </button>
@@ -394,7 +394,7 @@ export function PlayerProgressPanel({
             <i style={{ width: `${clampPct(prestige.pct)}%` }} />
           </span>
           <span className="player-hud__prestige-perk">
-            {prestige.perk} · награда ≈ +{prestige.ecoReward} эко
+            {prestige.perk} · награда ≈ +{prestige.ecoReward} мб
           </span>
         </button>
       ) : null}

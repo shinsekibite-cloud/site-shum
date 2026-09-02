@@ -159,7 +159,7 @@ export default function CollectiblesPanel({
         <h4>
           <Layers size={15} aria-hidden /> Карточки коллекции
         </h4>
-        <span className="yp-cards__balance">{ecoPoints} эко</span>
+        <span className="yp-cards__balance">{ecoPoints} мб</span>
       </div>
 
       {level ? (
@@ -181,7 +181,7 @@ export default function CollectiblesPanel({
       ) : null}
 
       <p className="yp-cards__lead">
-        Собирайте карточки Сочи, афиши и эко-серии. Открывайте паки за эко-баллы и ставьте до 5 карт на
+        Собирайте карточки Сочи, афиши и эко-серии. Открывайте паки за мбаллы и ставьте до 5 карт на
         витрину профиля — как инвентарь в Steam, но под наш портал.
       </p>
 
@@ -206,7 +206,7 @@ export default function CollectiblesPanel({
             <PackageOpen size={18} aria-hidden />
             <strong>{p.label}</strong>
             <span>{p.blurb}</span>
-            <em>{busy === p.id ? 'Открываем…' : `${p.cost} эко`}</em>
+            <em>{busy === p.id ? 'Открываем…' : `${p.cost} мб`}</em>
           </button>
         ))}
       </div>

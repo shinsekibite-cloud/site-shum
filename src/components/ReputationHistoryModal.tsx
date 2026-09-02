@@ -49,7 +49,7 @@ const TAB_META: Record<TabId, { label: string; Icon: typeof Zap; blurb: string }
     blurb: RATING_METER_COPY.SOCIAL.tip,
   },
   ECO: {
-    label: 'Эко',
+    label: 'мб',
     Icon: Leaf,
     blurb: RATING_METER_COPY.ECO.tip,
   },

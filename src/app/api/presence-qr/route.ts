@@ -22,7 +22,14 @@ export async function GET() {
 
   const user = await prisma.user.findUnique({
     where: { id: session.user.id },
-    select: { mBall: true, ecoBall: true, ecoBallPublic: true, name: true, publicCode: true },
+    select: {
+      mBall: true,
+      ecoBall: true,
+      ecoBallPublic: true,
+      ecoPoints: true,
+      name: true,
+      publicCode: true,
+    },
   });
 
   const history = await listReputationHistory(session.user.id, { take: 30 });
@@ -37,6 +44,7 @@ export async function GET() {
     scores: {
       mBall: user?.mBall ?? 0,
       ecoBall: user?.ecoBall ?? 0,
+      ecoPoints: user?.ecoPoints ?? 0,
       ecoBallPublic: user?.ecoBallPublic ?? false,
       mLevel: levelForScore(user?.mBall ?? 0),
       ecoLevel: levelForScore(user?.ecoBall ?? 0),

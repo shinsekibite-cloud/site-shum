@@ -446,7 +446,7 @@ export default function Navbar({ spaces = [], clubs = [], projects = [], pages =
                     <ShoppingBag size={16} aria-hidden />
                     <span className="nav-account-menu__label">
                       <strong>Магазин</strong>
-                      <small>Рамки, темы и эко</small>
+                      <small>Рамки, темы и мбаллы</small>
                     </span>
                   </Link>
                 ) : null}

@@ -81,8 +81,8 @@ export async function POST(req: Request) {
       await createUserNotification({
         userId,
         type: 'SYSTEM',
-        title: `+${parsed.data.amount} эко-баллов`,
-        body: 'Администратор начислил вам эко-баллы. Загляните в магазин профиля.',
+        title: `+${parsed.data.amount} мбаллов`,
+        body: 'Администратор начислил вам мбаллы. Загляните в магазин профиля.',
         meta: { href: '/dashboard' },
       }).catch(() => null);
 

@@ -269,11 +269,11 @@ export default function EcoPointsPanel({ compact, mode, onBalanceChange }: Props
 
   if (resolvedMode === 'card') {
     return (
-      <section className="eco-card" aria-label="Эко-капитал">
+      <section className="eco-card" aria-label="мбаллы">
         <div className="eco-card__top">
           <div>
             <div className="eco-card__label">
-              <Leaf size={14} aria-hidden /> Эко-капитал
+              <Leaf size={14} aria-hidden /> мбаллы
             </div>
             <div className="eco-card__balance">{ecoPoints.toLocaleString('ru-RU')}</div>
           </div>
@@ -308,11 +308,11 @@ export default function EcoPointsPanel({ compact, mode, onBalanceChange }: Props
     <section
       id={resolvedMode === 'shop' || resolvedMode === 'full' ? 'eco-shop' : undefined}
       className={`eco-panel${resolvedMode === 'shop' ? ' eco-panel--shop' : ''}`}
-      aria-label="Эко-баллы"
+      aria-label="мбаллы"
     >
       <div className="eco-panel__head">
         <h4>
-          <Leaf size={15} aria-hidden /> {resolvedMode === 'shop' ? 'Ваш баланс (можно тратить)' : 'Эко-баллы'}
+          <Leaf size={15} aria-hidden /> {resolvedMode === 'shop' ? 'Ваш баланс (можно тратить)' : 'мбаллы'}
         </h4>
         <span className="eco-panel__balance">{ecoPoints.toLocaleString('ru-RU')}</span>
       </div>
@@ -337,7 +337,7 @@ export default function EcoPointsPanel({ compact, mode, onBalanceChange }: Props
           <span className="eco-panel__tier-next">
             ещё {tierNext - pointsBase} вклада до следующего уровня
             {'nextReward' in progress && progress.nextReward
-              ? ` · награда: +${progress.nextReward.eco} эко`
+              ? ` · награда: +${progress.nextReward.eco} мб`
               : ''}
           </span>
         ) : (
@@ -346,7 +346,7 @@ export default function EcoPointsPanel({ compact, mode, onBalanceChange }: Props
       </div>
 
       <details className="eco-panel__faq">
-        <summary>Как заработать эко?</summary>
+        <summary>Как заработать мбаллы?</summary>
         <ul className="eco-panel__earn-hints">
           {ECO_EARN_HINTS.map((h) => (
             <li key={h.action}>
@@ -426,7 +426,7 @@ export default function EcoPointsPanel({ compact, mode, onBalanceChange }: Props
                     <div className="eco-shop-card__body">
                       <strong>{item.label}</strong>
                       <span className="eco-shop-card__meta">
-                        {item.owned ? (item.equipped ? 'Надето · видно в профиле' : 'В инвентаре') : `${item.cost} эко`}
+                        {item.owned ? (item.equipped ? 'Надето · видно в профиле' : 'В инвентаре') : `${item.cost} мб`}
                       </span>
                     </div>
                     <div className="eco-shop-card__actions">

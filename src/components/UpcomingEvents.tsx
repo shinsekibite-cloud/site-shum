@@ -18,6 +18,7 @@ import EventHomeCarousel from './EventHomeCarousel';
 import ViewBeacon from '@/components/ViewBeacon';
 import { isJunkEventTitle } from '@/lib/afisha-filters';
 import { eventRewardBadge, isEcoTagged } from '@/lib/score-scales';
+import { POINTS } from '@/lib/points-labels';
 
 type Props = {
   spaceId?: string;
@@ -157,8 +158,10 @@ function EventCard({
           sizes="(max-width: 768px) 100vw, 33vw"
         />
         <div className="event-reward-badges">
-          <span className="event-reward-pill">+{rewards.mBall} М-бал</span>
-          {rewards.ecoBall > 0 ? <span className="event-reward-pill is-eco">+{rewards.ecoBall} Экобал</span> : null}
+          <span className="event-reward-pill">+{rewards.mBall} {POINTS.mBall.brand}</span>
+          {rewards.ecoBall > 0 ? (
+            <span className="event-reward-pill is-eco">+{rewards.ecoBall} {POINTS.ecoBall.brand}</span>
+          ) : null}
         </div>
       </div>
 

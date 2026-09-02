@@ -284,7 +284,7 @@ export default function AchievementsPanel({ compact, onProgress }: Props) {
                 <span style={{ color: meta.color }}>
                   {label}
                   <em style={{ fontStyle: 'normal', fontWeight: 600, opacity: 0.75, marginLeft: 6 }}>
-                    +{meta.ecoReward} эко
+                    +{meta.ecoReward} мб
                   </em>
                 </span>
                 <span>

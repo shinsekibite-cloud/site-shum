@@ -149,7 +149,7 @@ export const MODULE_FLAG_META: Record<
     publicKill: true,
   },
   eco: {
-    label: 'Эко-баллы',
+    label: 'мбаллы',
     description: '/api/user/eco, магазин и разделы кабинета',
     publicKill: true,
   },
