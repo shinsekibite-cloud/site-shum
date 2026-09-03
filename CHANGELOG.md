@@ -4,6 +4,17 @@
 Версия в футере и в `package.json` / `src/lib/app-version.ts` должны совпадать.  
 Каждый пользовательский релиз на ty → запись здесь + bump версии **до** staging deploy.
 
+## [1.6.10] — 2026-09-03
+
+### Fixed
+- Dashboard QR «На весь экран»: overlay порталится в `document.body` (больше не ломается внутри Framer Motion)
+- То же для fullscreen QR билетов
+- Дубль «Мбал» на overview: кошелёк **мбаллы** + **Репутация** (не два похожих title); eco-meter в hero скрыт
+
+### Changed
+- Компактный mobile layout: greeting, QR, scores в 2 колонки
+- SW cache → `v38-dashboard-compact`
+
 ## [1.6.9] — 2026-09-03
 
 ### Fixed
