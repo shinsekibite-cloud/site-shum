@@ -1,0 +1,91 @@
+# Клиентская / разработческая установка YoungPortal
+
+Архивы и bootstrap — с зеркала **py.idivles.ru** (или IP `77.110.125.241` через `curl -fkL`).
+Старое хранилище `176.124.204.53` может быть недоступно.
+
+## Самый удобный путь (на целевом VPS)
+
+**Важно:** не ломайте аргументы переносами строк — используйте env-файл.
+
+```bash
+apt-get update -y && apt-get install -y curl ca-certificates
+curl -fsSL -o /tmp/yp-install.sh 'https://py.idivles.ru/backups/bootstrap/yp-install.sh'
+curl -fsSL -o /tmp/yp-install.env.example 'https://py.idivles.ru/backups/bootstrap/yp-install.env.example'
+```
+
+Клиент (чистая установка):
+```bash
+cat > /tmp/yp-install.env <<'EOF'
+PROFILE=client
+VARIANT=clean
+KIT_URL=https://py.idivles.ru/backups/youngportal-client-kit-latest.tgz
+PROD_DOMAIN=young.example.ru
+STAGING_DOMAIN=tyoung.example.ru
+LE_EMAIL=you@example.ru
+ADMIN_EMAIL=admin@young.example.ru
+EOF
+sudo bash /tmp/yp-install.sh /tmp/yp-install.env
+```
+
+После установки админ включает/выключает разделы в **Настройки → Модули** (`/admin/settings?tab=modules`).
+
+Через run-install (одна строка):
+```bash
+curl -fsSL -o /tmp/run-install.sh 'https://py.idivles.ru/backups/bootstrap/run-install.sh'
+sudo bash /tmp/run-install.sh client --kit-url 'https://py.idivles.ru/backups/youngportal-client-kit-latest.tgz' --prod-domain young.example.ru --staging-domain tyoung.example.ru --le-email you@example.ru --admin-email admin@young.example.ru
+```
+
+Разработчик (эталон с текущими данными БД + uploads + образы):
+```bash
+cat > /tmp/yp-install.env <<'EOF'
+PROFILE=developer
+VARIANT=full
+KIT_URL=https://py.idivles.ru/backups/youngportal-reference-kit-latest.tgz
+PROD_DOMAIN=py.example.ru
+STAGING_DOMAIN=ty.example.ru
+LE_EMAIL=you@example.ru
+EOF
+sudo bash /tmp/yp-install.sh /tmp/yp-install.env
+```
+
+Или одной строкой (demo-seed без клона БД — только если нужен пустой демо-стенд):
+```bash
+sudo bash /tmp/run-install.sh developer --kit-url 'https://py.idivles.ru/backups/youngportal-reference-kit-latest.tgz' --prod-domain py.example.ru --staging-domain ty.example.ru --le-email you@example.ru --demo
+```
+
+(`--sha256` необязателен: скрипт сам читает `URL.sha256`.)
+
+## Вручную: скачать → START.sh
+
+```bash
+mkdir -p /root/yp-kit && cd /root/yp-kit
+curl -fsSL --retry 5 -o kit.tgz 'https://py.idivles.ru/backups/youngportal-client-kit-latest.tgz'
+curl -fsSL -o kit.tgz.sha256 'https://py.idivles.ru/backups/youngportal-client-kit-latest.tgz.sha256'
+sha256sum -c kit.tgz.sha256
+tar -xzf kit.tgz && cd youngportal-*-kit-*
+sudo bash START.sh --client --reinstall --yes \
+  --prod-domain young.example.ru --staging-domain tyoung.example.ru \
+  --le-email you@example.ru --admin-email admin@young.example.ru
+```
+
+## По SSH с машины разработчика
+
+```bash
+SSHPASS='…' bash scripts/install-from-url.sh root@IP --client \
+  --prod-domain young.example.ru --staging-domain tyoung.example.ru \
+  --le-email you@example.ru --admin-email admin@young.example.ru
+```
+
+## После установки: HTTPS
+
+Если self-signed — в DNS **одна** A на IP сервера, затем:
+```bash
+bash /opt/sochi-portal/scripts/fix-tls-after-kit.sh
+```
+(домены из `/etc/yp-portal/install-meta.json`)
+
+## Зеркало по IP (если DNS ещё нет)
+
+```bash
+curl -fkL -o /tmp/yp-install.sh 'https://77.110.125.241/backups/bootstrap/yp-install.sh'
+```

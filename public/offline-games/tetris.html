@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no" />
+  <title>Тетрис — офлайн</title>
+  <link rel="stylesheet" href="/offline-games/games.css" />
+</head>
+<body>
+  <header class="og-top">
+    <a href="/offline-games/">← Игры</a>
+    <strong>Тетрис</strong>
+    <span></span>
+  </header>
+  <main class="og-main">
+    <div class="hud">
+      <div>Очки <strong id="score">0</strong></div>
+      <div>Рекорд <strong id="best">0</strong></div>
+    </div>
+    <div class="canvas-wrap"><canvas id="c" width="240" height="480"></canvas></div>
+    <div class="pad">
+      <span></span><button class="og-btn" id="rot">↻</button><span></span>
+      <button class="og-btn" id="left">←</button>
+      <button class="og-btn" id="down">↓</button>
+      <button class="og-btn" id="right">→</button>
+    </div>
+    <div class="actions">
+      <button class="og-btn primary" id="start">Играть</button>
+      <button class="og-btn" id="drop">Сброс ↓↓</button>
+    </div>
+    <p class="hint" id="hint">Стрелки · вращение · сброс</p>
+  </main>
+  <script src="/offline-games/scores.js"></script>
+  <script>
+(function () {
+  var COLS = 10, ROWS = 20, SIZE = 24;
+  var SHAPES = [
+    [[1,1,1,1]],
+    [[1,1],[1,1]],
+    [[0,1,0],[1,1,1]],
+    [[1,0,0],[1,1,1]],
+    [[0,0,1],[1,1,1]],
+    [[0,1,1],[1,1,0]],
+    [[1,1,0],[0,1,1]],
+  ];
+  var COLORS = ['#38bdf8','#fbbf24','#a78bfa','#60a5fa','#f97316','#4ade80','#f43f5e'];
+  var canvas = document.getElementById('c');
+  var ctx = canvas.getContext('2d');
+  var scoreEl = document.getElementById('score');
+  var bestEl = document.getElementById('best');
+  var hint = document.getElementById('hint');
+  var board, piece, px, py, score, timer, running, over;
+
+  bestEl.textContent = YPGames.getBest('tetris');
+
+  function emptyBoard() {
+    board = [];
+    for (var y = 0; y < ROWS; y++) board.push(Array(COLS).fill(0));
+  }
+
+  function spawn() {
+    var i = (Math.random() * SHAPES.length) | 0;
+    piece = { shape: SHAPES[i].map(function (r) { return r.slice(); }), color: COLORS[i] };
+    px = ((COLS - piece.shape[0].length) / 2) | 0;
+    py = 0;
+    if (collides(px, py, piece.shape)) end();
+  }
+
+  function collides(x, y, shape) {
+    for (var r = 0; r < shape.length; r++) {
+      for (var c = 0; c < shape[r].length; c++) {
+        if (!shape[r][c]) continue;
+        var nx = x + c, ny = y + r;
+        if (nx < 0 || nx >= COLS || ny >= ROWS) return true;
+        if (ny >= 0 && board[ny][nx]) return true;
+      }
+    }
+    return false;
+  }
+
+  function merge() {
+    piece.shape.forEach(function (row, r) {
+      row.forEach(function (v, c) {
+        if (!v) return;
+        var ny = py + r, nx = px + c;
+        if (ny >= 0) board[ny][nx] = piece.color;
+      });
+    });
+  }
+
+  function clearLines() {
+    var cleared = 0;
+    for (var y = ROWS - 1; y >= 0; y--) {
+      if (board[y].every(Boolean)) {
+        board.splice(y, 1);
+        board.unshift(Array(COLS).fill(0));
+        cleared++;
+        y++;
+      }
+    }
+    if (cleared) {
+      score += [0, 100, 300, 500, 800][cleared] || cleared * 100;
+      scoreEl.textContent = score;
+    }
+  }
+
+  function rotate() {
+    var s = piece.shape;
+    var next = s[0].map(function (_, i) { return s.map(function (row) { return row[i]; }).reverse(); });
+    if (!collides(px, py, next)) piece.shape = next;
+  }
+
+  function draw() {
+    ctx.fillStyle = '#020617';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    for (var y = 0; y < ROWS; y++) {
+      for (var x = 0; x < COLS; x++) {
+        if (!board[y][x]) continue;
+        ctx.fillStyle = board[y][x];
+        ctx.fillRect(x * SIZE + 1, y * SIZE + 1, SIZE - 2, SIZE - 2);
+      }
+    }
+    if (piece) {
+      piece.shape.forEach(function (row, r) {
+        row.forEach(function (v, c) {
+          if (!v) return;
+          ctx.fillStyle = piece.color;
+          ctx.fillRect((px + c) * SIZE + 1, (py + r) * SIZE + 1, SIZE - 2, SIZE - 2);
+        });
+      });
+    }
+  }
+
+  function end() {
+    over = true; running = false;
+    if (timer) clearInterval(timer); timer = null;
+    bestEl.textContent = YPGames.setBest('tetris', score);
+    YPGames.report({ game: 'tetris', score: score });
+    hint.textContent = 'Игра окончена · очки сохранены';
+    document.getElementById('start').textContent = 'Ещё раз';
+  }
+
+  function tick() {
+    if (!running) return;
+    if (!collides(px, py + 1, piece.shape)) { py++; draw(); return; }
+    merge(); clearLines(); spawn(); draw();
+  }
+
+  function start() {
+    emptyBoard(); score = 0; over = false; running = true;
+    scoreEl.textContent = '0';
+    hint.textContent = 'Стрелки · вращение · сброс';
+    document.getElementById('start').textContent = 'Заново';
+    spawn(); draw();
+    if (timer) clearInterval(timer);
+    timer = setInterval(tick, 500);
+  }
+
+  function softDrop() {
+    if (!running) return;
+    if (!collides(px, py + 1, piece.shape)) { py++; score += 1; scoreEl.textContent = score; draw(); }
+    else tick();
+  }
+
+  function hardDrop() {
+    if (!running) return;
+    while (!collides(px, py + 1, piece.shape)) { py++; score += 2; }
+    scoreEl.textContent = score;
+    merge(); clearLines(); spawn(); draw();
+  }
+
+  document.getElementById('start').onclick = start;
+  document.getElementById('left').onclick = function () { if (running && !collides(px - 1, py, piece.shape)) { px--; draw(); } };
+  document.getElementById('right').onclick = function () { if (running && !collides(px + 1, py, piece.shape)) { px++; draw(); } };
+  document.getElementById('down').onclick = softDrop;
+  document.getElementById('rot').onclick = function () { if (running) { rotate(); draw(); } };
+  document.getElementById('drop').onclick = hardDrop;
+  window.addEventListener('keydown', function (e) {
+    if (!running) return;
+    if (e.key === 'ArrowLeft') { e.preventDefault(); if (!collides(px - 1, py, piece.shape)) { px--; draw(); } }
+    if (e.key === 'ArrowRight') { e.preventDefault(); if (!collides(px + 1, py, piece.shape)) { px++; draw(); } }
+    if (e.key === 'ArrowDown') { e.preventDefault(); softDrop(); }
+    if (e.key === 'ArrowUp' || e.key === ' ') { e.preventDefault(); rotate(); draw(); }
+  }, { passive: false });
+
+  emptyBoard(); draw();
+})();
+  </script>
+</body>
+</html>
