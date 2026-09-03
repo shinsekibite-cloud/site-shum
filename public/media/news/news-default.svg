@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800">
+  <defs>
+    <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%" gradientTransform="rotate(55)">
+      <stop offset="0%" stop-color="#06b6d4"/>
+      <stop offset="55%" stop-color="#0e7490"/>
+      <stop offset="100%" stop-color="#164e63"/>
+    </linearGradient>
+    <radialGradient id="r" cx="30%" cy="-23%" r="65%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.22"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="800" fill="url(#g)"/>
+  <rect width="1200" height="800" fill="url(#r)"/>
+  <circle cx="730" cy="-78" r="90" fill="#fff" opacity="0.08"/>
+  <circle cx="-50" cy="308" r="14" fill="#fff" opacity="0.06"/>
+  <path d="M0 560 C220 500, 420 620, 640 560 S1040 500, 1200 560 L1200 800 L0 800 Z" fill="#000" opacity="0.12"/>
+  <!-- No text labels — card title lives below the image -->
+  <circle cx="1000" cy="140" r="44" fill="#fff" opacity="0.1"/>
+  <rect x="72" y="72" width="128" height="12" rx="6" fill="#fff" opacity="0.18"/>
+  <rect x="72" y="100" width="80" height="10" rx="5" fill="#fff" opacity="0.12"/>
+</svg>
