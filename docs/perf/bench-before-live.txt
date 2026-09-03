@@ -1,0 +1,9 @@
+# Perf before-live 2026-08-11T07:23:13.288Z base=https://young.idivles.ru
+200 avg=0.598s best=0.331s size=143183 /
+200 avg=0.268s best=0.173s size=143 /api/health
+200 avg=0.384s best=0.352s size=124624 /projects
+200 avg=0.361s best=0.314s size=105043 /news
+200 avg=0.374s best=0.329s size=110542 /privacy
+200 avg=0.320s best=0.301s size=91907 /rules
+200 avg=0.288s best=0.172s size=1067 /api/public/status
+wrote /workspace/docs/perf/bench-before-live.txt

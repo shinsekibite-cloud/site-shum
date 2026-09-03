@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no" />
+  <title>Шашки — офлайн</title>
+  <link rel="stylesheet" href="/offline-games/games.css" />
+</head>
+<body>
+  <header class="og-top">
+    <a href="/offline-games/">← Игры</a>
+    <strong>Шашки</strong>
+    <span></span>
+  </header>
+  <main class="og-main">
+    <div class="hud">
+      <div>Побед <strong id="score">0</strong></div>
+      <div>Рекорд <strong id="best">0</strong></div>
+    </div>
+    <div id="board" class="board" aria-label="Доска шашек"></div>
+    <div class="actions">
+      <button class="og-btn primary" id="start">Новая партия</button>
+    </div>
+    <p class="hint" id="hint">Вы играете белыми. Съём обязателен.</p>
+  </main>
+  <script src="/offline-games/scores.js"></script>
+  <script>
+(function () {
+  var boardEl = document.getElementById('board');
+  var hint = document.getElementById('hint');
+  var scoreEl = document.getElementById('score');
+  var bestEl = document.getElementById('best');
+  var wins = YPGames.getBest('checkers') || 0;
+  bestEl.textContent = wins;
+  scoreEl.textContent = wins;
+  var board, selected, turn, gameOver;
+
+  function dark(r, c) { return (r + c) % 2 === 1; }
+
+  function reset() {
+    board = Array.from({ length: 8 }, function () { return Array(8).fill(null); });
+    for (var r = 0; r < 3; r++) for (var c = 0; c < 8; c++) if (dark(r, c)) board[r][c] = { side: 'b', king: false };
+    for (var r2 = 5; r2 < 8; r2++) for (var c2 = 0; c2 < 8; c2++) if (dark(r2, c2)) board[r2][c2] = { side: 'w', king: false };
+    selected = null; turn = 'w'; gameOver = false;
+    hint.textContent = 'Ваш ход (белые)';
+    YPGames.report({ game: 'checkers', score: wins, event: 'play' });
+    render();
+  }
+
+  function cloneBoard(b) {
+    return b.map(function (row) { return row.map(function (p) { return p ? { side: p.side, king: p.king } : null; }); });
+  }
+
+  function movesFor(side) {
+    var caps = [], quiet = [];
+    for (var r = 0; r < 8; r++) for (var c = 0; c < 8; c++) {
+      var p = board[r][c];
+      if (!p || p.side !== side) continue;
+      var dirs = p.king ? [[-1,-1],[-1,1],[1,-1],[1,1]] : side === 'w' ? [[-1,-1],[-1,1]] : [[1,-1],[1,1]];
+      dirs.forEach(function (d) {
+        var r1 = r + d[0], c1 = c + d[1];
+        var r2 = r + d[0] * 2, c2 = c + d[1] * 2;
+        if (r1 >= 0 && r1 < 8 && c1 >= 0 && c1 < 8 && !board[r1][c1]) {
+          quiet.push({ fr: r, fc: c, tr: r1, tc: c1, cap: null });
+        }
+        if (r2 >= 0 && r2 < 8 && c2 >= 0 && c2 < 8 && board[r1][c1] && board[r1][c1].side !== side && !board[r2][c2]) {
+          caps.push({ fr: r, fc: c, tr: r2, tc: c2, cap: { r: r1, c: c1 } });
+        }
+      });
+    }
+    return caps.length ? caps : quiet;
+  }
+
+  function applyMove(m) {
+    var p = board[m.fr][m.fc];
+    board[m.fr][m.fc] = null;
+    board[m.tr][m.tc] = p;
+    if (m.cap) board[m.cap.r][m.cap.c] = null;
+    if (p.side === 'w' && m.tr === 0) p.king = true;
+    if (p.side === 'b' && m.tr === 7) p.king = true;
+  }
+
+  function count(side) {
+    var n = 0;
+    for (var r = 0; r < 8; r++) for (var c = 0; c < 8; c++) if (board[r][c] && board[r][c].side === side) n++;
+    return n;
+  }
+
+  function finish(won) {
+    gameOver = true;
+    if (won) {
+      wins += 1;
+      scoreEl.textContent = wins;
+      bestEl.textContent = YPGames.setBest('checkers', wins);
+      YPGames.report({ game: 'checkers', score: wins, event: 'win', meta: { won: true } });
+      hint.textContent = 'Победа! Рекорд обновлён';
+    } else {
+      YPGames.report({ game: 'checkers', score: wins, event: 'score', meta: { won: false } });
+      hint.textContent = 'Поражение. Новая партия?';
+    }
+  }
+
+  function aiMove() {
+    if (gameOver) return;
+    var moves = movesFor('b');
+    if (!moves.length) return finish(true);
+    var caps = moves.filter(function (m) { return m.cap; });
+    var pick = (caps.length ? caps : moves)[(Math.random() * (caps.length ? caps.length : moves.length)) | 0];
+    applyMove(pick);
+    if (!count('w') || !movesFor('w').length) return finish(false);
+    turn = 'w';
+    hint.textContent = 'Ваш ход (белые)';
+    render();
+  }
+
+  function onCell(r, c) {
+    if (gameOver || turn !== 'w') return;
+    var moves = movesFor('w');
+    if (selected) {
+      var m = moves.find(function (x) { return x.fr === selected.r && x.fc === selected.c && x.tr === r && x.tc === c; });
+      if (m) {
+        applyMove(m);
+        selected = null;
+        render();
+        if (!count('b') || !movesFor('b').length) return finish(true);
+        turn = 'b';
+        hint.textContent = 'Ход компьютера…';
+        setTimeout(aiMove, 350);
+        return;
+      }
+    }
+    if (board[r][c] && board[r][c].side === 'w' && moves.some(function (x) { return x.fr === r && x.fc === c; })) {
+      selected = { r: r, c: c };
+      render();
+    } else selected = null;
+  }
+
+  function render() {
+    boardEl.innerHTML = '';
+    var legal = turn === 'w' && selected ? movesFor('w').filter(function (m) { return m.fr === selected.r && m.fc === selected.c; }) : [];
+    for (var r = 0; r < 8; r++) for (var c = 0; c < 8; c++) {
+      (function (r, c) {
+        var cell = document.createElement('button');
+        cell.type = 'button';
+        cell.className = 'cell ' + (dark(r, c) ? 'dark' : 'light') + (selected && selected.r === r && selected.c === c ? ' sel' : '');
+        cell.style.border = 'none';
+        cell.style.padding = '0';
+        cell.style.position = 'relative';
+        if (legal.some(function (m) { return m.tr === r && m.tc === c; })) {
+          cell.style.boxShadow = 'inset 0 0 0 3px #38bdf8';
+        }
+        var p = board[r][c];
+        if (p) {
+          var piece = document.createElement('span');
+          piece.className = 'piece ' + p.side + (p.king ? ' king' : '');
+          cell.appendChild(piece);
+        }
+        cell.onclick = function () { onCell(r, c); };
+        boardEl.appendChild(cell);
+      })(r, c);
+    }
+  }
+
+  document.getElementById('start').onclick = reset;
+  reset();
+})();
+  </script>
+</body>
+</html>
