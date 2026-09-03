@@ -45,6 +45,7 @@ ADMIN_EMAIL="${ADMIN_EMAIL:-}"
 ADMIN_PASSWORD="${ADMIN_PASSWORD:-}"
 MODULES="${MODULES:-all}"
 MODULES_OFF="${MODULES_OFF:-}"
+MODULES_LOCKED="${MODULES_LOCKED:-0}"
 SEED_ORG="${SEED_ORG:-}"
 SEED_PASSWORD="${SEED_PASSWORD:-InstallSeed1!}"
 REINSTALL="${REINSTALL:-0}"
@@ -79,8 +80,8 @@ while [[ $# -gt 0 ]]; do
     --le-email) LE_EMAIL="$2"; shift 2 ;;
     --admin-email) ADMIN_EMAIL="$2"; shift 2 ;;
     --admin-password) ADMIN_PASSWORD="$2"; shift 2 ;;
-    --modules) MODULES="$2"; shift 2 ;;
-    --modules-off) MODULES_OFF="$2"; shift 2 ;;
+    --modules) MODULES="$2"; MODULES_LOCKED=1; shift 2 ;;
+    --modules-off) MODULES_OFF="$2"; MODULES_LOCKED=1; shift 2 ;;
     --seed-org) SEED_ORG=1; shift ;;
     --no-seed-org) SEED_ORG=0; shift ;;
     -h|--help) usage; exit 0 ;;
@@ -254,6 +255,37 @@ fi
 reject_bad_domain "$PROD_DOMAIN" "Прод"
 reject_bad_domain "$STAGING_DOMAIN" "Тест"
 [[ "$PROD_DOMAIN" != "$STAGING_DOMAIN" ]] || die "Домены прод и тест должны отличаться"
+
+# Название портала (интерактив)
+if [[ "$ASSUME_YES" != "1" ]]; then
+  read -r -p "Название портала [${SITE_NAME}]: " sn || true
+  SITE_NAME="${sn:-$SITE_NAME}"
+fi
+
+# Выбор функций сайта
+if [[ "$ASSUME_YES" != "1" && "${MODULES_LOCKED:-0}" != "1" ]]; then
+  echo
+  echo "Функции сайта (модули):"
+  echo "  1) Все разделы"
+  echo "  2) Базовые (core)"
+  echo "  3) Базовые + каталоги (content)"
+  echo "  4) Все, кроме игр и мбаллов"
+  echo "  5) Вручную"
+  mc=""
+  read -r -p "Выбор [1]: " mc || true
+  case "${mc:-1}" in
+    2) MODULES=core; MODULES_OFF="" ;;
+    3) MODULES=content; MODULES_OFF="" ;;
+    4) MODULES=all; MODULES_OFF=games,eco ;;
+    5)
+      read -r -p "MODULES [${MODULES}]: " mi || true
+      MODULES="${mi:-$MODULES}"
+      read -r -p "MODULES_OFF [${MODULES_OFF:-пусто}]: " mo || true
+      MODULES_OFF="${mo:-$MODULES_OFF}"
+      ;;
+  esac
+  echo "  → modules=${MODULES}${MODULES_OFF:+ off=${MODULES_OFF}}"
+fi
 
 prompt_admin_if_client
 

@@ -4,6 +4,16 @@
 Версия в футере и в `package.json` / `src/lib/app-version.ts` должны совпадать.  
 Каждый пользовательский релиз на ty → запись здесь + bump версии **до** staging deploy.
 
+## [1.6.10] — 2026-09-03
+
+### Added
+- Customer org kit: `pack-dev-deploy-kit.sh --customer` + `docs/CUSTOMER-ORG-KIT.md`
+- `apply-site-identity.mjs` / `verify-site-identity.mjs` — смена названия/доменов в политиках и правилах
+- Интерактивный выбор модулей в `START.sh` / `INSTALL.sh` (all/core/content/…)
+
+### Changed
+- Дефолты privacy/about в CMS используют `{{SITE_NAME}}`
+
 ## [1.6.9] — 2026-09-03
 
 ### Fixed

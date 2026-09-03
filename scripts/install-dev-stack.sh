@@ -78,6 +78,9 @@ SNAPSHOT_DIR="${SNAPSHOT_DIR:-}"
 SOURCE_TGZ="${SOURCE_TGZ:-}"
 MODULES="${MODULES:-all}"
 MODULES_OFF="${MODULES_OFF:-}"
+MODULES_LOCKED="${MODULES_LOCKED:-0}"
+OLD_SITE_NAMES="${OLD_SITE_NAMES:-}"
+OLD_HOSTS="${OLD_HOSTS:-}"
 OFF_MODE="${OFF_MODE:-hide}"
 # empty = auto (client/demo/clean → seed org starter); 0/1 = explicit
 SEED_ORG="${SEED_ORG:-}"
@@ -132,8 +135,10 @@ while [[ $# -gt 0 ]]; do
     --ssh-port) SSH_PORT="$2"; shift 2 ;;
     --admin-email) ADMIN_EMAIL="$2"; shift 2 ;;
     --admin-password) ADMIN_PASSWORD="$2"; shift 2 ;;
-    --modules) MODULES="$2"; shift 2 ;;
-    --modules-off) MODULES_OFF="$2"; shift 2 ;;
+    --modules) MODULES="$2"; MODULES_LOCKED=1; shift 2 ;;
+    --modules-off) MODULES_OFF="$2"; MODULES_LOCKED=1; shift 2 ;;
+    --old-site-names) OLD_SITE_NAMES="$2"; shift 2 ;;
+    --old-hosts) OLD_HOSTS="$2"; shift 2 ;;
     --off-mode) OFF_MODE="$2"; shift 2 ;;
     --seed-org) SEED_ORG=1; shift ;;
     --no-seed-org) SEED_ORG=0; shift ;;
@@ -372,6 +377,33 @@ if [[ "$REINSTALL" == "1" ]]; then
 fi
 
 ask SITE_NAME "Название портала (шапка, письма, 2FA issuer)" "$SITE_NAME"
+
+# Выбор функций сайта (модули) — интерактивно, если не задано явно и не --yes
+if [[ $ASSUME_YES -eq 0 && "${MODULES_LOCKED}" != "1" ]]; then
+  echo
+  echo "Функции сайта (модули):"
+  echo "  1) Все разделы (all)"
+  echo "  2) Базовые (core) — афиша, проекты, клубы, пространства, друзья, новости…"
+  echo "  3) Базовые + каталоги (content) — + места, гранты, вакансии, конкурсы, рефералы"
+  echo "  4) Все, кроме игр и мбаллов"
+  echo "  5) Указать вручную (список вкл. / выкл.)"
+  mod_choice=""
+  read -r -p "Выбор модулей [1]: " mod_choice || true
+  case "${mod_choice:-1}" in
+    2) MODULES=core; MODULES_OFF="" ;;
+    3) MODULES=content; MODULES_OFF="" ;;
+    4) MODULES=all; MODULES_OFF=games,eco ;;
+    5)
+      read -r -p "Включить (all|core|content|ключ1,ключ2) [${MODULES}]: " mi || true
+      MODULES="${mi:-$MODULES}"
+      read -r -p "Доп. выключить (ключ1,ключ2) [${MODULES_OFF:-пусто}]: " mo || true
+      MODULES_OFF="${mo:-$MODULES_OFF}"
+      ;;
+    *) MODULES="${MODULES:-all}" ;;
+  esac
+  echo "  → modules=${MODULES}${MODULES_OFF:+ off=${MODULES_OFF}}"
+fi
+
 if [[ $ASSUME_YES -eq 0 && -z "${MODE_LOCKED:-}" ]]; then
   echo "Что поднять:"
   echo "  1) тест + прод на одном сервере  (рекомендуется)"
@@ -1104,6 +1136,31 @@ PY
   if [[ -n "$(db_ctr)" ]]; then
     docker exec -i "$(db_ctr)" psql -U sochi -d sochi_portal -v ON_ERROR_STOP=0 -c "$SITE_SQL" || true
   fi
+
+  echo "==> [7a] Политики / правила / about под новое имя и домены"
+  W="$(web_ctr)"
+  ID_SCRIPT=""
+  for cand in \
+    "$APP_DIR/scripts/apply-site-identity.mjs" \
+    "$KIT_ROOT/scripts/apply-site-identity.mjs"
+  do
+    [[ -f "$cand" ]] && ID_SCRIPT="$cand" && break
+  done
+  if [[ -n "$W" && -n "$ID_SCRIPT" ]]; then
+    docker cp "$ID_SCRIPT" "$W:/app/scripts/apply-site-identity.mjs" 2>/dev/null || true
+    docker exec \
+      -e SITE_NAME="$SITE_NAME" \
+      -e PUBLIC_URL="$PUBLIC_URL" \
+      -e OLD_SITE_NAMES="${OLD_SITE_NAMES:-}" \
+      -e OLD_HOSTS="${OLD_HOSTS:-}" \
+      -e CONTACT_EMAIL="${ADMIN_EMAIL:-}" \
+      -e REPLACE_LEGAL=1 \
+      "$W" node /app/scripts/apply-site-identity.mjs \
+      || echo "WARN: apply-site-identity не выполнился"
+  else
+    echo "WARN: нет apply-site-identity.mjs — только SiteSettings (политики могут сохранить старые домены)"
+  fi
+
   if [[ -n "$ADMIN_EMAIL" && -n "$ADMIN_PASSWORD" ]]; then
     echo "  сид администратора $ADMIN_EMAIL"
     W="$(web_ctr)"
@@ -1193,6 +1250,25 @@ if want_prod; then
       || echo "WARN: apply-module-selection не выполнился"
   else
     echo "WARN: нет apply-module-selection.mjs — модули остаются все включёнными"
+  fi
+
+  echo "==> [7c2] Проверка политик / правил после смены identity"
+  VER_SCRIPT=""
+  for cand in \
+    "$APP_DIR/scripts/verify-site-identity.mjs" \
+    "$KIT_ROOT/scripts/verify-site-identity.mjs"
+  do
+    [[ -f "$cand" ]] && VER_SCRIPT="$cand" && break
+  done
+  if [[ -n "$W" && -n "$VER_SCRIPT" ]]; then
+    docker cp "$VER_SCRIPT" "$W:/app/scripts/verify-site-identity.mjs" 2>/dev/null || true
+    docker exec \
+      -e SITE_NAME="$SITE_NAME" \
+      -e PUBLIC_URL="$PUBLIC_URL" \
+      -e OLD_SITE_NAMES="${OLD_SITE_NAMES:-}" \
+      -e OLD_HOSTS="${OLD_HOSTS:-}" \
+      "$W" node /app/scripts/verify-site-identity.mjs \
+      || echo "WARN: verify-site-identity нашёл замечания — проверьте /privacy /rules /terms вручную"
   fi
 fi
 

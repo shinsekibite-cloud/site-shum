@@ -17,6 +17,7 @@ WITH_LIVE=0
 SKIP_PUBLISH=0
 SKIP_DOWNLOAD=0
 CLIENT_KIT=0
+CUSTOMER_KIT=0
 OUT_DIR="${ARTIFACTS_DIR:-/opt/cursor/artifacts}"
 KIT_PREFIX="${KIT_PREFIX:-youngportal-dev-kit}"
 NAME="${KIT_PREFIX}-${STAMP}"
@@ -31,6 +32,13 @@ while [[ $# -gt 0 ]]; do
       CLIENT_KIT=1
       KIT_PREFIX=youngportal-client-kit
       NAME="${KIT_PREFIX}-${STAMP}"
+      shift
+      ;;
+    --customer)
+      # Org kit for a prepared customer: full live snapshot + identity docs
+      KIT_PREFIX=youngportal-customer-org-kit
+      NAME="${KIT_PREFIX}-${STAMP}"
+      CUSTOMER_KIT=1
       shift
       ;;
     --skip-publish) SKIP_PUBLISH=1; shift ;;
@@ -60,6 +68,8 @@ need() {
   done
   if [[ "$CLIENT_KIT" == "1" ]]; then
     [[ -f "$ROOT/docs/CLIENT-INSTALL.txt" ]] || { echo "Missing CLIENT-INSTALL.txt" >&2; exit 1; }
+  elif [[ "${CUSTOMER_KIT:-0}" == "1" ]]; then
+    [[ -f "$ROOT/docs/CUSTOMER-ORG-KIT.md" ]] || { echo "Missing CUSTOMER-ORG-KIT.md" >&2; exit 1; }
   else
     [[ -f "$ROOT/docs/README-INSTALL-DEV-KIT.txt" ]] || { echo "Missing README-INSTALL-DEV-KIT.txt" >&2; exit 1; }
   fi
@@ -173,6 +183,11 @@ stage_source_kit() {
     cp -f "$ROOT/docs/CLIENT-INSTALL.txt" "$stage/README.txt"
     cp -f "$ROOT/docs/CLIENT-INSTALL.txt" "$stage/docs/CLIENT-INSTALL.txt"
     # no developer docs
+  elif [[ "${CUSTOMER_KIT:-0}" == "1" ]]; then
+    cp -f "$ROOT/docs/CUSTOMER-ORG-KIT.md" "$stage/README.txt"
+    cp -f "$ROOT/docs/CUSTOMER-ORG-KIT.md" "$stage/docs/CUSTOMER-ORG-KIT.md"
+    cp -f "$ROOT/docs/CLIENT-INSTALL.txt" "$stage/docs/CLIENT-INSTALL.txt" 2>/dev/null || true
+    cp -f "$ROOT/docs/REMOTE-DEPLOY.md" "$stage/docs/REMOTE-DEPLOY.md" 2>/dev/null || true
   else
     cp -f "$ROOT/docs/README-INSTALL-DEV-KIT.txt" "$stage/README.txt"
     cp -f "$ROOT/docs/README-INSTALL-DEV-KIT.txt" "$stage/docs/"
@@ -191,6 +206,7 @@ stage_source_kit() {
   local role="developer"
   [[ "$KIT_PREFIX" == *reference* ]] && role=reference
   [[ "$CLIENT_KIT" == "1" ]] && role=client
+  [[ "${CUSTOMER_KIT:-0}" == "1" ]] && role=customer_org
 
   cat > "$stage/VERSION.json" <<EOF
 {
@@ -325,12 +341,16 @@ if [[ -n "$avail_kb" && "$avail_kb" -lt 3500000 ]]; then
   docker builder prune -af >/dev/null 2>&1 || true
   docker image prune -f >/dev/null 2>&1 || true
 fi
-docker save "${SAVE_IMGS[@]}" | gzip -1 > "$SNAP/images.tar.gz"
+docker save "${SAVE_IMGS[@]}" | gzip -1 > "$SNAP/images.tar.gz" || {
+  echo "WARN: docker save failed (disk?) — images.tar.gz omitted" >&2
+  rm -f "$SNAP/images.tar.gz"
+}
 
-if [[ -f "$APP/.env" ]]; then
-  grep -E '^[A-Z0-9_]+=' "$APP/.env" | cut -d= -f1 | sort > "$SNAP/env-keys.txt"
+if [[ -r "$APP/.env" ]]; then
+  grep -E '^[A-Z0-9_]+=' "$APP/.env" | cut -d= -f1 | sort > "$SNAP/env-keys.txt" || true
+else
+  echo "# .env not readable by pack user" > "$SNAP/env-keys.txt"
 fi
-
 SW="$(grep -o 'sochi-shell-v[0-9a-z-]*' "$APP/public/sw.js" 2>/dev/null | head -1 || echo unknown)"
 IMG="$(docker inspect --format '{{.Id}}' sochi-portal_web:latest 2>/dev/null || true)"
 HEALTH="$(curl -sS --max-time 8 http://127.0.0.1:3000/api/health 2>/dev/null || echo '{}')"
@@ -401,8 +421,8 @@ if [[ "$WITH_LIVE" -eq 1 ]]; then
     echo "==> Live snapshot from VPS (db + uploads + docker save)"
   fi
   PACK_LOCAL=/tmp/yp-devkit-live.sh
-  # /tmp на многих VPS — tmpfs (~1G); docker save нужен диск
-  LIVE_SNAP_REMOTE=/var/backups/sochi-portal/yp-devkit-live-snap
+  # Prefer /var/tmp: writable for non-root deploy users; /tmp is often tiny tmpfs
+  LIVE_SNAP_REMOTE="${LIVE_SNAP_REMOTE:-/var/tmp/yp-devkit-live-snap}"
   pack_live_on_vps "$PACK_LOCAL"
   yp_ssh "mkdir -p '$LIVE_SNAP_REMOTE' /var/tmp && rm -rf '${LIVE_SNAP_REMOTE:?}'/*"
   yp_scp "$PACK_LOCAL" "$HOST:/var/tmp/yp-devkit-live.sh"

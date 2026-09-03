@@ -28,6 +28,11 @@ sudo bash /tmp/yp-install.sh /tmp/yp-install.env
 ```
 
 После установки админ включает/выключает разделы в **Настройки → Модули** (`/admin/settings?tab=modules`).
+При установке можно сразу выбрать пресет: `--modules=all|core|content` и `--modules-off=games,eco`.
+В интерактивном `START.sh` / `INSTALL.sh` есть меню «Функции сайта».
+
+Архив с готовым контентом заказчика (БД + загрузки + смена доменов/политик):
+см. `docs/CUSTOMER-ORG-KIT.md` и `bash scripts/pack-dev-deploy-kit.sh --customer --with-live`.
 
 Через run-install (одна строка):
 ```bash
@@ -44,6 +49,8 @@ KIT_URL=https://py.idivles.ru/backups/youngportal-reference-kit-latest.tgz
 PROD_DOMAIN=py.example.ru
 STAGING_DOMAIN=ty.example.ru
 LE_EMAIL=you@example.ru
+SITE_NAME=Молодёжный портал
+MODULES=content
 EOF
 sudo bash /tmp/yp-install.sh /tmp/yp-install.env
 ```
