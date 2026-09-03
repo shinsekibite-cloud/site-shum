@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { createPortal } from 'react-dom';
 import Link from 'next/link';
 import { useSession } from 'next-auth/react';
 import {
@@ -42,6 +43,24 @@ export default function TicketsHub({ standalone = false }: { standalone?: boolea
   const [selectedCode, setSelectedCode] = useState<string | null>(null);
   const [ticketBusy, setTicketBusy] = useState(false);
   const [fullscreen, setFullscreen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!fullscreen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setFullscreen(false);
+    };
+    document.body.classList.add('yp-modal-open');
+    window.addEventListener('keydown', onKey);
+    return () => {
+      document.body.classList.remove('yp-modal-open');
+      window.removeEventListener('keydown', onKey);
+    };
+  }, [fullscreen]);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -263,27 +282,33 @@ export default function TicketsHub({ standalone = false }: { standalone?: boolea
         )}
       </div>
 
-      {fullscreen && selected && (
-        <div className="tickets-fullscreen" role="dialog" aria-modal="true" aria-label="QR билета">
-          <button
-            type="button"
-            className="tickets-fullscreen__close"
-            onClick={() => setFullscreen(false)}
-            aria-label="Закрыть"
-          >
-            <X size={24} />
-          </button>
-          <div className="tickets-fullscreen__inner">
-            <QRCodeDisplay value={selected.ticketCode} size={Math.min(320, typeof window !== 'undefined' ? window.innerWidth - 48 : 280)} />
-            <p className="tickets-fullscreen__title">{selected.booking.title}</p>
-            <p className="tickets-fullscreen__hint">Покажите код сотруднику на входе</p>
-            <button type="button" className="btn btn-secondary" onClick={() => setFullscreen(false)}>
-              <Minimize2 size={16} aria-hidden />
-              Свернуть
-            </button>
-          </div>
-        </div>
-      )}
+      {fullscreen && selected && mounted
+        ? createPortal(
+            <div className="tickets-fullscreen" role="dialog" aria-modal="true" aria-label="QR билета">
+              <button
+                type="button"
+                className="tickets-fullscreen__close"
+                onClick={() => setFullscreen(false)}
+                aria-label="Закрыть"
+              >
+                <X size={24} />
+              </button>
+              <div className="tickets-fullscreen__inner">
+                <QRCodeDisplay
+                  value={selected.ticketCode}
+                  size={Math.min(320, typeof window !== 'undefined' ? window.innerWidth - 48 : 280)}
+                />
+                <p className="tickets-fullscreen__title">{selected.booking.title}</p>
+                <p className="tickets-fullscreen__hint">Покажите код сотруднику на входе</p>
+                <button type="button" className="btn btn-secondary" onClick={() => setFullscreen(false)}>
+                  <Minimize2 size={16} aria-hidden />
+                  Свернуть
+                </button>
+              </div>
+            </div>,
+            document.body
+          )
+        : null}
     </>
   );
 }

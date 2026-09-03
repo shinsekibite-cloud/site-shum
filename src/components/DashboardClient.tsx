@@ -214,10 +214,19 @@ function DashboardInner({ view = 'overview' }: DashboardClientProps) {
       return { ...prev, ecoPoints };
     });
   }, []);
-  const openRepModal = (tab: 'LEVEL' | 'AUTHORITY' | 'SOCIAL' | 'ECO') => {
+  const openRepModal = useCallback((tab: 'LEVEL' | 'AUTHORITY' | 'SOCIAL' | 'ECO') => {
     setRepModalTab(tab);
     setRepModalOpen(true);
-  };
+  }, []);
+
+  useEffect(() => {
+    const onOpenRep = (e: Event) => {
+      const detail = (e as CustomEvent<{ tab?: 'LEVEL' | 'AUTHORITY' | 'SOCIAL' | 'ECO' }>).detail;
+      openRepModal(detail?.tab || 'AUTHORITY');
+    };
+    window.addEventListener('yp:open-rep', onOpenRep as EventListener);
+    return () => window.removeEventListener('yp:open-rep', onOpenRep as EventListener);
+  }, [openRepModal]);
 
   useEffect(() => {
     fetchPublicStatusCached()
@@ -1635,7 +1644,8 @@ function DashboardInner({ view = 'overview' }: DashboardClientProps) {
                       }
                       onStatClick={(key) => openRepModal(key)}
                       showRatings={modOn('ratings')}
-                      showEco={modOn('eco')}
+                      /* мбаллы already shown in PersonalQrPanel — avoid twin wallets on overview */
+                      showEco={false}
                     />
 
                   </div>
