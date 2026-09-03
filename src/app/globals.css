@@ -23378,6 +23378,10 @@ body.yp-scroll-locked {
   padding: 0;
   margin: 0;
 }
+.cw-periods--hours {
+  grid-template-columns: repeat(auto-fill, minmax(5.4rem, 1fr));
+  gap: 0.4rem;
+}
 .cw-period {
   border: 1.5px solid var(--line);
   background: #fff;
@@ -23392,6 +23396,22 @@ body.yp-scroll-locked {
   box-sizing: border-box;
   font: inherit;
   color: inherit;
+}
+.cw-period--hour {
+  text-align: center;
+  padding: 0.55rem 0.4rem;
+  border-radius: 14px;
+  gap: 0.1rem;
+}
+.cw-period--hour strong {
+  font-size: 0.82rem;
+  font-variant-numeric: tabular-nums;
+}
+.cw-period--hour em {
+  font-size: 0.75rem;
+}
+.cw-period.is-full:not(.is-active) {
+  opacity: 0.55;
 }
 .cw-period strong,
 .cw-period span,
@@ -23468,6 +23488,9 @@ body.yp-scroll-locked {
 }
 @media (max-width: 560px) {
   .cw-periods { grid-template-columns: 1fr; }
+  .cw-periods--hours {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
 }
 
 /* Unified form group — replaces native fieldset frames */

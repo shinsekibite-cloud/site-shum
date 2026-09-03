@@ -5,6 +5,7 @@ import { aclJsonError, requireEndUser, requireUser } from '@/lib/acl';
 import {
   activeSignupStatuses,
   canCancelFree,
+  COWORKING_MAX_SEATS,
   COWORKING_PERIODS,
   isCoworkingSpace,
   occupiedSeatStatuses,
@@ -60,8 +61,11 @@ export async function POST(req: Request) {
   const body = await req.json().catch(() => null);
   const spaceId = String(body?.spaceId || '');
   const dayKey = String(body?.dayKey || todayKey());
-  const period = String(body?.period || 'DAY');
-  const seats = Math.min(5, Math.max(1, Number(body?.seats) || 1));
+  const period = String(body?.period || 'H13');
+  const seats = Math.min(
+    COWORKING_MAX_SEATS,
+    Math.max(1, Math.floor(Number(body?.seats)) || 1)
+  );
   const purpose = body?.purpose ? String(body.purpose).slice(0, 80) : null;
   const waitlist = Boolean(body?.waitlist);
 

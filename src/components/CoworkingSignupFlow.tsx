@@ -4,7 +4,13 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { ArrowRight, MapPin } from 'lucide-react';
-import { COWORKING_PERIODS } from '@/lib/coworking';
+import {
+  clampCoworkingSeats,
+  COWORKING_MAX_SEATS,
+  COWORKING_PERIODS,
+  defaultCoworkingPeriodId,
+  resolveCoworkingPeriod,
+} from '@/lib/coworking';
 import type { CoworkingSpaceAvailability } from '@/lib/coworking-availability';
 import SvcDateField from '@/components/SvcDateField';
 import ServiceSplitModal from '@/components/ServiceSplitModal';
@@ -50,8 +56,9 @@ export default function CoworkingSignupFlow({
     if (initialSpaceId && initialSpaces.some((s) => s.id === initialSpaceId)) return initialSpaceId;
     return initialSpaces[0]?.id || initialSpaceId || '';
   });
-  const [period, setPeriod] = useState('DAY');
+  const [period, setPeriod] = useState(() => defaultCoworkingPeriodId(initialDayKey || todayYmd()));
   const [seats, setSeats] = useState(1);
+  const [seatsDraft, setSeatsDraft] = useState('1');
   const [purpose, setPurpose] = useState('');
   const [loading, setLoading] = useState(initialSpaces.length === 0);
   const [refreshing, setRefreshing] = useState(false);
@@ -98,6 +105,11 @@ export default function CoworkingSignupFlow({
         if (!current || !next.some((s) => s.id === current)) {
           if (next[0]?.id) setSpaceId(next[0].id);
         }
+        setPeriod((prev) => {
+          const preferred = defaultCoworkingPeriodId(dayKey);
+          if (next[0]?.periods.some((p) => p.id === prev)) return prev;
+          return preferred;
+        });
       })
       .catch((e) => {
         if (!cancelled) setError(e.message);
@@ -117,19 +129,47 @@ export default function CoworkingSignupFlow({
   const periodInfo = space?.periods.find((p) => p.id === period) || null;
   const left = periodInfo?.left ?? 0;
   const cover = space?.image || '/brand/hero-cover.jpg';
-  const periodDef = COWORKING_PERIODS.find((p) => p.id === period);
+  const periodDef = resolveCoworkingPeriod(period);
   const busy = loading && spaces.length === 0;
+  const seatsMax = Math.max(
+    1,
+    Math.min(COWORKING_MAX_SEATS, left > 0 ? left : COWORKING_MAX_SEATS, space?.capacity || COWORKING_MAX_SEATS)
+  );
+
+  useEffect(() => {
+    setSeats((prev) => {
+      const next = clampCoworkingSeats(prev, seatsMax);
+      if (next !== prev) setSeatsDraft(String(next));
+      return next;
+    });
+  }, [seatsMax]);
+
+  function commitSeatsDraft(raw: string) {
+    const next = clampCoworkingSeats(raw === '' ? 1 : raw, seatsMax);
+    setSeats(next);
+    setSeatsDraft(String(next));
+  }
 
   async function submit(waitlist = false) {
     setSubmitting(true);
     setMessage(null);
     setError(null);
+    const seatsToSend = clampCoworkingSeats(seatsDraft === '' ? seats : seatsDraft, seatsMax);
+    setSeats(seatsToSend);
+    setSeatsDraft(String(seatsToSend));
     try {
       const r = await fetch('/api/coworking', {
         method: 'POST',
         credentials: 'same-origin',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ spaceId, dayKey, period, seats, purpose: purpose || null, waitlist }),
+        body: JSON.stringify({
+          spaceId,
+          dayKey,
+          period,
+          seats: seatsToSend,
+          purpose: purpose || null,
+          waitlist,
+        }),
       });
       const data = await r.json();
       if (!r.ok) {
@@ -145,8 +185,8 @@ export default function CoworkingSignupFlow({
       setSuccessMeta({
         title: space?.title || 'Коворкинг',
         day: dayKey,
-        start: periodDef?.start || '',
-        end: periodDef?.end || '',
+        start: periodDef.start || '',
+        end: periodDef.end || '',
         waitlist: wait,
       });
       try {
@@ -182,7 +222,7 @@ export default function CoworkingSignupFlow({
               : left > 0
                 ? `осталось ${left} из ${space?.capacity ?? 0}`
                 : space
-                  ? 'мест нет сегодня'
+                  ? 'мест нет на этот час'
                   : 'Загрузка…'}
           </span>
         </div>
@@ -209,30 +249,31 @@ export default function CoworkingSignupFlow({
           <SvcDateField value={dayKey} min={todayYmd()} onChange={setDayKey} />
 
           <div className="cw-field" role="group" aria-labelledby="cw-interval-label">
-            <span id="cw-interval-label">Интервал</span>
-            <div className="cw-periods">
+            <span id="cw-interval-label">Час</span>
+            <p className="cw-field-hint">Выберите почасовой слот (Москва)</p>
+            <div className="cw-periods cw-periods--hours">
               {COWORKING_PERIODS.map((p) => {
                 const info = space?.periods.find((x) => x.id === p.id);
                 const slotLeft = info?.left;
+                const full = typeof slotLeft === 'number' && slotLeft <= 0;
                 return (
                   <button
                     key={p.id}
                     type="button"
-                    className={`cw-period${period === p.id ? ' is-active' : ''}`}
+                    className={`cw-period cw-period--hour${period === p.id ? ' is-active' : ''}${full ? ' is-full' : ''}`}
                     aria-pressed={period === p.id}
                     onClick={() => setPeriod(p.id)}
                   >
-                    <strong>{p.label}</strong>
-                    <span>
-                      {p.start}–{p.end}
-                    </span>
+                    <strong>
+                      {p.start}–{p.end.slice(0, 5)}
+                    </strong>
                     <em>
                       {typeof slotLeft === 'number'
                         ? slotLeft > 0
-                          ? `${slotLeft} мест`
-                          : 'мест нет'
+                          ? `${slotLeft}`
+                          : 'нет'
                         : busy
-                          ? 'Загрузка…'
+                          ? '…'
                           : '—'}
                     </em>
                   </button>
@@ -245,12 +286,25 @@ export default function CoworkingSignupFlow({
             <label className="cw-field">
               <span>Мест</span>
               <input
-                type="number"
-                min={1}
-                max={5}
-                value={seats}
-                onChange={(e) => setSeats(Math.max(1, Math.min(5, Number(e.target.value) || 1)))}
+                type="text"
+                inputMode="numeric"
+                pattern="[0-9]*"
+                autoComplete="off"
+                value={seatsDraft}
+                aria-describedby="cw-seats-hint"
+                onChange={(e) => {
+                  const raw = e.target.value.replace(/\D/g, '');
+                  setSeatsDraft(raw);
+                  if (raw === '') return;
+                  const n = Number(raw);
+                  if (Number.isFinite(n) && n >= 1 && n <= seatsMax) setSeats(n);
+                }}
+                onBlur={() => commitSeatsDraft(seatsDraft)}
               />
+              <span id="cw-seats-hint" className="cw-field-hint">
+                от 1 до {seatsMax}
+                {left > 0 ? ` · свободно ${left}` : ''}
+              </span>
             </label>
 
             <label className="cw-field">
@@ -294,7 +348,11 @@ export default function CoworkingSignupFlow({
             <ArrowRight size={20} />
           </Link>
         </div>
-        {!busy && left > 0 ? <p className="cw-left-note">Осталось {left} мест на выбранный интервал</p> : null}
+        {!busy && left > 0 ? (
+          <p className="cw-left-note">
+            Осталось {left} мест на {periodDef.start}–{periodDef.end}
+          </p>
+        ) : null}
       </div>
 
       <ServiceSplitModal

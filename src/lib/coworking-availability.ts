@@ -3,6 +3,7 @@ import {
   COWORKING_PERIODS,
   isCoworkingSpace,
   occupiedSeatStatuses,
+  periodBounds,
   todayKey,
 } from '@/lib/coworking';
 
@@ -46,17 +47,30 @@ export async function getCoworkingAvailability(dayKey = todayKey()): Promise<{
       dayKey,
       status: { in: [...occupiedSeatStatuses(), 'WAITLIST'] },
     },
-    select: { spaceId: true, period: true, seats: true, status: true },
+    select: { spaceId: true, period: true, seats: true, status: true, startTime: true, endTime: true },
   });
 
   const occupied = new Set<string>(occupiedSeatStatuses());
   const availability = coworking.map((space) => {
     const periods = COWORKING_PERIODS.map((p) => {
+      const { start, end } = periodBounds(dayKey, p.id);
       const used = signups
-        .filter((s) => s.spaceId === space.id && s.period === p.id && occupied.has(s.status))
+        .filter(
+          (s) =>
+            s.spaceId === space.id &&
+            occupied.has(s.status) &&
+            s.startTime < end &&
+            s.endTime > start
+        )
         .reduce((acc, s) => acc + s.seats, 0);
       const wait = signups
-        .filter((s) => s.spaceId === space.id && s.period === p.id && s.status === 'WAITLIST')
+        .filter(
+          (s) =>
+            s.spaceId === space.id &&
+            s.status === 'WAITLIST' &&
+            s.startTime < end &&
+            s.endTime > start
+        )
         .reduce((acc, s) => acc + s.seats, 0);
       const left = Math.max(0, space.capacity - used);
       return { ...p, used, wait, left };
