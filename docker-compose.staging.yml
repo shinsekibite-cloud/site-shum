@@ -1,0 +1,59 @@
+# Staging overlay / standalone web for ty.idivles.ru
+# Used from /opt/sochi-portal-staging with the prod Docker network.
+#
+#   docker compose -p sochi-staging -f docker-compose.staging.yml up -d --build
+#
+# Expects external network `sochi-portal_default` (created by prod compose)
+# and .env with DATABASE_URL / REDIS_URL pointing at prod service hostnames
+# (sochi-portal_db_1 / sochi-portal_redis_1) OR copied from prod with
+# hostnames rewritten by workflow-promote-to-young.sh.
+
+version: '3.8'
+
+services:
+  web:
+    image: sochi-staging_web:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '127.0.0.1:3001:3000'
+    env_file:
+      - .env
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=${DATABASE_URL}
+      - REDIS_URL=${REDIS_URL}
+      - NEXTAUTH_URL=${NEXTAUTH_URL:-https://ty.idivles.ru}
+      - NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
+      - RESEND_FROM=${RESEND_FROM:-}
+      - RESEND_API_KEY=${RESEND_API_KEY:-}
+      - EMAIL_PROVIDER=${EMAIL_PROVIDER:-resend}
+      - EMAIL_SMTP_BLOCKED=${EMAIL_SMTP_BLOCKED:-1}
+      - TECH_EMAIL=${TECH_EMAIL:-}
+      - TECH_BOOTSTRAP_PASSWORD=${TECH_BOOTSTRAP_PASSWORD:-}
+      - TECH_PASSWORD_HASH=${TECH_PASSWORD_HASH:-}
+      # Heap under cgroup: leave ~128–160Mi for native/buffers to avoid GC thrash → nginx 503
+      - NODE_OPTIONS=--max-old-space-size=320
+      # NODE_EXTRA_CA_CERTS set by scripts/docker-entrypoint.sh only if PEM exists
+    volumes:
+      # Share prod uploads so docs/avatars/gallery exist for next/image + /api/documents
+      # (nginx already serves /uploads from prod; empty staging volume caused 400/404).
+      - ${STAGING_UPLOADS_HOST_PATH:-/opt/sochi-portal/public/uploads}:/app/public/uploads
+      - ./certs:/app/certs:ro
+    restart: always
+    mem_limit: 512m
+    memswap_limit: 640m
+    cpus: '0.75'
+    healthcheck:
+      test: ['CMD', 'node', '-e', "fetch('http://127.0.0.1:3000/api/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 20s
+      timeout: 5s
+      retries: 4
+      start_period: 60s
+    networks:
+      - sochi-portal_default
+
+networks:
+  sochi-portal_default:
+    external: true

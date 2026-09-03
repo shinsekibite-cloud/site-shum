@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex,nofollow" />
+  <title>Расшифровка архива ПДн YoungPortal (YPLEA1)</title>
+  <style>
+    :root {
+      --bg: #f1f5f9;
+      --card: #fff;
+      --text: #0f172a;
+      --muted: #64748b;
+      --line: #e2e8f0;
+      --primary: #2563eb;
+      --ok: #047857;
+      --err: #b91c1c;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      background: linear-gradient(180deg, #e8eef7, var(--bg) 40%);
+      color: var(--text);
+      line-height: 1.45;
+      min-height: 100vh;
+    }
+    .wrap {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 1.25rem 1rem 3rem;
+    }
+    h1 { font-size: 1.35rem; margin: 0 0 0.35rem; }
+    .lead { color: var(--muted); margin: 0 0 1.25rem; font-size: 0.95rem; }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 1.1rem 1.15rem;
+      box-shadow: 0 8px 28px rgba(15, 23, 42, 0.06);
+      margin-bottom: 1rem;
+    }
+    .card h2 { font-size: 1rem; margin: 0 0 0.65rem; }
+    label {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 750;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      color: var(--muted);
+      margin-bottom: 0.35rem;
+    }
+    .field { margin-bottom: 0.85rem; }
+    input[type="text"], input[type="password"], textarea {
+      width: 100%;
+      padding: 0.7rem 0.8rem;
+      border: 1.5px solid var(--line);
+      border-radius: 10px;
+      font: inherit;
+      background: #f8fafc;
+    }
+    input:focus, textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      background: #fff;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+    }
+    .row { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; }
+    .btn {
+      appearance: none;
+      border: 0;
+      border-radius: 999px;
+      padding: 0.65rem 1.1rem;
+      font: inherit;
+      font-weight: 750;
+      cursor: pointer;
+      background: var(--primary);
+      color: #fff;
+    }
+    .btn:disabled { opacity: 0.55; cursor: wait; }
+    .btn-ghost {
+      background: #fff;
+      color: var(--text);
+      border: 1.5px solid var(--line);
+    }
+    .hint {
+      font-size: 0.82rem;
+      color: var(--muted);
+      margin: 0.35rem 0 0;
+    }
+    .ok { color: var(--ok); font-weight: 700; font-size: 0.9rem; }
+    .err { color: var(--err); font-weight: 700; font-size: 0.9rem; white-space: pre-wrap; }
+    .meta {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 0.75rem;
+      word-break: break-all;
+      background: #f8fafc;
+      border-radius: 8px;
+      padding: 0.55rem 0.65rem;
+      border: 1px solid var(--line);
+    }
+    pre {
+      margin: 0;
+      max-height: 420px;
+      overflow: auto;
+      font-size: 0.78rem;
+      line-height: 1.4;
+      background: #0f172a;
+      color: #e2e8f0;
+      border-radius: 12px;
+      padding: 0.85rem;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+    .steps { margin: 0; padding-left: 1.15rem; color: var(--muted); font-size: 0.9rem; }
+    .steps li { margin-bottom: 0.35rem; }
+    .badge {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 0.2rem 0.5rem;
+      border-radius: 999px;
+      background: rgba(4, 120, 87, 0.1);
+      color: var(--ok);
+      margin-bottom: 0.65rem;
+    }
+    .offline {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 0.2rem 0.5rem;
+      border-radius: 999px;
+      background: rgba(37, 99, 235, 0.1);
+      color: #1d4ed8;
+      margin-left: 0.35rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Расшифровка архива ПДн</h1>
+    <p class="lead">
+      Официальный инструмент YoungPortal для файлов <strong>.ypenc</strong> (контейнер
+      <code>YPLEA1</code>, AES-256-GCM). Работает <strong>в браузере на этом компьютере</strong>:
+      ключ и файл никуда не отправляются.
+      <span class="offline" id="net-status">проверка сети…</span>
+    </p>
+
+    <div class="card">
+      <h2>Как пользоваться (для уполномоченного органа)</h2>
+      <ol class="steps">
+        <li>Получите файл <code>.ypenc</code> и <strong>отдельно</strong> одноразовый ключ AES (64 hex-символа).</li>
+        <li>При желании сохраните эту страницу («Сохранить как…») и откройте <strong>офлайн</strong>.</li>
+        <li>Выберите файл, вставьте ключ, при необходимости сверьте SHA-256 и отпечаток ключа.</li>
+        <li>Нажмите «Расшифровать» → скачайте JSON. Дальше можно открыть в любом редакторе или Excel (через конвертер JSON).</li>
+      </ol>
+      <p class="hint">
+        7-Zip / WinRAR не откроют этот файл — это не ZIP, а подписанный шифроконтейнер портала.
+        Используйте только этот расшифровщик или CLI <code>node scripts/decrypt-lea.mjs</code>.
+      </p>
+    </div>
+
+    <div class="card">
+      <div class="badge">Локальная расшифровка · ключ не уходит на сервер</div>
+      <div class="field">
+        <label for="file">Файл архива (.ypenc)</label>
+        <input id="file" type="file" accept=".ypenc,application/octet-stream" />
+      </div>
+      <div class="field">
+        <label for="key">Ключ AES (hex, 64 символа)</label>
+        <input id="key" type="password" autocomplete="off" spellcheck="false" placeholder="2bb80586…c72018" />
+        <p class="hint"><button type="button" class="btn-ghost btn" id="toggle-key" style="padding:0.35rem 0.7rem;font-size:0.78rem">Показать ключ</button></p>
+      </div>
+      <div class="field">
+        <label for="sha">Ожидаемый SHA-256 файла (необязательно)</label>
+        <input id="sha" type="text" spellcheck="false" placeholder="из сопроводительного сообщения" />
+      </div>
+      <div class="field">
+        <label for="fp">Ожидаемый отпечаток ключа (необязательно)</label>
+        <input id="fp" type="text" spellcheck="false" placeholder="первые 32 hex от SHA-256 ключа" />
+      </div>
+      <div class="row">
+        <button type="button" class="btn" id="run">Расшифровать</button>
+        <button type="button" class="btn btn-ghost" id="dl" disabled>Скачать JSON</button>
+        <button type="button" class="btn btn-ghost" id="clear">Очистить</button>
+      </div>
+      <p id="status" class="hint" style="margin-top:0.75rem"></p>
+      <div id="meta" class="meta" style="display:none;margin-top:0.65rem"></div>
+    </div>
+
+    <div class="card" id="out-card" style="display:none">
+      <h2>Содержимое</h2>
+      <pre id="out"></pre>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      const $ = (id) => document.getElementById(id);
+      const statusEl = $('status');
+      const metaEl = $('meta');
+      const outEl = $('out');
+      const outCard = $('out-card');
+      const dlBtn = $('dl');
+      let lastJson = '';
+      let lastName = 'lea-payload.json';
+
+      function setStatus(msg, kind) {
+        statusEl.textContent = msg || '';
+        statusEl.className = kind === 'ok' ? 'ok' : kind === 'err' ? 'err' : 'hint';
+      }
+
+      function hexToBytes(hex) {
+        const clean = String(hex || '').trim().replace(/\s+/g, '').toLowerCase();
+        if (!/^[0-9a-f]+$/.test(clean) || clean.length % 2) {
+          throw new Error('Ключ должен быть hex-строкой чётной длины');
+        }
+        const out = new Uint8Array(clean.length / 2);
+        for (let i = 0; i < out.length; i++) out[i] = parseInt(clean.slice(i * 2, i * 2 + 2), 16);
+        return out;
+      }
+
+      function bytesToHex(buf) {
+        return [...new Uint8Array(buf)].map((b) => b.toString(16).padStart(2, '0')).join('');
+      }
+
+      async function sha256Hex(buf) {
+        const dig = await crypto.subtle.digest('SHA-256', buf);
+        return bytesToHex(dig);
+      }
+
+      async function updateNet() {
+        const el = $('net-status');
+        el.textContent = navigator.onLine ? 'можно сохранить страницу и работать офлайн' : 'офлайн — расшифровка локальная';
+      }
+      updateNet();
+      window.addEventListener('online', updateNet);
+      window.addEventListener('offline', updateNet);
+
+      $('toggle-key').addEventListener('click', () => {
+        const inp = $('key');
+        const show = inp.type === 'password';
+        inp.type = show ? 'text' : 'password';
+        $('toggle-key').textContent = show ? 'Скрыть ключ' : 'Показать ключ';
+      });
+
+      $('clear').addEventListener('click', () => {
+        $('file').value = '';
+        $('key').value = '';
+        $('sha').value = '';
+        $('fp').value = '';
+        lastJson = '';
+        dlBtn.disabled = true;
+        outCard.style.display = 'none';
+        metaEl.style.display = 'none';
+        setStatus('');
+      });
+
+      dlBtn.addEventListener('click', () => {
+        if (!lastJson) return;
+        const blob = new Blob([lastJson], { type: 'application/json;charset=utf-8' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = lastName;
+        a.click();
+        URL.revokeObjectURL(a.href);
+      });
+
+      $('run').addEventListener('click', async () => {
+        setStatus('');
+        metaEl.style.display = 'none';
+        outCard.style.display = 'none';
+        dlBtn.disabled = true;
+        lastJson = '';
+
+        const file = $('file').files && $('file').files[0];
+        if (!file) {
+          setStatus('Выберите файл .ypenc', 'err');
+          return;
+        }
+
+        try {
+          const keyHex = $('key').value.trim();
+          if (keyHex.length !== 64) throw new Error('Ключ AES должен быть ровно 64 hex-символа (32 байта)');
+
+          const buf = new Uint8Array(await file.arrayBuffer());
+          const fileSha = await sha256Hex(buf.buffer);
+          const expectSha = $('sha').value.trim().toLowerCase();
+          if (expectSha && expectSha !== fileSha) {
+            throw new Error('SHA-256 файла не совпал с ожидаемым.\nОжидали: ' + expectSha + '\nПолучили: ' + fileSha);
+          }
+
+          const magic = new TextDecoder().decode(buf.subarray(0, 6));
+          if (magic !== 'YPLEA1') {
+            throw new Error('Не LEA-архив YoungPortal (ожидался заголовок YPLEA1, получено: ' + magic + ')');
+          }
+          if (buf.length < 6 + 12 + 16 + 1) throw new Error('Файл слишком короткий');
+
+          const iv = buf.subarray(6, 18);
+          const tag = buf.subarray(18, 34);
+          const ciphertext = buf.subarray(34);
+          // WebCrypto: ciphertext || tag
+          const ctWithTag = new Uint8Array(ciphertext.length + tag.length);
+          ctWithTag.set(ciphertext, 0);
+          ctWithTag.set(tag, ciphertext.length);
+
+          const keyBytes = hexToBytes(keyHex);
+          if (keyBytes.length !== 32) throw new Error('Ключ должен быть 32 байта');
+
+          const keyFpFull = await sha256Hex(keyBytes.buffer);
+          const keyFp = keyFpFull.slice(0, 32);
+          const expectFp = $('fp').value.trim().toLowerCase();
+          if (expectFp && expectFp !== keyFp) {
+            throw new Error('Отпечаток ключа не совпал.\nОжидали: ' + expectFp + '\nПолучили: ' + keyFp);
+          }
+
+          const cryptoKey = await crypto.subtle.importKey('raw', keyBytes, { name: 'AES-GCM' }, false, ['decrypt']);
+          let plainBuf;
+          try {
+            plainBuf = await crypto.subtle.decrypt({ name: 'AES-GCM', iv, tagLength: 128 }, cryptoKey, ctWithTag);
+          } catch {
+            throw new Error('Не удалось расшифровать: неверный ключ или повреждённый файл');
+          }
+
+          const text = new TextDecoder().decode(plainBuf);
+          JSON.parse(text); // validate
+          const pretty = JSON.stringify(JSON.parse(text), null, 2);
+          lastJson = pretty;
+          lastName = (file.name || 'archive').replace(/\.ypenc$/i, '') + '.json';
+          outEl.textContent = pretty;
+          outCard.style.display = 'block';
+          dlBtn.disabled = false;
+
+          metaEl.style.display = 'block';
+          metaEl.textContent =
+            'SHA-256 файла: ' + fileSha + '\n' +
+            'Отпечаток ключа: ' + keyFp + '\n' +
+            'Размер JSON: ' + pretty.length + ' символов';
+          setStatus('Готово. Можно скачать JSON.', 'ok');
+        } catch (e) {
+          setStatus(e && e.message ? e.message : String(e), 'err');
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

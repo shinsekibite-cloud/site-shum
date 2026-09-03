@@ -1,0 +1,29 @@
+# Скачивание kit — зеркало py.idivles.ru (sea-serv)
+# IP: 77.110.125.241 (curl -fkL, если сертификат не совпадает с именем)
+
+KIT_STORAGE_HOST=py.idivles.ru
+KIT_STORAGE_IP=77.110.125.241
+
+# Клиентский kit (исходники + scripts + Docker-образы, БЕЗ чужой БД/uploads) — 2026-08-17
+# Внутри: START.sh, scripts/, snapshot/images — модули: /admin/settings?tab=modules
+KIT_URL=https://py.idivles.ru/backups/youngportal-client-kit-latest.tgz
+KIT_SHA256=38dcb250ab167e531ebbede2eb71acbbdbf40c55917ccce6fec31c280834c7d1
+
+# Токен (клиент):
+# https://py.idivles.ru/backups/0c4d11be0b4be3eb6d94bb573b4c82f8/youngportal-client-kit-20260817-045005.tgz
+
+# Разработчик / полный эталон (код + scripts + БД + uploads + docker images) — 2026-08-17
+KIT_DEV_URL=https://py.idivles.ru/backups/youngportal-reference-kit-latest.tgz
+KIT_DEV_SHA256=258cba35dc775fbc548c7f441f48d584d793705f29c7528e05f4d2a9ff1f3fe8
+
+# Токен (эталон):
+# https://py.idivles.ru/backups/5e7396d73df0194dbffff01f852d366c/youngportal-reference-kit-20260817-044821.tgz
+
+# Bootstrap (скрипты установки):
+#   https://py.idivles.ru/backups/bootstrap/yp-install.sh
+#   https://py.idivles.ru/backups/bootstrap/yp-install.env.example
+#   https://py.idivles.ru/backups/bootstrap/run-install.sh
+#   https://py.idivles.ru/backups/bootstrap/CLIENT-INSTALL.txt
+#
+#   curl -fsSL -o /tmp/yp-install.sh https://py.idivles.ru/backups/bootstrap/yp-install.sh
+#   curl -fsSL -o /tmp/run-install.sh https://py.idivles.ru/backups/bootstrap/run-install.sh

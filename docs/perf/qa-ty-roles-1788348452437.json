@@ -1,0 +1,235 @@
+{
+  "base": "https://ty.idivles.ru",
+  "at": "2026-09-02T11:27:32.437Z",
+  "total": 32,
+  "pass": 25,
+  "fail": 7,
+  "critical": 5,
+  "high": 2,
+  "rows": [
+    {
+      "role": "GUEST",
+      "name": "public /",
+      "ok": true,
+      "severity": "info",
+      "detail": "HTTP 200"
+    },
+    {
+      "role": "GUEST",
+      "name": "public /events",
+      "ok": true,
+      "severity": "info",
+      "detail": "HTTP 200"
+    },
+    {
+      "role": "GUEST",
+      "name": "public /projects",
+      "ok": true,
+      "severity": "info",
+      "detail": "HTTP 200"
+    },
+    {
+      "role": "GUEST",
+      "name": "public /clubs",
+      "ok": true,
+      "severity": "info",
+      "detail": "HTTP 200"
+    },
+    {
+      "role": "GUEST",
+      "name": "public /spaces",
+      "ok": true,
+      "severity": "info",
+      "detail": "HTTP 200"
+    },
+    {
+      "role": "GUEST",
+      "name": "public /news",
+      "ok": true,
+      "severity": "info",
+      "detail": "HTTP 200"
+    },
+    {
+      "role": "GUEST",
+      "name": "public /coworking",
+      "ok": true,
+      "severity": "info",
+      "detail": "HTTP 200"
+    },
+    {
+      "role": "GUEST",
+      "name": "public /login",
+      "ok": true,
+      "severity": "info",
+      "detail": "HTTP 200"
+    },
+    {
+      "role": "GUEST",
+      "name": "public /privacy",
+      "ok": true,
+      "severity": "info",
+      "detail": "HTTP 200"
+    },
+    {
+      "role": "GUEST",
+      "name": "public /contacts",
+      "ok": true,
+      "severity": "info",
+      "detail": "HTTP 200"
+    },
+    {
+      "role": "GUEST",
+      "name": "deny /dashboard",
+      "ok": true,
+      "severity": "info",
+      "detail": "HTTP 307 → /login?callbackUrl=%2Fdashboard"
+    },
+    {
+      "role": "GUEST",
+      "name": "deny /dashboard/settings",
+      "ok": true,
+      "severity": "info",
+      "detail": "HTTP 307 → /login?callbackUrl=%2Fdashboard%2Fsettings"
+    },
+    {
+      "role": "GUEST",
+      "name": "deny /dashboard/applications",
+      "ok": true,
+      "severity": "info",
+      "detail": "HTTP 307 → /login?callbackUrl=%2Fdashboard%2Fapplications"
+    },
+    {
+      "role": "GUEST",
+      "name": "deny /more",
+      "ok": false,
+      "severity": "high",
+      "detail": "HTTP 200 → "
+    },
+    {
+      "role": "GUEST",
+      "name": "deny /admin",
+      "ok": true,
+      "severity": "info",
+      "detail": "HTTP 307 → /login?callbackUrl=/admin&staff=1"
+    },
+    {
+      "role": "GUEST",
+      "name": "deny /admin/occupancy",
+      "ok": true,
+      "severity": "info",
+      "detail": "HTTP 307 → /login?callbackUrl=/admin&staff=1"
+    },
+    {
+      "role": "GUEST",
+      "name": "deny /admin/spaces",
+      "ok": true,
+      "severity": "info",
+      "detail": "HTTP 307 → /login?callbackUrl=/admin&staff=1"
+    },
+    {
+      "role": "GUEST",
+      "name": "deny /admin/bookings",
+      "ok": true,
+      "severity": "info",
+      "detail": "HTTP 307 → /login?callbackUrl=/admin&staff=1"
+    },
+    {
+      "role": "GUEST",
+      "name": "deny /admin/users",
+      "ok": true,
+      "severity": "info",
+      "detail": "HTTP 307 → /login?callbackUrl=/admin&staff=1"
+    },
+    {
+      "role": "GUEST",
+      "name": "deny /scan",
+      "ok": true,
+      "severity": "info",
+      "detail": "HTTP 307 → /login?callbackUrl=%2Fscan&staff=1"
+    },
+    {
+      "role": "GUEST",
+      "name": "deny /scanner",
+      "ok": true,
+      "severity": "info",
+      "detail": "HTTP 307 → /login?callbackUrl=%2Fscanner&staff=1"
+    },
+    {
+      "role": "GUEST",
+      "name": "deny /admin/scanner",
+      "ok": true,
+      "severity": "info",
+      "detail": "HTTP 307 → /login?callbackUrl=/admin&staff=1"
+    },
+    {
+      "role": "GUEST",
+      "name": "deny /ops",
+      "ok": false,
+      "severity": "high",
+      "detail": "HTTP 307 → /"
+    },
+    {
+      "role": "USER",
+      "name": "login",
+      "ok": false,
+      "severity": "critical",
+      "detail": "401 {\"url\":\"https://ty.idivles.ru/api/auth/error?error=%0AInvalid%20%60prisma.user.findFirst()%60%20invocation%3A%0A%0A%0AThe%20column%20%60User.moderationApprovedAt%60%20does%20not%20"
+    },
+    {
+      "role": "PARTICIPANT",
+      "name": "login",
+      "ok": false,
+      "severity": "critical",
+      "detail": "401 {\"url\":\"https://ty.idivles.ru/api/auth/error?error=%0AInvalid%20%60prisma.user.findFirst()%60%20invocation%3A%0A%0A%0AThe%20column%20%60User.moderationApprovedAt%60%20does%20not%20"
+    },
+    {
+      "role": "MODERATOR",
+      "name": "login",
+      "ok": false,
+      "severity": "critical",
+      "detail": "401 {\"url\":\"https://ty.idivles.ru/api/auth/error?error=%0AInvalid%20%60prisma.user.findFirst()%60%20invocation%3A%0A%0A%0AThe%20column%20%60User.moderationApprovedAt%60%20does%20not%20"
+    },
+    {
+      "role": "ADMIN",
+      "name": "login",
+      "ok": false,
+      "severity": "critical",
+      "detail": "401 {\"url\":\"https://ty.idivles.ru/api/auth/error?error=%0AInvalid%20%60prisma.user.findFirst()%60%20invocation%3A%0A%0A%0AThe%20column%20%60User.moderationApprovedAt%60%20does%20not%20"
+    },
+    {
+      "role": "SCANNER",
+      "name": "login",
+      "ok": false,
+      "severity": "critical",
+      "detail": "401 {\"url\":\"https://ty.idivles.ru/api/auth/error?error=%0AInvalid%20%60prisma.user.findFirst()%60%20invocation%3A%0A%0A%0AThe%20column%20%60User.moderationApprovedAt%60%20does%20not%20"
+    },
+    {
+      "role": "SYSTEM",
+      "name": "health ok",
+      "ok": true,
+      "severity": "critical",
+      "detail": "{\"ok\":true,\"db\":true,\"version\":\"1.6.0\",\"maintenanceMode\":false,\"siteName\":\"Молодёжь Сочи\",\"uptimeSec\":495,\"latencyMs\":4}"
+    },
+    {
+      "role": "SYSTEM",
+      "name": "hero video class",
+      "ok": true,
+      "severity": "high",
+      "detail": ""
+    },
+    {
+      "role": "SYSTEM",
+      "name": "hero CTAs",
+      "ok": true,
+      "severity": "high",
+      "detail": ""
+    },
+    {
+      "role": "SYSTEM",
+      "name": "no QA tutorial SSR",
+      "ok": true,
+      "severity": "info",
+      "detail": ""
+    }
+  ]
+}

@@ -1,0 +1,307 @@
+/**
+ * Service UI standardization layer — menus, chips, sections, z-index.
+ * Imported last from globals.css via @import or appended.
+ */
+
+:root {
+  --z-content: 1;
+  --z-sticky: 100;
+  --z-dock: 1000;
+  --z-fab: 1100;
+  --z-dropdown: 3000;
+  --z-cookie: 9000;
+  --z-nav: 10000;
+  --z-sheet: 12000;
+  --z-modal: 13000;
+  --z-lightbox: 14000;
+  --z-toast: 100000;
+
+  --svc-chip-h: 2.35rem;
+  --svc-chip-pad-x: 0.85rem;
+  --svc-chip-fs: 0.82rem;
+}
+
+/* ----- Z-index: nav above cookies; sheets/modals/lightbox above nav ----- */
+.glass-nav,
+.glass-nav.menu-open {
+  z-index: var(--z-nav) !important;
+}
+.yp-cookie-banner,
+.consent-banner {
+  z-index: var(--z-cookie) !important;
+}
+
+.portal-activity-lightbox {
+  z-index: var(--z-lightbox) !important;
+}
+
+.qa-sheet-root {
+  z-index: var(--z-sheet) !important;
+}
+.qa-tutorial-root {
+  z-index: calc(var(--z-sheet) + 50) !important;
+}
+.qa-fab {
+  z-index: var(--z-fab) !important;
+}
+
+.yp-bottom-nav {
+  z-index: var(--z-dock) !important;
+}
+
+/* Undo earlier mobile demotion of nav into cookie band */
+@media (max-width: 1100px) {
+  .glass-nav,
+  .glass-nav.menu-open {
+    z-index: var(--z-nav) !important;
+  }
+  .qa-fab {
+    display: none !important;
+  }
+}
+
+/* ----- Unified chips / filters (no outer ring, no hover lift) ----- */
+.filter-bar__chip,
+.places-chip,
+.space-filter-chip,
+.catalog-filter-pop__chip,
+.faq-hub__chip,
+.ach-filters__btn,
+.ach-cat-filters__btn {
+  position: relative;
+  z-index: 0;
+  height: var(--svc-chip-h);
+  min-height: var(--svc-chip-h);
+  padding: 0 var(--svc-chip-pad-x) !important;
+  border-radius: var(--radius-pill) !important;
+  border: 1.5px solid var(--line) !important;
+  background: #fff !important;
+  color: var(--muted) !important;
+  font-size: var(--svc-chip-fs) !important;
+  font-weight: 700 !important;
+  line-height: 1 !important;
+  box-shadow: none !important;
+  transform: none !important;
+  text-decoration: none;
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  white-space: nowrap;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.filter-bar__chip:hover,
+.places-chip:hover,
+.space-filter-chip:hover,
+.catalog-filter-pop__chip:hover,
+.faq-hub__chip:hover,
+.ach-filters__btn:hover,
+.ach-cat-filters__btn:hover {
+  transform: none !important;
+  border-color: var(--primary) !important;
+  color: var(--primary-hover) !important;
+  background: var(--brand-pill) !important;
+  box-shadow: none !important;
+}
+
+.filter-bar__chip.is-active,
+.places-chip.is-active,
+.space-filter-chip.is-active,
+.catalog-filter-pop__chip.is-active,
+.faq-hub__chip.is-active,
+.ach-filters__btn.is-active,
+.ach-cat-filters__btn.is-active,
+.catalog-filter-pop__toggle.is-on,
+.catalog-filter-pop__toggle[aria-expanded='true'] {
+  z-index: 0 !important;
+  border-color: var(--primary) !important;
+  background: var(--brand-soft) !important;
+  color: var(--primary-hover) !important;
+  box-shadow: none !important;
+  transform: none !important;
+  font-weight: 800 !important;
+}
+
+/* Selected “all / solid” variants stay flat — no glow ring */
+.filter-bar__chip.is-active--all,
+.filter-bar__chip.is-active--primary,
+.filter-bar__chip.is-active--muted {
+  box-shadow: none !important;
+  transform: none !important;
+}
+.filter-bar__chip.is-active--primary,
+.space-filter-chip.is-active {
+  background: var(--primary) !important;
+  color: #fff !important;
+  border-color: var(--primary) !important;
+}
+.filter-bar__chip.is-active--all {
+  background: var(--foreground) !important;
+  color: #fff !important;
+  border-color: var(--foreground) !important;
+}
+
+/* Scroll rows: padding so chips never clip / jump above neighbors */
+.filter-bar__row--one,
+.filter-bar__chips,
+.places-chips,
+.space-filter-chips,
+.catalog-filter-pop__row,
+.places-toolbar--stack .places-chips {
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  padding: 4px 2px !important;
+  margin: 0;
+  gap: 0.45rem;
+  align-items: center;
+  scrollbar-width: thin;
+}
+
+/* Kill places hover lift permanently */
+.places-chip:hover {
+  transform: none !important;
+}
+.places-chip.is-active {
+  background: var(--brand-soft) !important;
+  color: var(--primary-hover) !important;
+  border-color: var(--primary) !important;
+}
+
+/* ----- Section headers: one rhythm ----- */
+.home-section-head,
+.catalog-page-header,
+.places-page__head,
+.cw-page-head,
+.profile-page-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 0.85rem 1rem;
+  margin-bottom: 1.15rem;
+  min-width: 0;
+}
+
+.home-section-title,
+.page-hero-title,
+.places-title,
+.cw-page-head h1 {
+  font-size: clamp(1.65rem, 3.5vw, 2.35rem) !important;
+  font-weight: 900 !important;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  margin: 0 0 0.35rem !important;
+  color: var(--foreground) !important;
+  text-shadow: none !important;
+}
+
+.home-section-sub,
+.page-hero-subtitle,
+.places-lead,
+.cw-page-head p {
+  margin: 0 !important;
+  color: var(--muted) !important;
+  font-size: 0.98rem !important;
+  line-height: 1.4;
+  max-width: 40rem;
+}
+
+.home-section-link {
+  border-radius: var(--radius-pill) !important;
+  border: 1px solid var(--line) !important;
+  background: #fff !important;
+  padding: 0.45rem 0.9rem !important;
+  font-weight: 700 !important;
+  color: var(--primary) !important;
+  text-decoration: none;
+}
+
+/* Catalog toolbars — white card, no bleed */
+.places-toolbar,
+.space-filter-bar,
+.catalog-filter-pop,
+.filter-bar {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 1.25rem;
+  padding: 0.85rem 1rem;
+  box-shadow: none;
+  margin-bottom: 1.15rem;
+  min-width: 0;
+  max-width: 100%;
+  overflow: visible;
+}
+
+.places-toolbar--stack {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 1.25rem;
+  padding: 0.85rem 1rem;
+}
+
+/* Prevent white wash / mask painting over labels in sticky end cluster on desktop only */
+@media (min-width: 901px) {
+  .glass-nav-end {
+    box-shadow: -10px 0 14px 8px #fff;
+  }
+}
+@media (max-width: 900px) {
+  .glass-nav-end {
+    box-shadow: none !important;
+    background: transparent !important;
+  }
+}
+
+/* Cards must not escape viewport */
+.catalog-card,
+.svc-space-card,
+.places-card,
+.free-now-card,
+.svc-cta-card {
+  max-width: 100%;
+  min-width: 0;
+  overflow: hidden;
+}
+
+/* Forms: kill native fieldset frames that draw lines through legends */
+.main-content fieldset:not(.keep-fieldset) {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  min-inline-size: 0;
+  min-width: 0;
+  max-width: 100%;
+}
+.main-content fieldset:not(.keep-fieldset) > legend {
+  float: none;
+  width: auto;
+  padding: 0;
+  margin: 0 0 0.35rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+/* Service form shells stay inside the viewport */
+.cw-page,
+.cw-layout,
+.cw-flow,
+.svc-form-group,
+.hall-week,
+.yp-engage {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.places-card:hover,
+.catalog-card:hover {
+  transform: none;
+}
+
+/* Filter panels above cards but below nav */
+.space-filter-panel,
+.catalog-filter-pop__panel {
+  z-index: 50 !important;
+}
