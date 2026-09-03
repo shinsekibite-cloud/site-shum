@@ -322,14 +322,11 @@ export default async function proxy(req: NextRequest) {
     pathname.startsWith('/vacancies') ||
     Boolean(pathname.match(/^\/spaces\/[^/]+\/book$/))
   ) {
-    if (!token) {
-      const cb = `${pathname}${req.nextUrl.search || ''}`;
-      return NextResponse.redirect(new URL(`/login?callbackUrl=${encodeURIComponent(cb)}`, req.url));
-    }
-    if (role === 'SCANNER') {
+    // Guests see soft-gate UI on the page — no hard redirect to /login.
+    if (token && role === 'SCANNER') {
       return NextResponse.redirect(new URL('/scanner', req.url));
     }
-    if (isTechRole(role)) {
+    if (token && isTechRole(role)) {
       return NextResponse.redirect(new URL('/ops', req.url));
     }
   }

@@ -102,8 +102,9 @@ export async function POST(req: Request) {
     where: {
       spaceId,
       dayKey,
-      period,
       status: { in: [...occupiedSeatStatuses()] },
+      startTime: { lt: end },
+      endTime: { gt: start },
     },
     select: { seats: true },
   });

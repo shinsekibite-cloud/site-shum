@@ -161,7 +161,7 @@ button {
   border-bottom: 1px solid var(--card-border);
   position: sticky;
   top: 0;
-  z-index: 10100; /* above cookie/onboarding sheets so «Вход» stays clickable */
+  z-index: var(--z-nav, 10000);
   overflow: visible;
   min-height: calc(var(--nav-h) + env(safe-area-inset-top, 0px));
 }
@@ -172,7 +172,7 @@ button {
   left: 0;
   right: 0;
   width: 100%;
-  z-index: 10100;
+  z-index: var(--z-nav, 10000);
   min-height: calc(var(--nav-h) + env(safe-area-inset-top, 0px));
   /* Opaque so scrolled page titles cannot bleed through the sticky bar */
   background: #ffffff;
@@ -5047,7 +5047,7 @@ input, textarea, select {
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.5);
-  z-index: 12000;
+  z-index: var(--z-modal, 13000);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -8623,7 +8623,7 @@ a.dashboard-nav-btn {
 .privacy-gate {
   position: fixed;
   inset: 0;
-  z-index: 10060;
+  z-index: var(--z-modal, 13000);
   box-sizing: border-box;
   display: flex;
   align-items: center;
@@ -22637,6 +22637,7 @@ button.profile-hero__bio-cta {
 .yp-modal {
   position: fixed;
   inset: 0;
+  z-index: var(--z-modal, 13000);
   display: flex;
   align-items: center;
   justify-content: center;

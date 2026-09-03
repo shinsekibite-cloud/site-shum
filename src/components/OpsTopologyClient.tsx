@@ -791,7 +791,7 @@ export default function OpsTopologyClient({ onBack }: { onBack?: () => void }) {
                     {` · ${related.length} связей`}
                   </p>
                   <p className="god-map__eco">
-                    {selectedNode.ecoPoints.toLocaleString('ru-RU')} эко
+                    {selectedNode.ecoPoints.toLocaleString('ru-RU')} мб
                   </p>
                 </div>
                 <Link

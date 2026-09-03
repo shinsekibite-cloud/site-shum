@@ -190,9 +190,9 @@ export default function ReputationHistoryModal({
         </div>
 
         <p className="rep-modal__why">
-          <b>Уровень</b> — ваш вклад на портале (эко + стиль + коллекция).{' '}
+          <b>Уровень</b> — ваш вклад на портале (мбаллы + стиль + коллекция).{' '}
           <b>Надёжность</b> — можно ли доверять вам на событиях;{' '}
-          <b>Сообщество</b> — насколько вы в теме общения. Эко — валюта стиля и карт.
+          <b>Сообщество</b> — насколько вы в теме общения. мбаллы — валюта стиля и карт.
         </p>
 
         <div className="rep-modal__tabs" role="tablist">
@@ -256,7 +256,7 @@ export default function ReputationHistoryModal({
                       <strong>{row.title}</strong>
                       <small>
                         {band?.title} · вклад от {row.min}
-                        {row.reward.eco > 0 ? ` · +${row.reward.eco} эко` : ''}
+                        {row.reward.eco > 0 ? ` · +${row.reward.eco} мбаллов` : ''}
                       </small>
                       <em>{row.reward.perk}</em>
                     </span>
@@ -278,7 +278,7 @@ export default function ReputationHistoryModal({
                 onClose();
               }}
             >
-              <ShoppingBag size={15} /> Эко-магазин и карты
+              <ShoppingBag size={15} /> Магазин мбаллов и карты
             </button>
           </div>
         )}
@@ -289,7 +289,7 @@ export default function ReputationHistoryModal({
           ) : events.length === 0 ? (
             <p className="rep-modal__empty">
               {tab === 'LEVEL'
-                ? 'История вклада пока пуста — зарабатывайте эко, оформляйте профиль и открывайте карты.'
+                ? 'История вклада пока пуста — зарабатывайте мбаллы, оформляйте профиль и открывайте карты.'
                 : 'Пока нет записей в этой категории'}
             </p>
           ) : (

@@ -41,7 +41,7 @@ export default function NotificationsInbox() {
       <div className="profile-page-head">
         <div>
           <h1 className="profile-view__title">История уведомлений</h1>
-          <p className="profile-view__lead">Покупки за эко, модерация, заявки и сообщения — всё в одном списке.</p>
+          <p className="profile-view__lead">Покупки за мбаллы, модерация, заявки и сообщения — всё в одном списке.</p>
         </div>
         <Link href="/dashboard" className="btn btn-secondary">
           К профилю

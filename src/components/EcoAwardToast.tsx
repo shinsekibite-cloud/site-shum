@@ -16,13 +16,13 @@ export default function EcoAwardToast() {
       if (amount <= 0) return;
       const id = `eco-award-${reason || 'award'}`;
       if (reason === 'view_unique') {
-        toast.success(t('eco.toast.view', `+${amount} эко за просмотр`, { n: amount }), {
+        toast.success(t('eco.toast.view', `+${amount} мбаллов за просмотр`, { n: amount }), {
           id,
           duration: 2600,
         });
         return;
       }
-      toast.success(t('eco.toast.game', `+${amount} эко за игру сегодня`, { n: amount }), {
+      toast.success(t('eco.toast.game', `+${amount} мбаллов за игру сегодня`, { n: amount }), {
         id,
         duration: 3600,
       });

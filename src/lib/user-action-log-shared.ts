@@ -28,7 +28,7 @@ export const ACTION_LABELS_RU: Record<string, string> = {
   BOOKING_LEAVE: 'Отказ от участия',
   APPLICATION_CREATE: 'Подача заявки',
   APPLICATION_CANCEL: 'Отзыв заявки',
-  ECO_SPEND: 'Покупка в эко-магазине',
+  ECO_SPEND: 'Покупка в магазине мбаллов',
   ECO_GRANT: 'Начисление мбаллов',
   CONSENT_COOKIES: 'Согласие cookie',
   CONSENT_PRIVACY: 'Согласие с политикой',

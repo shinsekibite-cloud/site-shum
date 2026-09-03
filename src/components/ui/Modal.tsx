@@ -40,7 +40,7 @@ export default function Modal({
   size = 'confirm',
   className = '',
   closeOnOverlay = true,
-  zIndex = 11000,
+  zIndex = 13000,
 }: Props) {
   const titleId = useId();
   const panelRef = useRef<HTMLDivElement>(null);

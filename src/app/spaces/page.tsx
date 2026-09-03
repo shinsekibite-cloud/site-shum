@@ -1,9 +1,9 @@
 import { Metadata } from 'next';
 import { getCachedPublicSpaces } from '@/lib/public-catalogs';
+import { getFreeTodaySpaceIds } from '@/lib/free-today-spaces';
 import SpacesCatalogClient from '@/components/catalog/SpacesCatalogClient';
 
 export const revalidate = 60;
-export const dynamic = 'force-static';
 
 export async function generateMetadata(): Promise<Metadata> {
   const { brandedMetadata } = await import('@/lib/branded-metadata');
@@ -14,6 +14,6 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function SpacesPage() {
-  const items = await getCachedPublicSpaces();
-  return <SpacesCatalogClient items={items} />;
+  const [items, freeTodayIds] = await Promise.all([getCachedPublicSpaces(), getFreeTodaySpaceIds()]);
+  return <SpacesCatalogClient items={items} freeTodayIds={freeTodayIds} />;
 }

@@ -1,12 +1,12 @@
 'use client';
 
 import { useState } from 'react';
-import Link from 'next/link';
 import { useSession } from 'next-auth/react';
 import { usePathname, useRouter } from 'next/navigation';
 import { reachGoal } from '@/components/YandexMetrika';
 import { ListPlus, UserMinus, UserPlus } from 'lucide-react';
 import AddToCalendarButton from '@/components/AddToCalendarButton';
+import GuestAuthPrompt from '@/components/GuestAuthPrompt';
 
 interface JoinEventButtonProps {
   eventId: string;
@@ -39,10 +39,9 @@ export default function JoinEventButton({
   compact = false,
   iconOnly = false,
 }: JoinEventButtonProps) {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const router = useRouter();
   const pathname = usePathname() || '/';
-  const loginHref = `/login?callbackUrl=${encodeURIComponent(pathname)}`;
 
   const [isJoined, setIsJoined] = useState(initialIsJoined);
   const [isFull, setIsFull] = useState(initialIsFull);
@@ -51,10 +50,7 @@ export default function JoinEventButton({
   const [message, setMessage] = useState('');
 
   const callJoin = async (opts?: { waitlist?: boolean }) => {
-    if (!session) {
-      router.push('/login?callbackUrl=' + encodeURIComponent(window.location.pathname));
-      return;
-    }
+    if (status !== 'authenticated' || !session) return;
     if (session.user?.moderationPending) {
       setMessage(
         'Ваш аккаунт находится на проверке. Полный функционал будет доступен после одобрения администратором'
@@ -150,30 +146,41 @@ export default function JoinEventButton({
   const showCalendar = isJoined && title && startTime && endTime;
   const pad = compact ? '0.4rem 0.55rem' : '0.75rem';
   const fontSize = compact ? '0.78rem' : '0.9rem';
+
   if (iconOnly) {
-    const needsLogin = !session && !isJoined && !waitlisted;
+    const needsLogin = status !== 'authenticated' && !isJoined && !waitlisted;
     const pendingMod = Boolean(session?.user?.moderationPending);
     const iconTitle = pendingMod
       ? 'Аккаунт на проверке'
       : needsLogin
-      ? 'Войти'
-      : isJoined
-        ? 'Отменить участие'
-        : waitlisted
-          ? 'Покинуть лист ожидания'
-          : isFull
-            ? 'В лист ожидания'
-            : 'Записаться на мероприятие';
+        ? 'Войти'
+        : isJoined
+          ? 'Отменить участие'
+          : waitlisted
+            ? 'Покинуть лист ожидания'
+            : isFull
+              ? 'В лист ожидания'
+              : 'Записаться на мероприятие';
     const Icon = isJoined || waitlisted ? UserMinus : isFull ? ListPlus : UserPlus;
+    if (needsLogin) {
+      return (
+        <GuestAuthPrompt
+          href={pathname}
+          className={`event-action-icon join-event-icon`}
+          asButton
+          title={iconTitle}
+          promptTitle="Войдите, чтобы записаться"
+          promptLead="Запись на событие доступна после входа. Можно сразу создать аккаунт."
+        >
+          <UserPlus size={16} aria-hidden />
+        </GuestAuthPrompt>
+      );
+    }
     return (
       <button
         type="button"
-        onClick={() =>
-          needsLogin
-            ? router.push(loginHref)
-            : callJoin(isJoined || waitlisted ? undefined : isFull ? { waitlist: true } : undefined)
-        }
-        disabled={isLoading || pendingMod}
+        onClick={() => callJoin(isJoined || waitlisted ? undefined : isFull ? { waitlist: true } : undefined)}
+        disabled={isLoading || pendingMod || status === 'loading'}
         className={`event-action-icon join-event-icon${isJoined ? ' is-joined' : ''}${waitlisted ? ' is-waitlist' : ''}`}
         title={iconTitle}
         aria-label={iconTitle}
@@ -216,14 +223,16 @@ export default function JoinEventButton({
             {compact ? (isJoined ? 'Отменить' : 'Покинуть') : actionLabel}
           </button>
         </>
-      ) : !session ? (
-        <Link
-          href={loginHref}
+      ) : status !== 'authenticated' ? (
+        <GuestAuthPrompt
+          href={pathname}
           className="join-event-btn is-primary"
-          style={{ padding: pad, fontSize, textAlign: 'center', textDecoration: 'none' }}
+          asButton
+          promptTitle="Войдите, чтобы записаться"
+          promptLead="Запись на событие доступна после входа. Можно сразу создать аккаунт."
         >
-          Войти
-        </Link>
+          {compact ? 'Записаться' : 'Я пойду'}
+        </GuestAuthPrompt>
       ) : session.user?.moderationPending ? (
         <div className="join-event-msg" style={{ padding: pad, fontSize }}>
           Аккаунт на проверке

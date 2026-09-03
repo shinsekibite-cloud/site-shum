@@ -306,7 +306,7 @@ export default async function AdminDashboard() {
           </div>
           <div className="admin-dash__pulse-card">
             <strong>{ecoSpenders}</strong>
-            <span>с эко-балансом</span>
+            <span>с балансом мбаллов</span>
           </div>
           <div className="admin-dash__pulse-card">
             <strong>{linkedMessengers}</strong>

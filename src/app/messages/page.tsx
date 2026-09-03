@@ -36,6 +36,7 @@ import toast from 'react-hot-toast';
 import UserAvatar from '@/components/UserAvatar';
 import MessageBodyText from '@/components/MessageBodyText';
 import MutualOverlapChips from '@/components/MutualOverlapChips';
+import AccountSoftGate from '@/components/AccountSoftGate';
 import type { MutualOverlap } from '@/lib/social';
 import { fetchPublicStatusCached } from '@/lib/public-status-client';
 import {
@@ -362,7 +363,7 @@ function MessagesInner() {
 
   useEffect(() => {
     if (status === 'unauthenticated') {
-      router.replace('/login?callbackUrl=' + encodeURIComponent('/messages'));
+      setLoading(false);
       return;
     }
     if (status !== 'authenticated') return;
@@ -845,6 +846,19 @@ function MessagesInner() {
       </div>
     );
   }
+
+  if (status === 'unauthenticated') {
+    return (
+      <div className="messages-root" style={{ padding: '1.25rem', maxWidth: 480, margin: '0 auto' }}>
+        <AccountSoftGate
+          callbackPath="/messages"
+          title="Войдите, чтобы читать сообщения"
+          lead="Личные чаты, клубы и приглашения доступны после входа."
+        />
+      </div>
+    );
+  }
+
   if (loading && dmList.length === 0 && groupList.length === 0 && !activeUser && !activeGroup) {
     return (
       <div className="messages-root" aria-busy="true">

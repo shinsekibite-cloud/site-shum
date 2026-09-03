@@ -1,12 +1,12 @@
 'use client';
 
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { ArrowLeft, Check, MessageCircle, Search, UserPlus, X } from 'lucide-react';
 import toast from 'react-hot-toast';
 import UserAvatar from '@/components/UserAvatar';
+import AccountSoftGate from '@/components/AccountSoftGate';
 
 type Trust = {
   score: number;
@@ -84,7 +84,6 @@ function Avatar({
 
 export default function FriendsPage() {
   const { status } = useSession();
-  const router = useRouter();
   const [data, setData] = useState<FriendsData>(emptyData);
   const [loading, setLoading] = useState(true);
   const [busyId, setBusyId] = useState<string | null>(null);
@@ -102,7 +101,7 @@ export default function FriendsPage() {
 
   useEffect(() => {
     if (status === 'unauthenticated') {
-      router.replace('/login?callbackUrl=' + encodeURIComponent('/friends'));
+      setLoading(false);
       return;
     }
     if (status === 'authenticated') {
@@ -126,7 +125,7 @@ export default function FriendsPage() {
         cancelled = true;
       };
     }
-  }, [load, router, status]);
+  }, [load, status]);
 
   useEffect(() => {
     const needle = siteQuery.trim();
@@ -223,7 +222,7 @@ export default function FriendsPage() {
     );
   }, [data.friends, query]);
 
-  if (status === 'loading' || loading) {
+  if (status === 'loading' || (status === 'authenticated' && loading)) {
     return (
       <main className="container friends-page" style={{ padding: '1.25rem 1rem 2rem' }}>
         <div className="svc-skel" aria-busy="true" aria-label="Загрузка">
@@ -231,6 +230,18 @@ export default function FriendsPage() {
           <div className="svc-skel__row" />
           <div className="svc-skel__row" />
         </div>
+      </main>
+    );
+  }
+
+  if (status === 'unauthenticated') {
+    return (
+      <main className="container friends-page" style={{ padding: '1.25rem 1rem 2rem', maxWidth: 480 }}>
+        <AccountSoftGate
+          callbackPath="/friends"
+          title="Войдите, чтобы видеть друзей"
+          lead="Список друзей, заявки и поиск участников доступны после входа."
+        />
       </main>
     );
   }

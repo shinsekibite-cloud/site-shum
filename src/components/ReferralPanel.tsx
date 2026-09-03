@@ -117,7 +117,7 @@ export default function ReferralPanel() {
             <Gift size={18} aria-hidden /> Пригласи друзей
           </h3>
           <p className="referral-panel__lead">
-            Друг регистрируется по ссылке и приходит на событие — вы оба получаете эко и социум.
+            Друг регистрируется по ссылке и приходит на событие — вы оба получаете мбаллы и социум.
           </p>
         </div>
         <button type="button" className="btn btn-primary" onClick={() => void share()}>
@@ -160,7 +160,7 @@ export default function ReferralPanel() {
         </div>
         <div>
           <Leaf size={16} /> <strong>{data.stats.ecoEarned}</strong>
-          <span>эко</span>
+          <span>мбаллы</span>
         </div>
         <div>
           <Sparkles size={16} /> <strong>+{data.stats.socialEarned}</strong>
@@ -180,14 +180,14 @@ export default function ReferralPanel() {
         <div className="referral-panel__rules">
           <ul>
             <li>
-              Регистрация: вам до <b>{data.rewards.ECO_SIGNUP_REFERRER}</b> эко, другу{' '}
+              Регистрация: вам до <b>{data.rewards.ECO_SIGNUP_REFERRER}</b> мбаллов, другу{' '}
               <b>{data.rewards.ECO_SIGNUP_REFEREE}</b>.
             </li>
             <li>
-              Инструктаж друга: +<b>{data.rewards.ECO_INSTRUCTIONS_REFERRER}</b> эко вам.
+              Инструктаж друга: +<b>{data.rewards.ECO_INSTRUCTIONS_REFERRER}</b> мбаллов вам.
             </li>
             <li>
-              Отметка на событии: +<b>{data.rewards.ECO_CHECKIN_REFERRER}</b> эко вам, +
+              Отметка на событии: +<b>{data.rewards.ECO_CHECKIN_REFERRER}</b> мбаллов вам, +
               <b>{data.rewards.ECO_CHECKIN_REFEREE}</b> другу.
             </li>
             <li>
@@ -195,7 +195,7 @@ export default function ReferralPanel() {
             </li>
             <li>
               Уровень 2: если ваш друг пригласит своего друга, вам ~{Math.round((data.rewards.L2_SIGNUP_PCT || 0.2) * 100)}%
-              от эко за его регистрацию и ~{Math.round((data.rewards.L2_CHECKIN_PCT || 0.15) * 100)}% от эко за его
+              от мбаллов за его регистрацию и ~{Math.round((data.rewards.L2_CHECKIN_PCT || 0.15) * 100)}% от мбаллов за его
               check-in.
             </li>
             <li>

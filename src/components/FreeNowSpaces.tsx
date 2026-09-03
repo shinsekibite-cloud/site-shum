@@ -92,7 +92,7 @@ export default async function FreeNowSpaces({ limit = 4 }: { limit?: number }) {
           <h2 className="home-section-title">Сейчас свободно</h2>
           <p className="home-section-sub">Ближайшие окна на площадках ЦРМ</p>
         </div>
-        <Link href="/spaces" className="home-section-link">
+        <Link href="/spaces?filter=free_today" className="home-section-link">
           Все пространства
         </Link>
       </div>

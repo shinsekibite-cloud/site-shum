@@ -12,6 +12,10 @@ type Props = {
   children: ReactNode;
   /** Prefer button semantics when styling matches a CTA pill */
   asButton?: boolean;
+  /** Dialog heading for guests */
+  promptTitle?: string;
+  /** Dialog lead for guests */
+  promptLead?: string;
 };
 
 /**
@@ -24,6 +28,8 @@ export default function GuestAuthPrompt({
   title,
   children,
   asButton = false,
+  promptTitle = 'Войдите, чтобы продолжить',
+  promptLead = 'Действие доступно после входа. Можно сразу создать аккаунт.',
 }: Props) {
   const { status } = useSession();
   const [open, setOpen] = useState(false);
@@ -45,6 +51,14 @@ export default function GuestAuthPrompt({
     };
   }, [open]);
 
+  if (status === 'loading') {
+    return (
+      <button type="button" className={className} title={title} disabled aria-busy>
+        {children}
+      </button>
+    );
+  }
+
   if (authed) {
     return (
       <Link href={href} className={className} title={title}>
@@ -53,13 +67,14 @@ export default function GuestAuthPrompt({
     );
   }
 
+  void asButton;
+
   return (
     <>
       <button
         type="button"
         className={className}
         title={title}
-        aria-busy={status === 'loading' ? true : undefined}
         onClick={(e) => {
           e.preventDefault();
           e.stopPropagation();
@@ -88,11 +103,9 @@ export default function GuestAuthPrompt({
             </button>
             <p className="yp-guest-prompt__eyebrow">Нужен аккаунт</p>
             <h2 id={titleId} className="yp-guest-prompt__title">
-              Войдите, чтобы записаться
+              {promptTitle}
             </h2>
-            <p className="yp-guest-prompt__lead">
-              Запись в коворкинг и на события доступна после входа. Можно сразу создать аккаунт.
-            </p>
+            <p className="yp-guest-prompt__lead">{promptLead}</p>
             <div className="yp-guest-prompt__actions">
               <Link href={loginHref} className="btn btn-primary" onClick={() => setOpen(false)}>
                 Войти

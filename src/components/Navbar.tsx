@@ -468,7 +468,7 @@ export default function Navbar({ spaces = [], clubs = [], projects = [], pages =
                     </span>
                   </Link>
                 ) : null}
-                {!isScanner ? (
+                {!isScanner && !isTech ? (
                   <Link href="/tickets" className="dropdown-item" role="menuitem" onClick={closeDesktopMenus}>
                     <Ticket size={16} aria-hidden />
                     <span className="nav-account-menu__label">

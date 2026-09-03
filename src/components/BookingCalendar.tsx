@@ -3,7 +3,8 @@
 import { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, Clock, ArrowLeft } from 'lucide-react';
 import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
+import GuestAuthPrompt from '@/components/GuestAuthPrompt';
 import {
   workingHourOptions,
   isWithinWorkingHours,
@@ -108,8 +109,13 @@ export default function BookingCalendar({
   initialStartIso = null,
   initialEndIso = null,
 }: BookingCalendarProps) {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const router = useRouter();
+  const pathname = usePathname() || `/spaces/${spaceId}/book`;
+  const guestHref =
+    initialStartIso && initialEndIso
+      ? `${pathname}?start=${encodeURIComponent(initialStartIso)}&end=${encodeURIComponent(initialEndIso)}`
+      : pathname;
 
   const timeOptions = workingHourOptions(openTime, closeTime);
   const initialTimes = defaultBookingTimes(openTime, closeTime);
@@ -198,8 +204,11 @@ export default function BookingCalendar({
   };
 
   const handleJoinEvent = async (eventId: string) => {
-    if (!session) {
-      router.push('/login?callbackUrl=' + encodeURIComponent(window.location.pathname));
+    if (status !== 'authenticated' || !session) {
+      setMessage({
+        type: 'error',
+        text: 'Войдите, чтобы записаться на событие.',
+      });
       return;
     }
     if (session.user?.moderationPending) {
@@ -233,9 +242,11 @@ export default function BookingCalendar({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!session) {
-      const cb = `${window.location.pathname}${window.location.search || ''}`;
-      router.push('/login?callbackUrl=' + encodeURIComponent(cb));
+    if (status !== 'authenticated' || !session) {
+      setMessage({
+        type: 'error',
+        text: 'Войдите, чтобы отправить заявку на бронь.',
+      });
       return;
     }
     if (session.user?.moderationPending) {
@@ -688,17 +699,29 @@ export default function BookingCalendar({
               ) : null}
             </div>
 
-            <button
-              type="submit"
-              disabled={isSubmitting || Boolean(session?.user?.moderationPending)}
-              style={{ width: '100%', padding: '0.6rem', border: 'none', borderRadius: 'var(--radius-sm)', background: 'var(--accent)', color: 'white', fontWeight: 600, fontSize: '0.9rem', cursor: 'pointer', marginTop: '0.25rem' }}
-            >
-              {session?.user?.moderationPending
-                ? 'Аккаунт на проверке'
-                : isSubmitting
-                  ? 'Отправка...'
-                  : 'Отправить заявку'}
-            </button>
+            {status !== 'authenticated' ? (
+              <GuestAuthPrompt
+                href={guestHref}
+                className="btn btn-primary"
+                asButton
+                promptTitle="Войдите, чтобы забронировать"
+                promptLead="Заявка на бронь зала доступна после входа. Можно сразу создать аккаунт — дата и время сохранятся в ссылке."
+              >
+                Войти и отправить заявку
+              </GuestAuthPrompt>
+            ) : (
+              <button
+                type="submit"
+                disabled={isSubmitting || Boolean(session?.user?.moderationPending)}
+                style={{ width: '100%', padding: '0.6rem', border: 'none', borderRadius: 'var(--radius-sm)', background: 'var(--accent)', color: 'white', fontWeight: 600, fontSize: '0.9rem', cursor: 'pointer', marginTop: '0.25rem' }}
+              >
+                {session?.user?.moderationPending
+                  ? 'Аккаунт на проверке'
+                  : isSubmitting
+                    ? 'Отправка...'
+                    : 'Отправить заявку'}
+              </button>
+            )}
             {session?.user?.moderationPending ? (
               <p style={{ margin: '0.45rem 0 0', fontSize: '0.8rem', color: 'var(--muted)', textAlign: 'center' }}>
                 Бронь откроется после одобрения администратором.

@@ -18,16 +18,28 @@ import { CATALOG_PAGE_SIZE, catalogSlice, totalPages } from '@/lib/pagination';
 import type { PublicSpaceCard } from '@/lib/public-catalogs';
 import { isCoworkingSpace } from '@/lib/coworking';
 
-export default function SpacesCatalogClient({ items }: { items: PublicSpaceCard[] }) {
+type Props = {
+  items: PublicSpaceCard[];
+  /** Space IDs with a free slot today (MSK) — powers ?filter=free_today */
+  freeTodayIds?: string[];
+};
+
+export default function SpacesCatalogClient({ items, freeTodayIds = [] }: Props) {
   const sp = useSafeSearchParams();
   const query = (sp.get('q') || '').trim().toLowerCase();
   const statusFilter = sp.get('status') || 'ALL';
   const categoryFilter = (sp.get('category') || '').trim();
   const amenityFilter = (sp.get('amenity') || '').trim();
+  const specialFilter = (sp.get('filter') || '').trim();
+  const freeToday = specialFilter === 'free_today';
   const page = catalogSlice(sp.get('page') || '1').page;
+  const freeTodaySet = useMemo(() => new Set(freeTodayIds), [freeTodayIds]);
 
   const filtered = useMemo(() => {
     let list = items.slice();
+    if (freeToday) {
+      list = list.filter((s) => freeTodaySet.has(s.id) && s.status === 'ACTIVE');
+    }
     if (query) {
       list = list.filter(
         (s) =>
@@ -43,30 +55,46 @@ export default function SpacesCatalogClient({ items }: { items: PublicSpaceCard[
       list = list.filter((s) => parseSpaceAmenities(s.amenities).includes(amenityFilter as never));
     }
     return list;
-  }, [items, query, statusFilter, categoryFilter, amenityFilter]);
+  }, [items, query, statusFilter, categoryFilter, amenityFilter, freeToday, freeTodaySet]);
 
   const total = filtered.length;
   const { skip, take } = catalogSlice(page);
   const spaces = filtered.slice(skip, skip + take);
   const pages = totalPages(total, CATALOG_PAGE_SIZE);
-  const listQuery = { q: query || undefined, category: categoryFilter || undefined };
+  const listQuery = {
+    q: query || undefined,
+    category: categoryFilter || undefined,
+    filter: freeToday ? 'free_today' : undefined,
+  };
   const usedCategories = Array.from(new Set([...SPACE_CATEGORIES, ...items.map((s) => s.category).filter(Boolean)])) as string[];
 
   return (
     <div className="container catalog-page">
       <div className="catalog-page-header" style={{ flexDirection: 'column', alignItems: 'stretch' }}>
         <h1 className="page-hero-title">Молодёжные пространства</h1>
-        <p className="page-hero-subtitle">Коворкинг и залы ЦРМ — запись и бронь в одном стиле</p>
+        <p className="page-hero-subtitle">
+          {freeToday
+            ? 'Свободные залы и коворкинги на сегодня'
+            : 'Коворкинг и залы ЦРМ — запись и бронь в одном стиле'}
+        </p>
       </div>
       <SpaceFilterBar placeholder="Поиск пространств…" categories={usedCategories} />
 
       {spaces.length === 0 ? (
         <div className="svc-empty">
-          <h3>{items.length === 0 ? 'Каталог временно недоступен' : 'Ничего не найдено'}</h3>
+          <h3>
+            {items.length === 0
+              ? 'Каталог временно недоступен'
+              : freeToday
+                ? 'Сейчас нет свободных слотов'
+                : 'Ничего не найдено'}
+          </h3>
           <p>
             {items.length === 0
               ? 'Обновите страницу или попробуйте позже.'
-              : 'Смените категорию или поисковый запрос.'}
+              : freeToday
+                ? 'Загляните позже или откройте полный каталог площадок.'
+                : 'Смените категорию или поисковый запрос.'}
           </p>
           {items.length === 0 ? (
             <button type="button" className="btn btn-primary" onClick={() => window.location.reload()}>
@@ -122,6 +150,12 @@ export default function SpacesCatalogClient({ items }: { items: PublicSpaceCard[
                       href={ctaHref}
                       className="svc-pill svc-pill--brand svc-space-card__cta"
                       asButton
+                      promptTitle={coworking ? 'Войдите, чтобы записаться' : 'Войдите, чтобы забронировать'}
+                      promptLead={
+                        coworking
+                          ? 'Запись в коворкинг доступна после входа. Можно сразу создать аккаунт.'
+                          : 'Бронь зала доступна после входа. Можно сразу создать аккаунт.'
+                      }
                     >
                       {ctaLabel}
                     </GuestAuthPrompt>

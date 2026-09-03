@@ -248,7 +248,7 @@ export default function AdminContestsClient() {
                     onClick={() =>
                       void post({ action: 'reviewSubmission', id: s.id, status: 'APPROVED' }).then(
                         () => {
-                          toast.success('Одобрено (+эко)');
+                          toast.success('Одобрено (+мбаллы)');
                           void load();
                         }
                       )

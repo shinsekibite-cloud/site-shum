@@ -24,6 +24,7 @@ export default function SpaceFilterBar({
   const [status, setStatus] = useState(searchParams.get('status') || 'ALL');
   const [category, setCategory] = useState(searchParams.get('category') || 'ALL');
   const [amenity, setAmenity] = useState(searchParams.get('amenity') || 'ALL');
+  const [filter, setFilter] = useState(searchParams.get('filter') || '');
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -31,6 +32,7 @@ export default function SpaceFilterBar({
     setStatus(searchParams.get('status') || 'ALL');
     setCategory(searchParams.get('category') || 'ALL');
     setAmenity(searchParams.get('amenity') || 'ALL');
+    setFilter(searchParams.get('filter') || '');
   }, [searchParams]);
 
   useEffect(() => {
@@ -40,13 +42,14 @@ export default function SpaceFilterBar({
       if (status && status !== 'ALL') params.set('status', status);
       if (category && category !== 'ALL') params.set('category', category);
       if (amenity && amenity !== 'ALL') params.set('amenity', amenity);
+      if (filter) params.set('filter', filter);
       const qs = params.toString();
       startTransition(() => {
         router.push(qs ? `?${qs}` : '?', { scroll: false });
       });
     }, 280);
     return () => clearTimeout(handler);
-  }, [query, status, category, amenity, router]);
+  }, [query, status, category, amenity, filter, router]);
 
   useEffect(() => {
     if (!open) return;
@@ -64,13 +67,18 @@ export default function SpaceFilterBar({
     };
   }, [open]);
 
+  const freeToday = filter === 'free_today';
   const activeCount =
-    (status !== 'ALL' ? 1 : 0) + (category !== 'ALL' ? 1 : 0) + (amenity !== 'ALL' ? 1 : 0);
+    (status !== 'ALL' ? 1 : 0) +
+    (category !== 'ALL' ? 1 : 0) +
+    (amenity !== 'ALL' ? 1 : 0) +
+    (freeToday ? 1 : 0);
 
   const resetFilters = () => {
     setStatus('ALL');
     setCategory('ALL');
     setAmenity('ALL');
+    setFilter('');
   };
 
   const chip = (active: boolean, label: string, onClick: () => void) => (
@@ -116,6 +124,10 @@ export default function SpaceFilterBar({
         </button>
       </div>
 
+      <div className="space-filter-bar__quick" style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem', marginTop: '0.55rem' }}>
+        {chip(freeToday, 'Свободные сегодня', () => setFilter(freeToday ? '' : 'free_today'))}
+      </div>
+
       {open ? (
         <div className="space-filter-panel" role="dialog" aria-label="Фильтры пространств">
           <div className="space-filter-panel__head">
@@ -129,6 +141,14 @@ export default function SpaceFilterBar({
               <button type="button" className="yp-modal-close" aria-label="Закрыть" onClick={() => setOpen(false)}>
                 <X size={14} />
               </button>
+            </div>
+          </div>
+
+          <div className="space-filter-panel__section">
+            <div className="space-filter-panel__label">Доступность</div>
+            <div className="space-filter-panel__chips">
+              {chip(!freeToday, 'Все', () => setFilter(''))}
+              {chip(freeToday, 'Свободные сегодня', () => setFilter('free_today'))}
             </div>
           </div>
 
